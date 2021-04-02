@@ -1,0 +1,1 @@
+# Direct Edge Module Base

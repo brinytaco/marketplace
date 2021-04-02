@@ -1,0 +1,22 @@
+# https://git-scm.com/docs/gitignore#_pattern_format
+
+# Ignore all files except those noted with the prefixed "!" below
+# Explictly add any ignored files using git add -f <filename>
+
+# 
+/*
+docker-compose.yml
+!/src
+/src/*
+!/src/app
+/src/app/*
+!/src/app/code/
+!/src/app/design/
+
+# Ignore: Generated for each module as needed
+/src/app/code/*/*/etc/db_schema_whitelist.json
+
+# Ignore Magento folders
+/src/app/design/adminhtml/Magento
+/src/app/design/frontend/Magento
+

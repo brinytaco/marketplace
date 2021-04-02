@@ -1,0 +1,120 @@
+# Mark Shust's Docker Configuration for Magento
+# (https://github.com/markshust/docker-magento)
+#
+# Version 37.0.2
+
+version: "3"
+
+services:
+  app:
+    image: markoshust/magento-nginx:1.18-4
+    ports:
+      - "80:8000"
+      - "443:8443"
+    links:
+      - db
+      - phpfpm
+    volumes: &appvolumes
+      - ~/.composer:/var/www/.composer:cached
+      - appdata:/var/www/html
+      - sockdata:/sock
+      - ssldata:/etc/nginx/certs
+
+      # Host mounts with performance penalty, only put what is necessary here
+      # Uncomment following lines only after installation
+      #- ./src/app/code:/var/www/html/app/code
+      #- ./src/app/design:/var/www/html/app/design
+      #- ./src/app/etc:/var/www/html/app/etc
+      #- ./src/var/log:/var/www/html/var/log
+      #- ./src/var/report:/var/www/html/var/report
+      #- ./src/composer.json:/var/www/html/composer.json
+      #- ./src/composer.lock:/var/www/html/composer.lock
+      #- ./src/nginx.conf:/var/www/html/nginx.conf
+      #- ~/.composer/auth.json:/var/www/html/var/composer_home/auth.json
+
+      # To sync your SSH to the container, uncomment the following line:
+      #- ~/.ssh/id_rsa:/var/www/.ssh/id_rsa:cached
+      # Linux only: remove the above lines and mount the entire src directory with:
+      #- ./src:/var/www/html:cached
+
+  phpfpm:
+    image: markoshust/magento-php:7.4-fpm-5
+    links:
+      - db
+    volumes: *appvolumes
+
+  db:
+    image: percona:5.7
+    command: --max_allowed_packet=64M
+    ports:
+      - "3306:3306"
+    environment:
+        MYSQL_HOST: "db"
+        MYSQL_ROOT_PASSWORD: "magento"
+        MYSQL_DATABASE: "magento"
+        MYSQL_USER: "magento"
+        MYSQL_PASSWORD: "magento"
+    volumes:
+      - dbdata:/var/lib/mysql
+
+  redis:
+    image: redis:5.0-alpine
+
+  elasticsearch:
+    image: markoshust/magento-elasticsearch:7.7.1-0
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - "discovery.type=single-node"
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+
+  rabbitmq:
+    image: rabbitmq:3.7-management-alpine
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+
+  # Disabling cron by default as it uses higher CPU, enable if needed
+  #cron:
+  #  image: markoshust/magento-php:7.4-fpm-5
+  #  user: root
+  #  command: /usr/local/bin/cronstart
+  #  tty: true
+  #  links:
+  #    - db
+  #  volumes: *appvolumes
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - "1025"
+      - "8025:8025"
+    user: root
+    command: ["-storage=maildir", "-maildir-path=/maildir"]
+    volumes:
+      - maildir:/maildir
+
+  phpmyadmin:
+    restart: always
+    image: phpmyadmin/phpmyadmin
+    environment:
+        MYSQL_HOST: "db"
+        MYSQL_ROOT_PASSWORD: "magento"
+        MYSQL_DATABASE: "magento"
+        MYSQL_USER: "magento"
+        MYSQL_PASSWORD: "magento"
+    ports:
+      - "8080:80"
+    links:
+      - db
+
+volumes:
+  appdata:
+  dbdata:
+  rabbitmqdata:
+  sockdata:
+  ssldata:
+  maildir:
