@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Direct Edge Media, Inc. All rights reserved.
+ */
+-->
+
+<schema
+    xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+    xsi:noNamespaceSchemaLocation='urn:magento/framework/Setup/Declaration/Schema/etc/schema.xsd'>
+
+    <table name="dem_helpdesk_user" resource="default" engine="innodb" comment="Dem Helpdesk Users">
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false" identity="true"
+                comment="User ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false"
+                default="0" comment="Website ID, admin/user = 0"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true"
+                comment="Customer ID"/>
+        <column xsi:type="int" name="admin_id" unsigned="true" nullable="true"
+                comment="Admin User ID"/>
+        <column xsi:type="varchar" name="email" nullable="false" length="84"
+                comment="Email address of user"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="42"
+                comment="Full name of user"/>
+        <column xsi:type="varchar" name="session_id" nullable="true" length="64"
+                comment="Session ID"/>
+        <column xsi:type="timestamp" name="last_accessed" nullable="true"
+                comment="Last Accessed"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="user_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="UNQ_HELPDESK_USER_ADMIN_ID_CUSTOMER_ID">
+            <column name="admin_id"/>
+            <column name="customer_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_USER_TO_ADMIN_ID"
+                    table="dem_helpdesk_user" column="admin_id" referenceTable="admin_user"
+                    referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_USER_TO_CUSTOMER_ID"
+                    table="dem_helpdesk_user" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_USER_TO_WEBSITE_ID"
+                    table="dem_helpdesk_user" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
+        <index referenceId="IDX_HELPDESK_USER_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+
+    </table>
+
+    <table name="dem_helpdesk_department" resource="default" engine="innodb" comment="Dem Helpdesk Department">
+        <column xsi:type="int" name="department_id" unsigned="true" nullable="false" identity="true"
+                comment="Department ID"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false"
+                default="0" comment="Website ID"/>
+        <column xsi:type="int" name="case_manager_id" unsigned="true" nullable="false"
+                comment="HelpDesk User ID of assigned Case Mgr"/>
+        <column xsi:type="varchar" name="label" nullable="false" length="255"
+                comment="Department Label"/>
+        <column xsi:type="varchar" name="description" nullable="true" length="255"
+                comment="Department Description"/>
+        <column xsi:type="tinyint" name="is_internal" unsigned="true" nullable="false"
+                default="0" comment="Internal Depts not visible to customers"/>
+        <column xsi:type="tinyint" name="is_active" unsigned="true" nullable="false"
+                default="1" comment="Active/Inactive"/>
+        <column xsi:type="smallint" name="sort_order" unsigned="true" nullable="false"
+                default="1" comment="Sort Order"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="department_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_DEPT_CASE_MANAGER_TO_HD_USER_ID"
+                    table="dem_helpdesk_department" column="case_manager_id" referenceTable="dem_helpdesk_user"
+                    referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_DEPT_TO_WEBSITE_ID"
+                    table="dem_helpdesk_department" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
+    </table>
+
+    <table name="dem_helpdesk_department_user" resource="default" engine="innodb" comment="Dem Helpdesk Department Users">
+        <column xsi:type="int" name="dept_user_id" unsigned="true" nullable="false" identity="true"
+                comment="Department User ID"/>
+        <column xsi:type="int" name="department_id" unsigned="true" nullable="false"
+                comment="Department ID"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false"
+                comment="HelpDesk User ID"/>
+        <column xsi:type="tinyint" name="is_follower" unsigned="true" nullable="false"
+                default="0" comment="Is user a default dept follower"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="dept_user_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_DEPT_USER_USER_ID_TO_HD_USER_ID"
+                    table="dem_helpdesk_department_user" column="user_id" referenceTable="dem_helpdesk_user"
+                    referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_DEPT_USER_TO_DEPT_ID"
+                    table="dem_helpdesk_department_user" column="department_id" referenceTable="dem_helpdesk_department"
+                    referenceColumn="department_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="UNQ_HELPDESK_DEPT_USER_DEPT_ID_USER_ID">
+            <column name="department_id"/>
+            <column name="user_id"/>
+        </constraint>
+    </table>
+
+    <table name="dem_helpdesk_case" resource="default" engine="innodb" comment="Dem Helpdesk Cases">
+        <column xsi:type="int" name="case_id" unsigned="true" nullable="false" identity="true"
+                comment="Case ID"/>
+        <column xsi:type="varchar" name="case_number" nullable="true" length="10"
+                comment="Case Number"/>
+        <column xsi:type="varchar" name="protect_code" nullable="true" length="255"
+                comment="Protect Code"/>
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false"
+                default="0" comment="Website ID"/>
+        <column xsi:type="int" name="department_id" unsigned="true" nullable="false"
+                default="1" comment="Department ID"/>
+        <column xsi:type="int" name="creator_customer_id" unsigned="true" nullable="true"
+                comment="Creator Customer ID (not GUEST)"/>
+        <column xsi:type="int" name="creator_admin_id" unsigned="true" nullable="true"
+                comment="Creator Admin ID (not GUEST)"/>
+        <column xsi:type="varchar" name="creator_email" nullable="false" length="84"
+                comment="Required. Creator is GUEST if no customer_id or admin_id set"/>
+        <column xsi:type="int" name="creator_last_read" unsigned="true" nullable="true"
+                comment="Reply ID of last read"/>
+        <column xsi:type="varchar" name="subject" nullable="false" length="100"
+                comment="Case Subject"/>
+        <column xsi:type="smallint" name="status_id" unsigned="true" nullable="false"
+                default="0" comment="Status ID"/>
+        <column xsi:type="smallint" name="priority" unsigned="true" nullable="false"
+                default="0" comment="Priority"/>
+        <column xsi:type="varchar" name="remote_ip" nullable="true" length="46"
+                default="0.0.0.0" comment="Remote IP Address"/>
+        <column xsi:type="varchar" name="http_user_agent" nullable="true" length="255"
+                comment="Client browser information"/>
+        <column xsi:type="varchar" name="updated_by" nullable="true" length="50"
+                comment="Full name of last user edit reply"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="case_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_TO_DEPARTMENT_ID"
+                    table="dem_helpdesk_case" column="department_id" referenceTable="dem_helpdesk_department"
+                    referenceColumn="department_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_USER_TO_ADMIN_ID"
+                    table="dem_helpdesk_case" column="creator_admin_id" referenceTable="admin_user"
+                    referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_USER_TO_CUSTOMER_ID"
+                    table="dem_helpdesk_case" column="creator_customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_TO_WEBSITE_ID"
+                    table="dem_helpdesk_case" column="website_id" referenceTable="store_website"
+                    referenceColumn="website_id" onDelete="CASCADE"/>
+    </table>
+
+    <table name="dem_helpdesk_case_reply" resource="default" engine="innodb" comment="Dem Helpdesk Case Replies">
+        <column xsi:type="int" name="reply_id" unsigned="true" nullable="false" identity="true"
+                comment="Reply ID"/>
+        <column xsi:type="int" name="case_id" unsigned="true" nullable="false"
+                comment="Case ID"/>
+        <column xsi:type="int" name="author_id" unsigned="true" nullable="false"
+                comment="Author ID: null if not a HelpDesk user (Guest)"/>
+        <column xsi:type="varchar" name="author_type" nullable="false" length="20"
+                comment="Author Type: CREATOR | HELPDESK_USER | SYSTEM"/>
+        <column xsi:type="text" name="reply_text" nullable="false"
+                comment="Reply text | system-generated message"/>
+        <column xsi:type="varchar" name="remote_ip" nullable="true" length="46"
+                default="0.0.0.0" comment="Remote IP Address"/>
+        <column xsi:type="smallint" name="status_id" unsigned="true" nullable="false"
+                default="0" comment="Status ID"/>
+        <column xsi:type="tinyint" name="is_initial" unsigned="true" nullable="false"
+                default="0" comment="Is initial author reply?"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="reply_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_REPLY_CASE_ID_TO_CASE_ID"
+                    table="dem_helpdesk_reply" column="case_id" referenceTable="dem_helpdesk_case"
+                    referenceColumn="case_id" onDelete="CASCADE"/>
+    </table>
+
+    <table name="dem_helpdesk_case_follower" resource="default" engine="innodb" comment="Dem Helpdesk Case Followers">
+        <column xsi:type="int" name="follower_id" unsigned="true" nullable="false" identity="true"
+                comment="Follower ID"/>
+        <column xsi:type="int" name="case_id" unsigned="true" nullable="false"
+                comment="Case ID"/>
+        <column xsi:type="int" name="user_id" unsigned="true" nullable="false"
+                comment="HelpDesk User ID"/>
+        <column xsi:type="int" name="last_read" unsigned="true" nullable="true"
+                comment="Reply ID of last read"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="follower_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_FOLLOWER_CASE_ID_TO_CASE_ID"
+                    table="dem_helpdesk_case_follower" column="case_id" referenceTable="dem_helpdesk_case"
+                    referenceColumn="case_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_FOLLOWER_USER_ID_TO_HD_USER_ID"
+                    table="dem_helpdesk_case_follower" column="user_id" referenceTable="dem_helpdesk_user"
+                    referenceColumn="user_id" onDelete="CASCADE"/>
+    </table>
+
+</schema>
