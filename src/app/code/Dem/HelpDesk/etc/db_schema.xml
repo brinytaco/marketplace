@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
- * Copyright © Direct Edge Media, Inc. All rights reserved.
- */
+ * @author      Toby Crain <tcrain@directedgemedia.com>
+ * @copyright © Direct Edge Media, Inc. All rights reserved.
 -->
 
 <schema
@@ -105,9 +104,9 @@
         </constraint>
     </table>
 
-    <table name="dem_helpdesk_case" resource="default" engine="innodb" comment="Dem Helpdesk Cases">
-        <column xsi:type="int" name="case_id" unsigned="true" nullable="false" identity="true"
-                comment="Case ID"/>
+    <table name="dem_helpdesk_topic" resource="default" engine="innodb" comment="Dem Helpdesk Topics">
+        <column xsi:type="int" name="topic_id" unsigned="true" nullable="false" identity="true"
+                comment="Topic ID"/>
         <column xsi:type="varchar" name="case_number" nullable="true" length="10"
                 comment="Case Number"/>
         <column xsi:type="varchar" name="protect_code" nullable="true" length="255"
@@ -125,7 +124,7 @@
         <column xsi:type="int" name="creator_last_read" unsigned="true" nullable="true"
                 comment="Reply ID of last read"/>
         <column xsi:type="varchar" name="subject" nullable="false" length="100"
-                comment="Case Subject"/>
+                comment="Topic Subject"/>
         <column xsi:type="smallint" name="status_id" unsigned="true" nullable="false"
                 default="0" comment="Status ID"/>
         <column xsi:type="smallint" name="priority" unsigned="true" nullable="false"
@@ -139,29 +138,29 @@
         <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
-            <column name="case_id"/>
+            <column name="topic_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_TO_DEPARTMENT_ID"
-                    table="dem_helpdesk_case" column="department_id" referenceTable="dem_helpdesk_department"
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_TOPIC_TO_DEPARTMENT_ID"
+                    table="dem_helpdesk_topic" column="department_id" referenceTable="dem_helpdesk_department"
                     referenceColumn="department_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="FK_HELPDESK_USER_TO_ADMIN_ID"
-                    table="dem_helpdesk_case" column="creator_admin_id" referenceTable="admin_user"
+                    table="dem_helpdesk_topic" column="creator_admin_id" referenceTable="admin_user"
                     referenceColumn="user_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="FK_HELPDESK_USER_TO_CUSTOMER_ID"
-                    table="dem_helpdesk_case" column="creator_customer_id" referenceTable="customer_entity"
+                    table="dem_helpdesk_topic" column="creator_customer_id" referenceTable="customer_entity"
                     referenceColumn="entity_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_TO_WEBSITE_ID"
-                    table="dem_helpdesk_case" column="website_id" referenceTable="store_website"
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_TOPIC_TO_WEBSITE_ID"
+                    table="dem_helpdesk_topic" column="website_id" referenceTable="store_website"
                     referenceColumn="website_id" onDelete="CASCADE"/>
     </table>
 
-    <table name="dem_helpdesk_case_reply" resource="default" engine="innodb" comment="Dem Helpdesk Case Replies">
+    <table name="dem_helpdesk_topic_reply" resource="default" engine="innodb" comment="Dem Helpdesk Topic Replies">
         <column xsi:type="int" name="reply_id" unsigned="true" nullable="false" identity="true"
                 comment="Reply ID"/>
-        <column xsi:type="int" name="case_id" unsigned="true" nullable="false"
-                comment="Case ID"/>
-        <column xsi:type="int" name="author_id" unsigned="true" nullable="false"
-                comment="Author ID: null if not a HelpDesk user (Guest)"/>
+        <column xsi:type="int" name="topic_id" unsigned="true" nullable="false"
+                comment="Topic ID"/>
+        <column xsi:type="int" name="author_id" unsigned="true" nullable="true"
+                comment="Helpdesk user_id, or null if Guest"/>
         <column xsi:type="varchar" name="author_type" nullable="false" length="20"
                 comment="Author Type: CREATOR | HELPDESK_USER | SYSTEM"/>
         <column xsi:type="text" name="reply_text" nullable="false"
@@ -176,16 +175,19 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="reply_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_REPLY_CASE_ID_TO_CASE_ID"
-                    table="dem_helpdesk_reply" column="case_id" referenceTable="dem_helpdesk_case"
-                    referenceColumn="case_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_TOPIC_REPLY_TOPIC_ID_TO_TOPIC_ID"
+                    table="dem_helpdesk_reply" column="topic_id" referenceTable="dem_helpdesk_topic"
+                    referenceColumn="topic_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_TOPIC_REPLY_AUTHOR_ID_TO_HD_USER_ID"
+                    table="dem_helpdesk_reply" column="author_id" referenceTable="dem_helpdesk_user"
+                    referenceColumn="user_id" onDelete="CASCADE"/>
     </table>
 
-    <table name="dem_helpdesk_case_follower" resource="default" engine="innodb" comment="Dem Helpdesk Case Followers">
+    <table name="dem_helpdesk_topic_follower" resource="default" engine="innodb" comment="Dem Helpdesk Topic Followers">
         <column xsi:type="int" name="follower_id" unsigned="true" nullable="false" identity="true"
                 comment="Follower ID"/>
-        <column xsi:type="int" name="case_id" unsigned="true" nullable="false"
-                comment="Case ID"/>
+        <column xsi:type="int" name="topic_id" unsigned="true" nullable="false"
+                comment="Topic ID"/>
         <column xsi:type="int" name="user_id" unsigned="true" nullable="false"
                 comment="HelpDesk User ID"/>
         <column xsi:type="int" name="last_read" unsigned="true" nullable="true"
@@ -195,11 +197,11 @@
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="follower_id"/>
         </constraint>
-        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_FOLLOWER_CASE_ID_TO_CASE_ID"
-                    table="dem_helpdesk_case_follower" column="case_id" referenceTable="dem_helpdesk_case"
-                    referenceColumn="case_id" onDelete="CASCADE"/>
-        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_CASE_FOLLOWER_USER_ID_TO_HD_USER_ID"
-                    table="dem_helpdesk_case_follower" column="user_id" referenceTable="dem_helpdesk_user"
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_TOPIC_FOLLOWER_TOPIC_ID_TO_TOPIC_ID"
+                    table="dem_helpdesk_topic_follower" column="topic_id" referenceTable="dem_helpdesk_topic"
+                    referenceColumn="topic_id" onDelete="CASCADE"/>
+        <constraint xsi:type="foreign" referenceId="FK_HELPDESK_TOPIC_FOLLOWER_USER_ID_TO_HD_USER_ID"
+                    table="dem_helpdesk_topic_follower" column="user_id" referenceTable="dem_helpdesk_user"
                     referenceColumn="user_id" onDelete="CASCADE"/>
     </table>
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-/**
- * Copyright © Direct Edge Media, Inc. All rights reserved.
+/*
+ * @author      Toby Crain <tcrain@directedgemedia.com>
+ * @copyright © Direct Edge Media, Inc. All rights reserved.
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">

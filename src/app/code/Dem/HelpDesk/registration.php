@@ -1,6 +1,8 @@
 <?php
 /**
- * Copyright © Direct Edge Media, Inc. All rights reserved.
+ * @author      Toby Crain <tcrain@directedgemedia.com>
+ * @copyright © Direct Edge Media, Inc. All rights reserved.
+ * @since       1.0.0
  */
 
 use Magento\Framework\Component\ComponentRegistrar;
