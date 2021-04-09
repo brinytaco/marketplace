@@ -3,12 +3,12 @@
 namespace Dem\HelpDesk\Block\Adminhtml;
 
 /*
- * Adminhtml Topic Grid Container
+ * Adminhtml CaseItem Grid Container
  *
  * @author      Toby Crain <tcrain@directedgemedia.com>
  * @copyright © Direct Edge Media, Inc. All rights reserved.
  */
-class Topic extends \Magento\Backend\Block\Widget\Grid\Container
+class CaseItem extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Constructor
@@ -17,10 +17,10 @@ class Topic extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _construct()
     {
-        $this->_controller = 'adminhtml_topic';
+        $this->_controller = 'adminhtml_case_item';
         $this->_blockGroup = 'Dem_HelpDesk';
-        $this->_headerText = __('Manage Topics');
-        $this->_addButtonLabel = __('Create New Topic');
+        $this->_headerText = __('Manage Cases');
+        $this->_addButtonLabel = __('Create New Case');
         parent::_construct();
     }
 }

@@ -3,12 +3,12 @@
 namespace Dem\HelpDesk\Model\ResourceModel;
 
 /**
- * Topic Resource
+ * CaseItem Resource
  *
  * @author      Toby Crain <tcrain@directedgemedia.com>
  * @copyright © Direct Edge Media, Inc. All rights reserved.
  */
-class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * Instantiation
@@ -29,6 +29,6 @@ class Topic extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('dem_helpdesk_topic', 'topic_id');
+        $this->_init('dem_helpdesk_case', 'case_id');
     }
 }

@@ -3,32 +3,32 @@
 namespace Dem\HelpDesk\Model;
 
 /**
- * Topic Model
+ * CaseItem Model
  *
  * @author      Toby Crain <tcrain@directedgemedia.com>
  * @copyright © Direct Edge Media, Inc. All rights reserved.
  */
-class Topic extends \Magento\Framework\Model\AbstractModel implements
-    \Magento\Framework\DataObject\IdentityInterface
+class CaseItem extends \Magento\Framework\Model\AbstractModel implements
+        \Magento\Framework\DataObject\IdentityInterface
 {
-    const CURRENT_KEY = 'current_topic';
+    const CURRENT_KEY = 'current_case';
 
     /**
      * @var string|array|bool
      */
-    protected $_cacheTag = 'dem_helpdesk_topic';
+    protected $_cacheTag = 'dem_helpdesk_case';
 
     /**
      * @var string
      */
-    protected $_eventPrefix = 'dem_helpdesk_topic';
+    protected $_eventPrefix = 'dem_helpdesk_case';
 
     /**
      * @return void
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\Topic::class);
+        $this->_init(\Dem\HelpDesk\Model\ResourceModel\CaseItem::class);
     }
 
     /**

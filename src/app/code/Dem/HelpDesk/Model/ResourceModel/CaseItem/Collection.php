@@ -1,9 +1,9 @@
 <?php
 
-namespace Dem\HelpDesk\Model\ResourceModel\Topic;
+namespace Dem\HelpDesk\Model\ResourceModel\CaseItem;
 
 /**
- * Topics Resource Collection
+ * CaseItem Resource Collection
  *
  * @author      Toby Crain <tcrain@directedgemedia.com>
  * @copyright © Direct Edge Media, Inc. All rights reserved.
@@ -22,14 +22,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var string
      */
-    protected $_eventPrefix = 'dem_helpdesk_topic_collection';
+    protected $_eventPrefix = 'dem_helpdesk_case_collection';
 
     /**
      * Name of event parameter
      *
      * @var string
      */
-    protected $_eventObject = 'topic_collection';
+    protected $_eventObject = 'case_collection';
 
     /**
      * Define resource model
@@ -38,6 +38,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Dem\HelpDesk\Model\Topic', 'Dem\HelpDesk\Model\ResourceModel\Topic');
+        $this->_init(
+            Dem\HelpDesk\Model\CaseItem::class,
+            Dem\HelpDesk\Model\ResourceModel\CaseItem::class
+        );
     }
 }

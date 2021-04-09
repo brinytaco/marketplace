@@ -1,11 +1,11 @@
 <?php
 
-namespace Dem\HelpDesk\Controller\Adminhtml\Topic;
+namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
 use Magento\Framework\Controller\ResultFactory;
 
 /*
- * Adminhtml Topic grid action
+ * Adminhtml CaseItem grid action
  *
  * @author      Toby Crain <tcrain@directedgemedia.com>
  * @copyright © Direct Edge Media, Inc. All rights reserved.
@@ -18,7 +18,7 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getConfig()->getTitle()->prepend(__('Manage Topics'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Manage Cases'));
         return $resultPage;
     }
 }
