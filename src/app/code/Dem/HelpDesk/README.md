@@ -4,11 +4,14 @@ The Dem_HelpDesk module provides a support-ticket system, providing a database-d
 correspondence mechanism to record and track issues and service requests ("Cases")
 throughout their life cycles.
 
-## CaseItem vs. Case
+## Caseitem vs. Case
 
 Because "case" is a php keyword, it's usage as a class identifier is forbidden.
-As a result, all class names and references will be regarded as "CaseItem" as
+As a result, all class names and references will be regarded as "Caseitem" as
 needed.
+
+A custom router is added to provide for URI matching of "case" and dispatching
+to caseitem controller as needed.
 
 ## Installation details
 

@@ -1,11 +1,12 @@
 <?php
+declare(strict_types=1);
 
-namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
+namespace Dem\HelpDesk\Controller\Adminhtml\Caseitem;
 
 use Magento\Framework\Controller\ResultFactory;
 
 /*
- * Adminhtml CaseItem grid action
+ * Adminhtml Caseitem grid action
  *
  * @author      Toby Crain <tcrain@directedgemedia.com>
  * @copyright © Direct Edge Media, Inc. All rights reserved.

@@ -1,15 +1,15 @@
 <?php
+declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
 /**
- * CaseItem Model
+ * Caseitem Model
  *
  * @author      Toby Crain <tcrain@directedgemedia.com>
  * @copyright © Direct Edge Media, Inc. All rights reserved.
  */
-class CaseItem extends \Magento\Framework\Model\AbstractModel implements
-        \Magento\Framework\DataObject\IdentityInterface
+class Caseitem extends \Magento\Framework\Model\AbstractModel
 {
     const CURRENT_KEY = 'current_case';
 
@@ -28,7 +28,7 @@ class CaseItem extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\CaseItem::class);
+        $this->_init(\Dem\HelpDesk\Model\ResourceModel\Caseitem::class);
     }
 
     /**

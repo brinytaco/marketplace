@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\Grid\Column\Renderer;
 

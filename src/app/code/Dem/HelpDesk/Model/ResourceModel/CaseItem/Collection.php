@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 
-namespace Dem\HelpDesk\Model\ResourceModel\CaseItem;
+namespace Dem\HelpDesk\Model\ResourceModel\Caseitem;
 
 /**
- * CaseItem Resource Collection
+ * Caseitem Resource Collection
  *
  * @author      Toby Crain <tcrain@directedgemedia.com>
  * @copyright © Direct Edge Media, Inc. All rights reserved.
@@ -39,8 +40,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            Dem\HelpDesk\Model\CaseItem::class,
-            Dem\HelpDesk\Model\ResourceModel\CaseItem::class
+            \Dem\HelpDesk\Model\Caseitem::class,
+            \Dem\HelpDesk\Model\ResourceModel\Caseitem::class
         );
     }
 }
