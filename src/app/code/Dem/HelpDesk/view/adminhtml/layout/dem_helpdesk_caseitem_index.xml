@@ -58,28 +58,29 @@
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="department_id">
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="department_name">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Department</argument>
-                                <argument name="index" xsi:type="string">department_id</argument>
+                                <argument name="index" xsi:type="string">department_name</argument>
                                 <argument name="type" xsi:type="string">text</argument>
                                 <argument name="column_css_class" xsi:type="string">col-id</argument>
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>
                             </arguments>
                         </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="case_manager">
+<!--                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="case_manager">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Case Manager</argument>
                                 <argument name="index" xsi:type="string">case_manager</argument>
                                 <argument name="type" xsi:type="string">text</argument>
+                                <argument name="renderer" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\Grid\Column\Renderer\CaseManagerName</argument>
                                 <argument name="column_css_class" xsi:type="string">col-id</argument>
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>
                             </arguments>
-                        </block>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="case_creator">
+                        </block>-->
+                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="creator_name">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Created By</argument>
-                                <argument name="index" xsi:type="string">case_creator</argument>
+                                <argument name="index" xsi:type="string">creator_name</argument>
                                 <argument name="type" xsi:type="string">text</argument>
                                 <argument name="column_css_class" xsi:type="string">col-id</argument>
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>

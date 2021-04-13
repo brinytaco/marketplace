@@ -36,6 +36,26 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected $_eventObject = 'case_collection';
 
+
+    /**
+     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
+     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param mixed $connection
+     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     */
+    public function __construct(
+        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
+        \Psr\Log\LoggerInterface $logger,
+        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
+        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+    ) {
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+    }
+
     /**
      * Define resource model
      *
@@ -48,4 +68,19 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             \Dem\HelpDesk\Model\ResourceModel\Caseitem::class
         );
     }
+
+    /**
+     * Load additional object data when loading collection
+     *
+     * @return $this
+     */
+    protected function _afterLoad()
+    {
+        parent::_afterLoad();
+        foreach ($this as $case) {
+            $case->afterLoad();
+        }
+        return $this;
+    }
+
 }

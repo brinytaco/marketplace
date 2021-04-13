@@ -64,8 +64,8 @@
                 default="0" comment="Website ID"/>
         <column xsi:type="int" name="case_manager_id" unsigned="true" nullable="false"
                 comment="HelpDesk User ID of assigned Case Mgr"/>
-        <column xsi:type="varchar" name="label" nullable="false" length="255"
-                comment="Department Label"/>
+        <column xsi:type="varchar" name="name" nullable="false" length="255"
+                comment="Department Name"/>
         <column xsi:type="varchar" name="description" nullable="true" length="255"
                 comment="Department Description"/>
         <column xsi:type="tinyint" name="is_internal" unsigned="true" nullable="false"
@@ -128,6 +128,8 @@
                 comment="Creator Customer ID (not GUEST)"/>
         <column xsi:type="int" name="creator_admin_id" unsigned="true" nullable="true"
                 comment="Creator Admin ID (not GUEST)"/>
+        <column xsi:type="varchar" name="creator_name" nullable="false" length="42"
+                comment="Full name of creator"/>
         <column xsi:type="varchar" name="creator_email" nullable="false" length="84"
                 comment="Required. Creator is GUEST if no customer_id or admin_id set"/>
         <column xsi:type="int" name="creator_last_read" unsigned="true" nullable="true"

@@ -14,13 +14,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <!-- Website name column renderer -->
-    <type name="Dem\HelpDesk\Block\Adminhtml\Grid\Column\Renderer\WebsiteName">
-        <arguments>
-            <argument name="website" xsi:type="string">\Magento\Store\Model\Website</argument>
-        </arguments>
-    </type>
-
     <!-- Add custom router -->
     <type name="Magento\Framework\App\RouterList">
         <arguments>
@@ -28,6 +21,7 @@
                 <item name="helpdesk" xsi:type="array">
                     <item name="class" xsi:type="string">Dem\HelpDesk\Controller\Adminhtml\Router</item>
                     <item name="disable" xsi:type="boolean">false</item>
+                    <!-- MUST BE less than 100 (default router) or it won't get called -->
                     <item name="sortOrder" xsi:type="string">20</item>
                 </item>
             </argument>

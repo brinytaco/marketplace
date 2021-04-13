@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\ResourceModel;
 
 /**
- * HelpDesk Resource Model - Case
+ * HelpDesk Resource Model - Department
  *
  * =============================================================================
  *
@@ -13,7 +13,7 @@ namespace Dem\HelpDesk\Model\ResourceModel;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Caseitem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -29,28 +29,17 @@ class Caseitem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('dem_helpdesk_case', 'case_id');
+        $this->_init('dem_helpdesk_department', 'department_id');
     }
 
     /**
-     * Set the case protectCode if new
+     * After save
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        parent::_beforeSave($object);
-
-        // Only if not already set (doesn't change)
-        $protectCode = $object->_getData('protect_code');
-
-        if (empty($protectCode)) {
-            $object->setData('protect_code', sha1(microtime()));
-        }
-
-        return $this;
+        return parent::_afterSave($object);
     }
-
-
 }

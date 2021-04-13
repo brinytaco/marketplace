@@ -19,11 +19,6 @@ use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 class WebsiteName extends AbstractRenderer
 {
     /**
-     * @var \Magento\Store\Model\Website $websiteModel
-     */
-    protected $websiteModel;
-
-    /**
      * @param Context $context
      * @param \Magento\Store\Model\Website $websiteModel
      * @param array $data
@@ -31,10 +26,8 @@ class WebsiteName extends AbstractRenderer
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,
-        \Magento\Store\Model\Website $websiteModel,
         array $data = []
     ) {
-        $this->websiteModel = $websiteModel;
         parent::__construct($context, $data);
     }
 
@@ -46,8 +39,6 @@ class WebsiteName extends AbstractRenderer
      */
     public function render(DataObject $row)
     {
-        $websiteId = $row->getWebsiteId();
-        $website = $this->websiteModel->load($websiteId, 'website_id');
-        return $website->getName();
+        return $row->getWebsite()->getName();
     }
 }
