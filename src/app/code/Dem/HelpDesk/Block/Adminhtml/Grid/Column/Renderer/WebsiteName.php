@@ -6,11 +6,15 @@ namespace Dem\HelpDesk\Block\Adminhtml\Grid\Column\Renderer;
 use Magento\Framework\DataObject;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 
-/*
- * Adminhtml Grid Column Renderer Website Name
+/**
+ * HelpDesk Block - Adminhtml Grid Column Renderer WebsiteName
  *
- * @author      Toby Crain <tcrain@directedgemedia.com>
- * @copyright © Direct Edge Media, Inc. All rights reserved.
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
  */
 class WebsiteName extends AbstractRenderer
 {
@@ -20,12 +24,10 @@ class WebsiteName extends AbstractRenderer
     protected $websiteModel;
 
     /**
-     * @param \Magento\Store\Model\Website $websiteModel
-     */
-
-    /**
      * @param Context $context
+     * @param \Magento\Store\Model\Website $websiteModel
      * @param array $data
+     * @return void
      */
     public function __construct(
         \Magento\Backend\Block\Context $context,

@@ -3,17 +3,21 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml;
 
-use Magento\Framework\App\Action\Forward;
-use Magento\Framework\App\ActionFactory;
-use Magento\Framework\App\ActionInterface;
-use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
 
 /**
-* Class CustomRouter
-*
-* @package Bss\Agencies\Controller
-*/
+ * HelpDesk Custom Router
+ *
+ * Converts "case" controller request to the proper "caseitem" controller,
+ * since "case" cannot be an actual class/file name.
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
 class Router implements RouterInterface
 {
     /**
@@ -31,6 +35,7 @@ class Router implements RouterInterface
     /**
      * @param \Magento\Framework\App\ActionFactory $actionFactory
      * @param \Magento\Framework\App\ResponseInterface $response
+     * @return void
      */
     public function __construct(
             \Magento\Framework\App\ActionFactory $actionFactory,
@@ -41,6 +46,11 @@ class Router implements RouterInterface
     }
 
     /**
+     * Match request and rewrite as needed
+     *
+     * If "helpdesk" module request and "case" controller set,
+     * reset controller to "caseitem" for proper routing.
+     *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ActionInterface|void
      */

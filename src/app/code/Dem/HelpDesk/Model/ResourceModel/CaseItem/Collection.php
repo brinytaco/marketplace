@@ -4,10 +4,14 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\ResourceModel\Caseitem;
 
 /**
- * Caseitem Resource Collection
+ * HelpDesk Resource Model - Case Collection
  *
- * @author      Toby Crain <tcrain@directedgemedia.com>
- * @copyright © Direct Edge Media, Inc. All rights reserved.
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {

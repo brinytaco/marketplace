@@ -5,11 +5,18 @@ namespace Dem\HelpDesk\Controller\Adminhtml\Caseitem;
 
 use Magento\Framework\Controller\ResultFactory;
 
-/*
- * Adminhtml Caseitem grid action
+/**
+ * HelpDesk Controller - Adminhtml Case Grid (Index)
  *
- * @author      Toby Crain <tcrain@directedgemedia.com>
- * @copyright © Direct Edge Media, Inc. All rights reserved.
+ * Uses layout definition from:
+ * view/adminhtml/layout/dem_helpdesk_caseitem_index.xml
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
  */
 class Index extends \Magento\Backend\App\Action
 {
@@ -19,7 +26,7 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);
-        $resultPage->getConfig()->getTitle()->prepend(__('Manage Cases'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Help Desk Cases'));
         return $resultPage;
     }
 }

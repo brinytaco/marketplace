@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- * @author      Toby Crain <tcrain@directedgemedia.com>
- * @copyright © Direct Edge Media, Inc. All rights reserved.
+/**
+ * HelpDesk - DB Schema
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
 -->
-
 <schema
     xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
     xsi:noNamespaceSchemaLocation='urn:magento/framework/Setup/Declaration/Schema/etc/schema.xsd'>
 
+    <!-- HelpDesk User Table -->
     <table name="dem_helpdesk_user" resource="default" engine="innodb" comment="Dem Helpdesk Users">
         <column xsi:type="int" name="user_id" unsigned="true" nullable="false" identity="true"
                 comment="User ID"/>
@@ -48,6 +56,7 @@
 
     </table>
 
+    <!-- HelpDesk Department Table -->
     <table name="dem_helpdesk_department" resource="default" engine="innodb" comment="Dem Helpdesk Department">
         <column xsi:type="int" name="department_id" unsigned="true" nullable="false" identity="true"
                 comment="Department ID"/>
@@ -78,6 +87,7 @@
                     referenceColumn="website_id" onDelete="CASCADE"/>
     </table>
 
+    <!-- HelpDesk Department User Table -->
     <table name="dem_helpdesk_department_user" resource="default" engine="innodb" comment="Dem Helpdesk Department Users">
         <column xsi:type="int" name="dept_user_id" unsigned="true" nullable="false" identity="true"
                 comment="Department User ID"/>
@@ -104,17 +114,16 @@
         </constraint>
     </table>
 
+    <!-- HelpDesk Case Table -->
     <table name="dem_helpdesk_case" resource="default" engine="innodb" comment="Dem Helpdesk Cases">
         <column xsi:type="int" name="case_id" unsigned="true" nullable="false" identity="true"
                 comment="Case ID"/>
-        <column xsi:type="varchar" name="case_number" nullable="true" length="10"
-                comment="Case Number"/>
-        <column xsi:type="varchar" name="protect_code" nullable="true" length="255"
-                comment="Protect Code"/>
         <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false"
                 default="0" comment="Website ID"/>
         <column xsi:type="int" name="department_id" unsigned="true" nullable="false"
                 default="1" comment="Department ID"/>
+        <column xsi:type="varchar" name="protect_code" nullable="true" length="255"
+                comment="Protect Code"/>
         <column xsi:type="int" name="creator_customer_id" unsigned="true" nullable="true"
                 comment="Creator Customer ID (not GUEST)"/>
         <column xsi:type="int" name="creator_admin_id" unsigned="true" nullable="true"
@@ -154,6 +163,7 @@
                     referenceColumn="website_id" onDelete="CASCADE"/>
     </table>
 
+    <!-- HelpDesk Case Reply Table -->
     <table name="dem_helpdesk_case_reply" resource="default" engine="innodb" comment="Dem Helpdesk Case Replies">
         <column xsi:type="int" name="reply_id" unsigned="true" nullable="false" identity="true"
                 comment="Reply ID"/>
@@ -183,6 +193,7 @@
                     referenceColumn="user_id" onDelete="CASCADE"/>
     </table>
 
+    <!-- HelpDesk Case Follower Table -->
     <table name="dem_helpdesk_case_follower" resource="default" engine="innodb" comment="Dem Helpdesk Case Followers">
         <column xsi:type="int" name="follower_id" unsigned="true" nullable="false" identity="true"
                 comment="Follower ID"/>

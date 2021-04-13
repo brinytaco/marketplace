@@ -1,10 +1,18 @@
 <?php
-/**
- * @author      Toby Crain <tcrain@directedgemedia.com>
- * @copyright © Direct Edge Media, Inc. All rights reserved.
- * @since       1.0.0
- */
+
+namespace Dem\HelpDesk;
 
 use Magento\Framework\Component\ComponentRegistrar;
+
+/**
+ * HelpDesk Case Layout - Grid
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
 
 ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Dem_HelpDesk', __DIR__);

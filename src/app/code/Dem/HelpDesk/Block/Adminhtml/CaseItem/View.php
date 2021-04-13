@@ -3,11 +3,15 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\Caseitem;
 
-/*
- * Adminhtml Caseitem Block View
+/**
+ * HelpDesk Block - Adminhtml Caseitem View
  *
- * @author      Toby Crain <tcrain@directedgemedia.com>
- * @copyright © Direct Edge Media, Inc. All rights reserved.
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
  */
 class View extends \Magento\Backend\Block\Widget\Container
 {
@@ -29,6 +33,7 @@ class View extends \Magento\Backend\Block\Widget\Container
      * @param \Magento\Backend\Block\Widget\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
+     * @return void
      */
     public function __construct(
         \Magento\Backend\Block\Widget\Context $context,
@@ -40,14 +45,12 @@ class View extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
-     * Constructor
-     *
      * @return void
      */
     protected function _construct()
     {
         $this->_objectId = 'case_id';
-        $this->_controller = 'adminhtml_case';
+        $this->_controller = 'adminhtml_caseitem';
         $this->_mode = 'view';
 
         parent::_construct();
@@ -59,7 +62,7 @@ class View extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
-     * Retrieve case model object
+     * Retrieve registered Case model
      *
      * @return \Dem\HelpDesk\Model\Caseitem
      */
@@ -109,6 +112,6 @@ class View extends \Magento\Backend\Block\Widget\Container
      */
     public function getBackUrl()
     {
-        return $this->getUrl('helpdesk/*/');
+        return $this->getUrl('helpdesk/case/');
     }
 }
