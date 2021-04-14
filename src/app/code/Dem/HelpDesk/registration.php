@@ -5,7 +5,7 @@ namespace Dem\HelpDesk;
 use Magento\Framework\Component\ComponentRegistrar;
 
 /**
- * HelpDesk Case Layout - Grid
+ * HelpDesk - Module Registration
  *
  * =============================================================================
  *

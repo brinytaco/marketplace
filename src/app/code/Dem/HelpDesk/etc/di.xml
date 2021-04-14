@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * HelpDesk - Main DI Constructor definitions
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <virtualType name="adminFilterWebsite" type="Dem\HelpDesk\Block\Adminhtml\Grid\Column\Filter\Website">
+        <arguments>
+            <argument name="helper" xsi:type="object">Dem\HelpDesk\Helper\Data</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="adminSourceWebsite" type="Dem\HelpDesk\Model\Source\Adminhtml\WebsiteOptions">
+        <arguments>
+            <argument name="helper" xsi:type="object">Dem\HelpDesk\Helper\Data</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="caseItemModel" type="Dem\HelpDesk\Model\Caseitem">
+        <arguments>
+            <argument name="context" xsi:type="object">Magento\Framework\Model\Context</argument>
+            <argument name="registry" xsi:type="object">Magento\Framework\Registry</argument>
+            <argument name="department" xsi:type="object">Dem\HelpDesk\Model\Department</argument>
+        </arguments>
+    </virtualType>
+
+</config>

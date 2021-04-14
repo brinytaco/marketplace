@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
-use Magento\Framework\App\ObjectManager;
-use Dem\HelpDesk\Model\Department;
-
 /**
  * HelpDesk Model - Case
  *
@@ -52,8 +49,14 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
     protected $website;
 
     /**
+     * @var \Dem\HelpDesk\Model\Department
+     */
+    protected $department;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
+     * @param \Dem\HelpDesk\Model\Department $department
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -61,10 +64,12 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
+        \Dem\HelpDesk\Model\Department $department,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [])
     {
+        $this->department = $department;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -140,6 +145,14 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
         $this->setData('case_number', $caseNumber);
     }
 
+    public function getDepartment()
+    {
+        if (!$this->department->getId()) {
+            $this->department->load($this->getDepartmentId());
+        }
+        return $this->department;
+    }
+
     /**
      * Set case number dynamically
      *
@@ -147,15 +160,8 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function setDepartmentName()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        /* @var $department \Dem\HelpDesk\Model\Department */
-        $department = $objectManager->create('\Dem\HelpDesk\Model\Department')->load($this->getDepartmentId());
-        $this->setData('department_name', $department->getName());
+        $this->setData('department_name', $this->getDepartment()->getName());
         return $this;
     }
 
-    public function getUserSuffix($userId = null)
-    {
-
-    }
 }

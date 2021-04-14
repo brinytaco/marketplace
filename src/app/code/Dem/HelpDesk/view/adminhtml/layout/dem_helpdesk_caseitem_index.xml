@@ -12,7 +12,7 @@
  */
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="styles"/>
+    <!--<update handle="styles"/>-->
     <body>
         <referenceContainer name="content">
             <block class="Dem\HelpDesk\Block\Adminhtml\Caseitem" name="helpdesk_case_grid">
@@ -30,15 +30,6 @@
                                 <item name="path" xsi:type="string">*/*/view</item>
                             </argument>
                         </arguments>
-                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="case_id">
-                            <arguments>
-                                <argument name="header" xsi:type="string" translate="true">ID</argument>
-                                <argument name="index" xsi:type="string">case_id</argument>
-                                <argument name="type" xsi:type="string">text</argument>
-                                <argument name="column_css_class" xsi:type="string">col-id</argument>
-                                <argument name="header_css_class" xsi:type="string">col-id</argument>
-                            </arguments>
-                        </block>
                         <block class="Magento\Backend\Block\Widget\Grid\Column" as="case_number">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Case Number</argument>
@@ -52,8 +43,8 @@
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Website</argument>
                                 <argument name="index" xsi:type="string">website_id</argument>
-                                <argument name="type" xsi:type="string">text</argument>
-                                <argument name="renderer" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\Grid\Column\Renderer\WebsiteName</argument>
+                                <argument name="type" xsi:type="string">options</argument>
+                                <argument name="options" xsi:type="options" model="Dem\HelpDesk\Block\Adminhtml\Grid\Column\Filter\Website"/>
                                 <argument name="column_css_class" xsi:type="string">col-id</argument>
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>
                             </arguments>
@@ -67,16 +58,6 @@
                                 <argument name="header_css_class" xsi:type="string">col-id</argument>
                             </arguments>
                         </block>
-<!--                        <block class="Magento\Backend\Block\Widget\Grid\Column" as="case_manager">
-                            <arguments>
-                                <argument name="header" xsi:type="string" translate="true">Case Manager</argument>
-                                <argument name="index" xsi:type="string">case_manager</argument>
-                                <argument name="type" xsi:type="string">text</argument>
-                                <argument name="renderer" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\Grid\Column\Renderer\CaseManagerName</argument>
-                                <argument name="column_css_class" xsi:type="string">col-id</argument>
-                                <argument name="header_css_class" xsi:type="string">col-id</argument>
-                            </arguments>
-                        </block>-->
                         <block class="Magento\Backend\Block\Widget\Grid\Column" as="creator_name">
                             <arguments>
                                 <argument name="header" xsi:type="string" translate="true">Created By</argument>
