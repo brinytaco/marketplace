@@ -32,6 +32,9 @@ services:
       #- ./src/nginx.conf:/var/www/html/nginx.conf
       #- ~/.composer/auth.json:/var/www/html/var/composer_home/auth.json
 
+      # Development only: Map core files to container
+      #- ./src/vendor:/var/www/html/vendor
+
       # To sync your SSH to the container, uncomment the following line:
       #- ~/.ssh/id_rsa:/var/www/.ssh/id_rsa:cached
       # Linux only: remove the above lines and mount the entire src directory with:
