@@ -6,5 +6,20 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
-
+    <default>
+        <dem_helpdesk>
+            <general>
+                <enabled>0</enabled>
+                <default_label>Help Desk</default_label>
+                <sender_email>helpdesk@directedgeprint.com</sender_email>
+                <default_department_label><![CDATA[General Request]]></default_department_label>
+            </general>
+            <cron>
+                <notify_active>0</notify_active>
+                <session_timeout>30</session_timeout>
+                <auto_inactive_interval>3</auto_inactive_interval>
+                <auto_archive_interval>30</auto_archive_interval>
+            </cron>
+        </dem_helpdesk>
+    </default>
 </config>

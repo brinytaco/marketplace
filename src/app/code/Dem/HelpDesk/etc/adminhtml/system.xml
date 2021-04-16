@@ -1,0 +1,113 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * HelpDesk - System Configuration
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <system>
+        <tab id="dem_system_tab" translate="label" sortOrder="100">
+            <label>Direct Edge (DEM)</label>
+        </tab>
+        <section id="dem_helpdesk" translate="label" sortOrder="100"
+                 showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Help Desk</label>
+            <tab>dem_system_tab</tab>
+            <resource>Dem_HelpDesk::System_Config</resource>
+            <group id="general" translate="label" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="0">
+                <comment>
+                    <![CDATA[Help Desk is always available at the Admin (Internal) level for use
+                    with Internal cases. However, each website must be enabled individually, and new cases
+                    can only be created for enabled websites.]]>
+                </comment>
+                <label>General Configuration</label>
+                <field id="enabled" translate="label" type="select" sortOrder="10"
+                       showInDefault="0" showInWebsite="1" showInStore="0">
+                    <label>Enable Help Desk?</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[By enabling this feature, the default "Contact Us"
+                        feature will be disabled.]]>
+                    </comment>
+                </field>
+                <field id="default_label" translate="label" type="text" sortOrder="20"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Frontend Label</label>
+                    <validate>required-entry</validate>
+                    <comment>
+                        <![CDATA[Frontend display label if other than "Help Desk"]]>
+                    </comment>
+                </field>
+                <field id="sender_email" translate="label" type="text" sortOrder="30"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sender Email Address</label>
+                    <validate>required-entry</validate>
+                    <comment>
+                        <![CDATA[Email address used as the "sender" for all notifications.]]>
+                    </comment>
+                </field>
+                <field id="default_department_label" translate="label" type="text" sortOrder="40"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Default Department Label</label>
+                    <validate>required-entry</validate>
+                    <comment>
+                        <![CDATA[Display label of default department on frontend.
+                        The default department will always be listed last.]]>
+                    </comment>
+                </field>
+            </group>
+            <group id="cron" translate="label" sortOrder="10"
+                   showInDefault="1" showInWebsite="1" showInStore="0">
+                <label>Automation Settings</label>
+                <field id="notify_active" translate="label" type="select" sortOrder="50"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Send notifications to active users?</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>
+                        <![CDATA[Should email notifications be sent to active HelpDesk users? If set to "no,"
+                        email notifications will only be sent to users considered to be "inactive."]]>
+                    </comment>
+                </field>
+                <field id="session_timeout" translate="label" type="text" sortOrder="60"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Active Session Timeout</label>
+                    <validate>required-entry</validate>
+                    <comment>
+                        <![CDATA[How many minutes of inactivity should a HelpDesk
+                        user be considered inactive?]]>
+                    </comment>
+                    <!-- If we're notifying active users, then we don't need to determine the inactive interval -->
+                    <depends>
+                        <field id="notify_active">0</field>
+                    </depends>
+                </field>
+                <field id="auto_inactive_interval" translate="label" type="text" sortOrder="70"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Auto-Inactive Days</label>
+                    <validate>required-entry</validate>
+                    <comment>
+                        <![CDATA[How many days of inactivity should a case be
+                        automatically set to inactive?]]>
+                    </comment>
+                </field>
+                <field id="auto_archive_interval" translate="label" type="text" sortOrder="80"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Auto-Archive Days</label>
+                    <validate>required-entry</validate>
+                    <comment>
+                        <![CDATA[How many days of inactivity should a case be auto-archived?]]>
+                    </comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
