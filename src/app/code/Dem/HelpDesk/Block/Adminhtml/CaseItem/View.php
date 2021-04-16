@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Block\Adminhtml\Caseitem;
+namespace Dem\HelpDesk\Block\Adminhtml\CaseItem;
 
 /**
- * HelpDesk Block - Adminhtml Caseitem View
+ * HelpDesk Block - Adminhtml CaseItem View
  *
  * =============================================================================
  *
@@ -64,11 +64,11 @@ class View extends \Magento\Backend\Block\Widget\Container
     /**
      * Retrieve registered Case model
      *
-     * @return \Dem\HelpDesk\Model\Caseitem
+     * @return \Dem\HelpDesk\Model\CaseItem
      */
     public function getCase()
     {
-        return $this->_coreRegistry->registry(\Dem\HelpDesk\Model\Caseitem::CURRENT_KEY);
+        return $this->_coreRegistry->registry(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY);
     }
 
     /**

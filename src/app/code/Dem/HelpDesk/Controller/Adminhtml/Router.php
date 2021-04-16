@@ -8,7 +8,7 @@ use Magento\Framework\App\RouterInterface;
 /**
  * HelpDesk Custom Router
  *
- * Converts "case" controller request to the proper "caseitem" controller,
+ * Converts "case" controller request to the proper "caseItem" controller,
  * since "case" cannot be an actual class/file name.
  *
  * =============================================================================
@@ -49,7 +49,7 @@ class Router implements RouterInterface
      * Match request and rewrite as needed
      *
      * If "helpdesk" module request and "case" controller set,
-     * reset controller to "caseitem" for proper routing.
+     * reset controller to "caseItem" for proper routing.
      *
      * @param \Magento\Framework\App\RequestInterface $request
      * @return \Magento\Framework\App\ActionInterface|void
@@ -57,7 +57,7 @@ class Router implements RouterInterface
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
         if (preg_match('/\/case\//', $request->getPathInfo())) {
-            $request->setControllerName('caseitem');
+            $request->setControllerName('caseItem');
         }
 
         return $this

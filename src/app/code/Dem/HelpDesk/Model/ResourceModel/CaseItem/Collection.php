@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Model\ResourceModel\Caseitem;
+namespace Dem\HelpDesk\Model\ResourceModel\CaseItem;
 
 /**
  * HelpDesk Resource Model - Case Collection
@@ -64,8 +64,8 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected function _construct()
     {
         $this->_init(
-            \Dem\HelpDesk\Model\Caseitem::class,
-            \Dem\HelpDesk\Model\ResourceModel\Caseitem::class
+            \Dem\HelpDesk\Model\CaseItem::class,
+            \Dem\HelpDesk\Model\ResourceModel\CaseItem::class
         );
     }
 

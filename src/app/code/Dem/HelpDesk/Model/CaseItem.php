@@ -32,7 +32,7 @@ namespace Dem\HelpDesk\Model;
  * @method getUpdatedBy()
  *
  */
-class Caseitem extends \Magento\Framework\Model\AbstractModel implements
+class CaseItem extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Framework\DataObject\IdentityInterface
 {
     const CURRENT_KEY = 'current_case';
@@ -78,7 +78,7 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\Caseitem::class);
+        $this->_init(\Dem\HelpDesk\Model\ResourceModel\CaseItem::class);
     }
 
     /**
@@ -112,7 +112,7 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
      * Load case by protect code (frontend)
      *
      * @param string $protectCode
-     * @return \Dem\HelpDesk\Model\Caseitem
+     * @return \Dem\HelpDesk\Model\CaseItem
      */
     public function loadByCode(string $protectCode)
     {
@@ -122,7 +122,7 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
     /**
      * After load
      *
-     * @return \Dem\HelpDesk\Model\Caseitem
+     * @return \Dem\HelpDesk\Model\CaseItem
      */
     public function afterLoad()
     {
@@ -135,7 +135,7 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Set case number dynamically
      *
-     * @return \Dem\HelpDesk\Model\Caseitem
+     * @return \Dem\HelpDesk\Model\CaseItem
      */
     protected function setCaseNumber()
     {
@@ -156,7 +156,7 @@ class Caseitem extends \Magento\Framework\Model\AbstractModel implements
     /**
      * Set case number dynamically
      *
-     * @return \Dem\HelpDesk\Model\Caseitem
+     * @return \Dem\HelpDesk\Model\CaseItem
      */
     protected function setDepartmentName()
     {

@@ -13,7 +13,7 @@ namespace Dem\HelpDesk\Model\ResourceModel;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Caseitem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context

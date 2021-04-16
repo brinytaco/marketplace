@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Controller\Adminhtml\Caseitem;
+namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
 use Magento\Framework\Controller\ResultFactory;
 

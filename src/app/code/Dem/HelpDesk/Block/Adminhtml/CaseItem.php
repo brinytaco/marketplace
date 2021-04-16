@@ -13,7 +13,7 @@ namespace Dem\HelpDesk\Block\Adminhtml;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Caseitem extends \Magento\Backend\Block\Widget\Grid\Container
+class CaseItem extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * @return void
