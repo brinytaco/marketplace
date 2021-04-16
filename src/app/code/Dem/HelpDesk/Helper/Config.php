@@ -16,14 +16,23 @@ namespace Dem\HelpDesk\Helper;
 class Config extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Configuration
+     * Configuration paths
      */
-    const XML_PATH_HELPDESK_STATUS_ENABLED = 'helpdesk/status/enabled';
+    const XML_PATH_HELPDESK_STATUS_ENABLED      = 'dem_helpdesk/general/enabled';
+    const XML_PATH_HELPDESK_FRONTEND_LABEL      = 'dem_helpdesk/general/frontend_label';
+    const XML_PATH_HELPDESK_SENDER_EMAIL        = 'dem_helpdesk/general/sender_email';
+    const XML_PATH_HELPDESK_DEFAULT_DEPT_LABEL  = 'dem_helpdesk/general/department_label';
+    const XML_PATH_HELPDESK_NOTIFY_ACTIVE       = 'dem_helpdesk/cron/notify_active';
+    const XML_PATH_HELPDESK_SESSION_TIMEOUT     = 'dem_helpdesk/cron/session_timeout';
+    const XML_PATH_HELPDESK_INACTIVE_INTERVAL   = 'dem_helpdesk/cron/auto_inactive_interval';
+    const XML_PATH_HELPDESK_ARCHIVE_INTERVAL    = 'dem_helpdesk/cron/auto_archive_interval';
 
-    const HELPDESK_WEBSITE_ID_DEFAULT = 1;
-    const HELPDESK_WEBSITE_ID_ADMIN = 0;
-
-    const HELPDESK_DEPARTMENT_DEFAULT_ID = 1;
+    /**
+     * Default references
+     */
+    const HELPDESK_WEBSITE_ID_DEFAULT           = 1;
+    const HELPDESK_WEBSITE_ID_ADMIN             = 0;
+    const HELPDESK_DEPARTMENT_DEFAULT_ID        = 1;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface

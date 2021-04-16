@@ -56,24 +56,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             return false;
         }
 
-        return $this->getWebsiteEnabledFlag($websiteId);
-    }
-
-    /**
-     * Get helpdesk enabled flag by website.
-     *
-     * If websiteId is empty, will check current website
-     *
-     * @param null|int|string $websiteId
-     * @return bool
-     */
-    public function getWebsiteEnabledFlag($websiteId = null)
-    {
-        return $this->scopeConfig->isSetFlag(
-            Config::XML_PATH_HELPDESK_STATUS_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
-            $websiteId
-        );
+        return $this->getConfiguredEnabledFlag($websiteId);
     }
 
     /**
@@ -132,5 +115,145 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getIsFrontendArea()
     {
         return ($this->getCurrentArea() == \Magento\Framework\App\Area::AREA_FRONTEND);
+    }
+
+    /* ====================================================================== */
+    /* Configuration values
+    /* ====================================================================== */
+
+    /**
+     * Get helpdesk enabled flag by website.
+     *
+     * If websiteId is empty, will check current website
+     *
+     * @param null|int|string $websiteId
+     * @return bool
+     */
+    public function getConfiguredEnabledFlag($websiteId = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            Config::XML_PATH_HELPDESK_STATUS_ENABLED,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+    }
+
+    /**
+     * Get helpdesk frontend label by website.
+     *
+     * If websiteId is empty, will check current website
+     *
+     * @param null|int|string $websiteId
+     * @return bool
+     */
+    public function getConfiguredFrontendLabel($websiteId = null)
+    {
+        return $this->scopeConfig->getValue(
+            Config::XML_PATH_HELPDESK_FRONTEND_LABEL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+    }
+
+    /**
+     * Get helpdesk sender email by website.
+     *
+     * If websiteId is empty, will check current website
+     *
+     * @param null|int|string $websiteId
+     * @return bool
+     */
+    public function getConfiguredSenderEmail($websiteId = null)
+    {
+        return $this->scopeConfig->getValue(
+            Config::XML_PATH_HELPDESK_SENDER_EMAIL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+    }
+
+    /**
+     * Get helpdesk default department label by website.
+     *
+     * If websiteId is empty, will check current website
+     *
+     * @param null|int|string $websiteId
+     * @return bool
+     */
+    public function getConfiguredDepartmentLabel($websiteId = null)
+    {
+        return $this->scopeConfig->getValue(
+            Config::XML_PATH_HELPDESK_DEFAULT_DEPT_LABEL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+    }
+
+    /**
+     * Get helpdesk notify_active flag by website.
+     *
+     * If websiteId is empty, will check current website
+     *
+     * @param null|int|string $websiteId
+     * @return bool
+     */
+    public function getConfiguredNotifyActiveFlag($websiteId = null)
+    {
+        return $this->scopeConfig->isSetFlag(
+            Config::XML_PATH_HELPDESK_NOTIFY_ACTIVE,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+    }
+
+    /**
+     * Get helpdesk session timeout interval by website.
+     *
+     * If websiteId is empty, will check current website
+     *
+     * @param null|int|string $websiteId
+     * @return bool
+     */
+    public function getConfiguredSessionTimeoutMinutes($websiteId = null)
+    {
+        return (int) $this->scopeConfig->getValue(
+            Config::XML_PATH_HELPDESK_SESSION_TIMEOUT,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+    }
+
+    /**
+     * Get helpdesk auto inactive user interval by website.
+     *
+     * If websiteId is empty, will check current website
+     *
+     * @param null|int|string $websiteId
+     * @return bool
+     */
+    public function getConfiguredInactiveIntervalDays($websiteId = null)
+    {
+        return (int) $this->scopeConfig->getValue(
+            Config::XML_PATH_HELPDESK_INACTIVE_INTERVAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
+    }
+
+    /**
+     * Get helpdesk auto archive interval by website.
+     *
+     * If websiteId is empty, will check current website
+     *
+     * @param null|int|string $websiteId
+     * @return bool
+     */
+    public function getConfiguredArchiveIntervalDays($websiteId = null)
+    {
+        return (int) $this->scopeConfig->getValue(
+            Config::XML_PATH_HELPDESK_ARCHIVE_INTERVAL,
+            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            $websiteId
+        );
     }
 }

@@ -39,10 +39,10 @@
                         feature will be disabled.]]>
                     </comment>
                 </field>
-                <field id="default_label" translate="label" type="text" sortOrder="20"
+                <field id="frontend_label" translate="label" type="text" sortOrder="20"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Frontend Label</label>
-                    <validate>required-entry</validate>
+                    <validate>required-entry no-marginal-whitespace</validate>
                     <comment>
                         <![CDATA[Frontend display label if other than "Help Desk"]]>
                     </comment>
@@ -50,15 +50,15 @@
                 <field id="sender_email" translate="label" type="text" sortOrder="30"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Sender Email Address</label>
-                    <validate>required-entry</validate>
+                    <validate>required-entry validate-email</validate>
                     <comment>
                         <![CDATA[Email address used as the "sender" for all notifications.]]>
                     </comment>
                 </field>
-                <field id="default_department_label" translate="label" type="text" sortOrder="40"
+                <field id="department_label" translate="label" type="text" sortOrder="40"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Default Department Label</label>
-                    <validate>required-entry</validate>
+                    <validate>required-entry no-marginal-whitespace</validate>
                     <comment>
                         <![CDATA[Display label of default department on frontend.
                         The default department will always be listed last.]]>
@@ -80,7 +80,7 @@
                 <field id="session_timeout" translate="label" type="text" sortOrder="60"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Active Session Timeout</label>
-                    <validate>required-entry</validate>
+                    <validate>required-entry integer</validate>
                     <comment>
                         <![CDATA[How many minutes of inactivity should a HelpDesk
                         user be considered inactive?]]>
@@ -93,7 +93,7 @@
                 <field id="auto_inactive_interval" translate="label" type="text" sortOrder="70"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Auto-Inactive Days</label>
-                    <validate>required-entry</validate>
+                    <validate>required-entry integer</validate>
                     <comment>
                         <![CDATA[How many days of inactivity should a case be
                         automatically set to inactive?]]>
@@ -102,7 +102,7 @@
                 <field id="auto_archive_interval" translate="label" type="text" sortOrder="80"
                        showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Auto-Archive Days</label>
-                    <validate>required-entry</validate>
+                    <validate>required-entry integer</validate>
                     <comment>
                         <![CDATA[How many days of inactivity should a case be auto-archived?]]>
                     </comment>
