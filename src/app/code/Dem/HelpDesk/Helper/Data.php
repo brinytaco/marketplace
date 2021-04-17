@@ -20,17 +20,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
-    public $storeManager;
+    private $storeManager;
+
+    /**
+     * Current area
+     *
+     * @var string
+     */
+    private $currentArea;
 
     /**
      * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        \Magento\Framework\App\Helper\Context $context
     ) {
-        $this->storeManager = $storeManager;
         parent::__construct($context);
     }
 
@@ -60,19 +64,29 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Fetch instance of StoreManagerInterface
+     * @return type
+     */
+    public static function getStoreManager()
+    {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        return $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+    }
+
+    /**
      * Get selected or current website by id
      *
      * @param int $websiteId
      * @return \Magento\Store\Api\Data\WebsiteInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getWebsite($websiteId = null)
+    public static function getWebsite($websiteId = null)
     {
         if ($websiteId) {
-            return $this->storeManager->getWebsite($websiteId);
+            return self::getStoreManager()->getWebsite($websiteId);
         }
 
-        return $this->storeManager->getWebsite();
+        return self::getStoreManager()->getWebsite();
     }
 
     /**
@@ -80,9 +94,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return \Magento\Store\Api\Data\WebsiteInterface[]
      */
-    public function getWebsites()
+    public static function getWebsites()
     {
-        return $this->storeManager->getWebsites();
+        return self::getStoreManager()->getWebsites();
     }
 
     /**
@@ -92,9 +106,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCurrentArea()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $area = $objectManager->get('Magento\Framework\App\State');
-        return $area->getAreaCode();
+        if (!isset($this->currentArea)) {
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $this->currentArea = $objectManager->get('Magento\Framework\App\State');
+        }
+        return $this->currentArea->getAreaCode();
     }
 
     /**

@@ -28,4 +28,17 @@
         </arguments>
     </type>
 
+    <virtualType name="adminFilterWebsite" type="Dem\HelpDesk\Block\Adminhtml\Grid\Column\Filter\Website">
+        <arguments>
+            <argument name="helper" xsi:type="object">Dem\HelpDesk\Helper\Data</argument>
+            <argument name="store" xsi:type="object">Magento\Store\Model\System\Store</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="adminSourceWebsite" type="Dem\HelpDesk\Model\Source\Adminhtml\WebsiteOptions">
+        <arguments>
+            <argument name="helper" xsi:type="object">Dem\HelpDesk\Helper\Data</argument>
+        </arguments>
+    </virtualType>
+
 </config>

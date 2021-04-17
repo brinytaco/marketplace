@@ -28,11 +28,20 @@ class Website implements ArrayInterface
     protected $helper;
 
     /**
-     * @param \Dem\HelpDesk\Helper\Data $helper
+     * @var \Magento\Store\Model\System\Store
      */
-    public function __construct(\Dem\HelpDesk\Helper\Data $helper)
-    {
+    protected $store;
+
+    /**
+     * @param \Dem\HelpDesk\Helper\Data $helper
+     * @param \Magento\Store\Model\System\Store $store
+     */
+    public function __construct(
+        \Dem\HelpDesk\Helper\Data $helper,
+        \Magento\Store\Model\System\Store $store
+    ) {
         $this->helper = $helper;
+        $this->store = $store;
     }
 
     /**
@@ -42,11 +51,7 @@ class Website implements ArrayInterface
      */
     public function toOptionArray()
     {
-        /* @var $store Magento\Store\Model\System\Store */
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $store = $objectManager->get('Magento\Store\Model\System\Store');
-
-        $options = $store->getWebsiteValuesForForm($empty = false, $all = true);
+        $options = $this->store->getWebsiteValuesForForm($empty = false, $all = true);
 
         foreach ($options as $key => $option) {
             if (!$this->helper->isEnabled($option['value'])) {

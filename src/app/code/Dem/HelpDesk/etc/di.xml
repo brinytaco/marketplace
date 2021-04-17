@@ -14,18 +14,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <virtualType name="adminFilterWebsite" type="Dem\HelpDesk\Block\Adminhtml\Grid\Column\Filter\Website">
-        <arguments>
-            <argument name="helper" xsi:type="object">Dem\HelpDesk\Helper\Data</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="adminSourceWebsite" type="Dem\HelpDesk\Model\Source\Adminhtml\WebsiteOptions">
-        <arguments>
-            <argument name="helper" xsi:type="object">Dem\HelpDesk\Helper\Data</argument>
-        </arguments>
-    </virtualType>
-
     <virtualType name="caseItemModel" type="Dem\HelpDesk\Model\CaseItem">
         <arguments>
             <argument name="context" xsi:type="object">Magento\Framework\Model\Context</argument>

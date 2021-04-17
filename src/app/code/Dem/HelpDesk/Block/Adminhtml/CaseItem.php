@@ -26,4 +26,14 @@ class CaseItem extends \Magento\Backend\Block\Widget\Grid\Container
         $this->_addButtonLabel = __('Create New Case');
         parent::_construct();
     }
+
+
+    /**
+     * See parent. If grid not created via layout,
+     * do it here (old school)
+     */
+    protected function _prepareLayout()
+    {
+        return parent::_prepareLayout();
+    }
 }

@@ -48,4 +48,50 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             \Dem\HelpDesk\Model\ResourceModel\Department::class
         );
     }
+
+    /**
+     * Before collection load
+     *
+     * @return $this
+     */
+    protected function _beforeLoad()
+    {
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_before', [$this->_eventObject => $this]);
+        return parent::_beforeLoad();
+    }
+
+    /**
+     * After collection load
+     *
+     * @return $this
+     */
+    protected function _afterLoad()
+    {
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', [$this->_eventObject => $this]);
+
+        return parent::_afterLoad();
+    }
+
+    /**
+     * Get department collection by website
+     *
+     * @param integer $websiteId
+     * @return Dem_HelpDesk_Model_Resource_Department_Collection
+     */
+    public function getWebsiteDepartments($websiteId = null)
+    {
+        if (is_null($websiteId)) {
+            $websiteId = Mage::app()->getWebsite()->getId();
+        }
+
+        // There can be multiple admin-level departments (website 0),
+        // but the #1 General is available to all websites.
+        if (!isset($this->_websiteDepartments)) {
+            $this->_websiteDepartments = $this->getCollection()
+                ->addFieldToFilter('website_id', array('in' => array($websiteId, self::WEBSITE_ID_DEFAULT)))
+                ->setOrder('sort_order', 'asc');
+        }
+
+        return $this->_websiteDepartments;
+    }
 }

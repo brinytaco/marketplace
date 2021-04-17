@@ -54,6 +54,11 @@ class CaseItem extends \Magento\Framework\Model\AbstractModel implements
     protected $department;
 
     /**
+     * @var Dem\HelpDesk\Helper\Data
+     */
+    protected $helper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Dem\HelpDesk\Model\Department $department
@@ -126,10 +131,7 @@ class CaseItem extends \Magento\Framework\Model\AbstractModel implements
      */
     public function afterLoad()
     {
-        $this->setCaseNumber();
-        $this->setDepartmentName();
-
-        return $this;
+        return parent::afterLoad();
     }
 
     /**
@@ -137,13 +139,16 @@ class CaseItem extends \Magento\Framework\Model\AbstractModel implements
      *
      * @return \Dem\HelpDesk\Model\CaseItem
      */
-    protected function setCaseNumber()
-    {
-        $websiteId = str_pad($this->getWebsiteId(), 3, '0', STR_PAD_LEFT);
-        $caseId = str_pad($this->getCaseId(), 6, '0', STR_PAD_LEFT);
-        $caseNumber = $websiteId . '-' . $caseId;
-        $this->setData('case_number', $caseNumber);
-    }
+//    public function getCaseNumber()
+//    {
+//        if (!$this->hasData('case_number')) {
+//            $websiteId = str_pad($this->getWebsiteId(), 3, '0', STR_PAD_LEFT);
+//            $caseId = str_pad($this->getCaseId(), 6, '0', STR_PAD_LEFT);
+//            $caseNumber = $websiteId . '-' . $caseId;
+//            $this->setData('case_number', $caseNumber);
+//        }
+//        return $this->getData('case_number');
+//    }
 
     public function getDepartment()
     {
@@ -151,17 +156,6 @@ class CaseItem extends \Magento\Framework\Model\AbstractModel implements
             $this->department->load($this->getDepartmentId());
         }
         return $this->department;
-    }
-
-    /**
-     * Set case number dynamically
-     *
-     * @return \Dem\HelpDesk\Model\CaseItem
-     */
-    protected function setDepartmentName()
-    {
-        $this->setData('department_name', $this->getDepartment()->getName());
-        return $this;
     }
 
 }

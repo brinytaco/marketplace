@@ -67,20 +67,68 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             \Dem\HelpDesk\Model\CaseItem::class,
             \Dem\HelpDesk\Model\ResourceModel\CaseItem::class
         );
+
+        // Add department_name alias to grid filter
+        $this->addFilterToMap('department_name', 'd.name');
+        $this->addFilterToMap('case_number', 'case_id');
     }
 
     /**
+     * Before collection load
+     *
+     * @return $this
+     */
+    protected function _beforeLoad()
+    {
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_before', [$this->_eventObject => $this]);
+        return parent::_beforeLoad();
+    }
+
+    /**
+     * After collection load
+     *
      * Load additional object data when loading collection
      *
      * @return $this
      */
     protected function _afterLoad()
     {
-        parent::_afterLoad();
-        foreach ($this as $case) {
-            $case->afterLoad();
-        }
+        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', [$this->_eventObject => $this]);
+        return parent::_afterLoad();
+    }
+
+
+    /**
+     * Add extra fields as output columns
+     * department_name
+     * case_manager_name
+     *
+     */
+    protected function _initSelect()
+    {
+
+        parent::_initSelect();
+
+        // Add department name to select
+        $this->getSelect()->join(
+            ['d' => $this->getTable('dem_helpdesk_department')],
+            'd.department_id = main_table.department_id',
+            ['department_name' => 'name']
+        );
+
+        // Dynamically retrieve the "case number" string
+        $this->addExpressionFieldToSelect(
+            'case_number',
+            $this->getCaseNumberExpressionSelect(),
+            []
+        );
+
         return $this;
+    }
+
+    public function getCaseNumberExpressionSelect()
+    {
+        return "CONCAT_WS('-', LPAD(main_table.website_id, 3, '0'), LPAD(main_table.case_id, 6, '0'))";
     }
 
 }
