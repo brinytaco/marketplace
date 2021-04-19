@@ -36,9 +36,9 @@ class View extends \Magento\Backend\Block\Widget\Container
      * @return void
      */
     public function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
-        \Magento\Framework\Registry $registry,
-        array $data = []
+            \Magento\Backend\Block\Widget\Context $context,
+            \Magento\Framework\Registry $registry,
+            array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -50,7 +50,7 @@ class View extends \Magento\Backend\Block\Widget\Container
     protected function _construct()
     {
         $this->_objectId = 'case_id';
-        $this->_controller = 'adminhtml_caseitem';
+        $this->_controller = 'adminhtml_case';
         $this->_mode = 'view';
 
         parent::_construct();
@@ -88,8 +88,8 @@ class View extends \Magento\Backend\Block\Widget\Container
      */
     public function getHeaderText()
     {
-        return __(
-            'Case # %s',
+        return sprintf('%s # %s',
+            __('Case'),
             $this->getCase()->getCaseNumber(),
         );
     }

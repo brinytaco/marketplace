@@ -28,16 +28,10 @@
         </arguments>
     </type>
 
-    <virtualType name="adminFilterWebsite" type="Dem\HelpDesk\Block\Adminhtml\Grid\Column\Filter\Website">
+    <virtualType name="adminCaseItemGrid" type="Dem\HelpDesk\Controller\Adminhtml\CaseItem\Index">
         <arguments>
-            <argument name="helper" xsi:type="object">Dem\HelpDesk\Helper\Data</argument>
-            <argument name="store" xsi:type="object">Magento\Store\Model\System\Store</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="adminSourceWebsite" type="Dem\HelpDesk\Model\Source\Adminhtml\WebsiteOptions">
-        <arguments>
-            <argument name="helper" xsi:type="object">Dem\HelpDesk\Helper\Data</argument>
+            <argument name="context" xsi:type="object">Magento\Backend\App\Action\Context</argument>
+            <argument name="helper" xsi:type="object" shared="true">Dem\HelpDesk\Helper\Data</argument>
         </arguments>
     </virtualType>
 

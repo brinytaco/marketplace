@@ -20,10 +20,10 @@ class CaseItem extends \Magento\Backend\Block\Widget\Grid\Container
      */
     protected function _construct()
     {
-        $this->_controller = 'adminhtml_caseitem';
+        $this->_controller = 'adminhtml_case';
         $this->_blockGroup = 'Dem_HelpDesk';
         $this->_headerText = __('Manage Cases');
-        $this->_addButtonLabel = __('Create New Case');
+        $this->_addButtonLabel = __('Open New Case');
         parent::_construct();
     }
 

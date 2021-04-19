@@ -13,6 +13,8 @@ namespace Dem\HelpDesk\Model;
  * @author     Toby Crain
  * @since      1.0.0
  *
+ * @todo: Do I need to prevent "setter" methods?
+ * 
  * @method getId()
  * @method getProtectCode()
  * @method getWebsiteId()
@@ -36,8 +38,8 @@ class CaseItem extends \Magento\Framework\Model\AbstractModel implements
     \Magento\Framework\DataObject\IdentityInterface
 {
     const CURRENT_KEY = 'current_case';
-
     const CACHE_TAG = 'helpdesk_case';
+
     /**
      * @var string
      */

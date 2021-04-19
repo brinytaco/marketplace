@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Block\Adminhtml\Grid\Column\Filter;
+namespace Dem\HelpDesk\Block\Grid\Column\Filter\CaseItem;
 
 use Magento\Framework\Option\ArrayInterface;
 
 /**
- * HelpDesk Block - Adminhtml Grid Column Filter Website
+ * HelpDesk Block - Adminhtml Grid Column Filter CaseItem Website
  *
  * =============================================================================
  *
@@ -17,11 +17,6 @@ use Magento\Framework\Option\ArrayInterface;
  */
 class Website implements ArrayInterface
 {
-    /**
-     * @var ListInterface
-     */
-    protected $list;
-
     /**
      * @var \Dem\HelpDesk\Helper\Data
      */
@@ -35,23 +30,28 @@ class Website implements ArrayInterface
     /**
      * @param \Dem\HelpDesk\Helper\Data $helper
      * @param \Magento\Store\Model\System\Store $store
+     * @return void
      */
     public function __construct(
-        \Dem\HelpDesk\Helper\Data $helper,
-        \Magento\Store\Model\System\Store $store
+            \Dem\HelpDesk\Helper\Data $helper,
+            \Magento\Store\Model\System\Store $store
     ) {
         $this->helper = $helper;
         $this->store = $store;
     }
 
     /**
-     * Return array of scope names
+     * Return array of website names
      *
+     * Adminhtml view, so include Admin website,
+     * but rewrite the label
+     *
+     * @param bool $includeAdmin Adds "admin" website to list if true
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray($includeAdmin = true)
     {
-        $options = $this->store->getWebsiteValuesForForm($empty = false, $all = true);
+        $options = $this->store->getWebsiteValuesForForm($addEmptyOption = false, $includeAdmin);
 
         foreach ($options as $key => $option) {
             if (!$this->helper->isEnabled($option['value'])) {
@@ -60,7 +60,7 @@ class Website implements ArrayInterface
         }
 
         // Change the label of the Admin website
-        $options[\Dem\HelpDesk\Helper\Config::HELPDESK_WEBSITE_ID_ADMIN]['label'] = __('DE INTERNAL*');
+        $options[\Dem\HelpDesk\Helper\Config::HELPDESK_WEBSITE_ID_ADMIN]['label'] = __('DE INTERNAL');
 
         return $options;
     }
