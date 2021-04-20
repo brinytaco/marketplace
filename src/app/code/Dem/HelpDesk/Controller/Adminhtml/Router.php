@@ -56,8 +56,14 @@ class Router implements RouterInterface
      */
     public function match(\Magento\Framework\App\RequestInterface $request)
     {
-        if (preg_match('/\/case\//', $request->getPathInfo())) {
+        $pathInfo = $request->getPathInfo();
+        if (preg_match('/helpdesk\/case/', $pathInfo) && !preg_match('/helpdesk\/caseitem/i', $pathInfo)) {
             $request->setControllerName('caseItem');
+        }
+
+        if ($request->getControllerName() == '') {
+            $request->setModuleName('admin');
+            $request->setControllerName('index');
         }
 
         return $this
