@@ -27,23 +27,15 @@ class Index extends \Magento\Backend\App\Action
     protected $helper;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
-     */
-    protected $layoutFactory;
-
-    /**
      * @param Context $context
      * @param \Dem\HelpDesk\Helper\Data $helper
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
      * @return void
      */
     public function __construct(
             Context $context,
-            \Dem\HelpDesk\Helper\Data $helper,
-            \Magento\Framework\View\LayoutFactory $layoutFactory
+            \Dem\HelpDesk\Helper\Data $helper
     ) {
         $this->helper = $helper;
-        $this->layoutFactory = $layoutFactory;
         parent::__construct($context);
     }
 
@@ -52,15 +44,6 @@ class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        if ($this->getRequest()->isAjax()) {
-            $output = $this->layoutFactory->create()
-                ->createBlock(\Dem\HelpDesk\Block\Adminhtml\CaseItem\Grid::class)
-                ->toHtml();
-
-
-            $this->getResponse()->appendBody($output);
-        }
-
         $frontendLabel = $this->helper->getConfiguredFrontendLabel();
         $label = sprintf('%s %s', $frontendLabel, __('Cases'));
         $resultPage = $this->resultFactory->create(ResultFactory::TYPE_PAGE);

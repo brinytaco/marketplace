@@ -14,6 +14,22 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <!-- Case Collection Resource -->
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="dem_helpdesk_caseitem_listing_data_source" xsi:type="string">caseItemSearchResult</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="caseItemSearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">dem_helpdesk_case</argument>
+            <argument name="resourceModel" xsi:type="string">Dem\HelpDesk\Model\ResourceModel\CaseItem</argument>
+        </arguments>
+    </virtualType>
+
+    <!-- Dependency Injection requirements -->
     <virtualType name="caseItemModel" type="Dem\HelpDesk\Model\CaseItem">
         <arguments>
             <argument name="context" xsi:type="object">Magento\Framework\Model\Context</argument>

@@ -67,7 +67,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             \Dem\HelpDesk\Model\CaseItem::class,
             \Dem\HelpDesk\Model\ResourceModel\CaseItem::class
         );
-
+        
         // Add department_name alias to grid filter
         $this->addFilterToMap('department_name', 'd.name');
         $this->addFilterToMap('case_number', 'case_id');

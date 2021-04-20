@@ -32,7 +32,6 @@
         <arguments>
             <argument name="context" xsi:type="object">Magento\Backend\App\Action\Context</argument>
             <argument name="helper" xsi:type="object" shared="true">Dem\HelpDesk\Helper\Data</argument>
-            <argument name="layoutFactory" xsi:type="object" shared="true">Magento\Framework\View\LayoutFactory</argument>
         </arguments>
     </virtualType>
 
