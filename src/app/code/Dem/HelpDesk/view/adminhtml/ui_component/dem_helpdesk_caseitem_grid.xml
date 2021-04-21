@@ -15,10 +15,10 @@
 
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">dem_helpdesk_caseitem_listing.dem_helpdesk_caseitem_listing_data_source</item>
-            <item name="deps" xsi:type="string">dem_helpdesk_caseitem_listing.dem_helpdesk_caseitem_listing_data_source</item>
+            <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid_data_source</item>
+            <item name="deps" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">spinner_columns</item>
+        <item name="spinner" xsi:type="string">dem_helpdesk_caseitem_grid_columns</item>
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
@@ -29,16 +29,16 @@
         </item>
     </argument>
 
-    <dataSource name="caseDataSource">
+    <dataSource name="dem_helpdesk_caseitem_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument>
-            <argument name="name" xsi:type="string">dem_helpdesk_caseitem_listing_data_source</argument>
+            <argument name="class" xsi:type="string">DemHelpDeskCaseGridDataProvider</argument>
+            <argument name="name" xsi:type="string">dem_helpdesk_caseitem_grid_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">case_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="indexField" xsi:type="string">case_id</item>
                     </item>
@@ -48,20 +48,65 @@
     </dataSource>
 
     <listingToolbar name="listing_top">
+        <!-- Make toolbar "sticky" (fixed) when scrolling beyond vertical -->
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="sticky" xsi:type="boolean">true</item>
             </item>
         </argument>
+        <!-- Adds support for "bookmarking" or "saving" the current view -->
 	<bookmark name="bookmarks"/>
+        <!-- Include controls for "column" visibility on/off -->
 	<columnsControls name="columns_controls"/>
 	<filterSearch name="fulltext"/>
-	<filters name="listing_filters" />
+        <!-- Include "templates" config argument to show select lists as multiple checkboxes -->
+	<filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="templates" xsi:type="array">
+                        <item name="filters" xsi:type="array">
+                            <item name="select" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </filters>
+        <!-- Include paging for results -->
 	<paging name="listing_paging"/>
+        <!-- Add default export button -->
 	<exportButton name="export_button"/>
     </listingToolbar>
 
-    <columns name="spinner_columns">
+    <!-- Grid column definition -->
+    <columns name="dem_helpdesk_caseitem_grid_columns">
+
+<!--        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid.listing_top.bookmarks</item>
+                    <item name="namespace" xsi:type="string">current</item>
+                </item>
+                <item name="childDefaults" xsi:type="array">
+                    <item name="fieldAction" xsi:type="array">
+                        <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid_columns.actions</item>
+                        <item name="target" xsi:type="string">applyAction</item>
+                        <item name="params" xsi:type="array">
+                            <item name="0" xsi:type="string">edit</item>
+                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                        </item>
+                    </item>
+                    <item name="controlVisibility" xsi:type="boolean">true</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid.listing_top.bookmarks</item>
+                        <item name="root" xsi:type="string">columns.${ $.index }</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                    </item>
+                </item>
+            </item>
+        </argument>-->
 
         <!-- For Mass Actions
         <selectionsColumn name="ids">
@@ -83,6 +128,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
+                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -98,6 +144,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Case Number</item>
+                    <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
@@ -111,6 +158,7 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Website</item>
+                    <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
@@ -123,6 +171,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Department</item>
+                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -135,6 +184,7 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Created At</item>
+                    <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
@@ -147,6 +197,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Created By</item>
+                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -159,6 +210,7 @@
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Updated At</item>
+                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -171,6 +223,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Updated By</item>
+                    <item name="visible" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -184,6 +237,7 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Priority</item>
+                    <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
@@ -197,9 +251,11 @@
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
+                    <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
 
     </columns>
 </listing>
+

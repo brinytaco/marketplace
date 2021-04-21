@@ -15,7 +15,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="dem_helpdesk_caseitem_listing"/>
+            <uiComponent name="dem_helpdesk_caseitem_grid"/>
         </referenceContainer>
     </body>
 </page>

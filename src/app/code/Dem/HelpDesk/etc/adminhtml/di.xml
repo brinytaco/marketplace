@@ -28,8 +28,11 @@
         </arguments>
     </type>
 
-    <virtualType name="adminCaseItemGrid" type="Dem\HelpDesk\Controller\Adminhtml\CaseItem\Index">
+    <virtualType name="adminCaseItemGrid" type="Dem\HelpDesk\Controller\Adminhtml\CaseItem">
         <arguments>
+            <argument name="registry" xsi:type="object">Magento\Framework\Registry</argument>
+            <argument name="resultPageFactory" xsi:type="object">Magento\Framework\View\Result\PageFactory</argument>
+            <argument name="resultForwardFactory" xsi:type="object">Magento\Backend\Model\View\Result\ForwardFactory</argument>
             <argument name="context" xsi:type="object">Magento\Backend\App\Action\Context</argument>
             <argument name="helper" xsi:type="object" shared="true">Dem\HelpDesk\Helper\Data</argument>
         </arguments>

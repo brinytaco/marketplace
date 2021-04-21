@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+
 /**
  * HelpDesk Resource Model - Case
  *
@@ -13,14 +18,23 @@ namespace Dem\HelpDesk\Model\ResourceModel;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class CaseItem extends AbstractDb
 {
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $date;
+
+    /**
+     * @param Context $context
+     * @param DateTime $date
      * @return void
      */
-    public function __construct(\Magento\Framework\Model\ResourceModel\Db\Context $context)
-    {
+    public function __construct(
+        Context $context,
+        DateTime $date
+    ) {
+        $this->date = $date;
         parent::__construct($context);
     }
 
@@ -40,17 +54,11 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        parent::_beforeSave($object);
-
-        // Only if not already set (doesn't change)
-        $protectCode = $object->_getData('protect_code');
-
-        if (empty($protectCode)) {
+        $object->setUpdatedAt($this->date->gmtDate());
+        if ($object->isObjectNew()) {
+            $object->setCreatedAt($this->date->gmtDate());
             $object->setData('protect_code', sha1(microtime()));
         }
-
-        return $this;
+        return parent::_beforeSave($object);
     }
-
-
 }

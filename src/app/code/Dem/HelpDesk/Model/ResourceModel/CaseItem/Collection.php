@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel\CaseItem;
 
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+
 /**
  * HelpDesk Resource Model - Case Collection
  *
@@ -13,7 +15,7 @@ namespace Dem\HelpDesk\Model\ResourceModel\CaseItem;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
     /**
      * Identifier field name for collection items
@@ -27,34 +29,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var string
      */
-    protected $_eventPrefix = 'dem_helpdesk_case_collection';
+    protected $_eventPrefix = 'helpdesk_case_collection';
 
     /**
      * Name of event parameter
      *
      * @var string
      */
-    protected $_eventObject = 'case_collection';
-
-
-    /**
-     * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param mixed $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
-     */
-    public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
-    ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
-    }
+    protected $_eventObject = 'helpdesk_case_collection';
 
     /**
      * Define resource model
@@ -67,36 +49,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             \Dem\HelpDesk\Model\CaseItem::class,
             \Dem\HelpDesk\Model\ResourceModel\CaseItem::class
         );
-        
+
         // Add department_name alias to grid filter
         $this->addFilterToMap('department_name', 'd.name');
         $this->addFilterToMap('case_number', 'case_id');
     }
-
-    /**
-     * Before collection load
-     *
-     * @return $this
-     */
-    protected function _beforeLoad()
-    {
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_before', [$this->_eventObject => $this]);
-        return parent::_beforeLoad();
-    }
-
-    /**
-     * After collection load
-     *
-     * Load additional object data when loading collection
-     *
-     * @return $this
-     */
-    protected function _afterLoad()
-    {
-        $this->_eventManager->dispatch($this->_eventPrefix . '_load_after', [$this->_eventObject => $this]);
-        return parent::_afterLoad();
-    }
-
 
     /**
      * Add extra fields as output columns

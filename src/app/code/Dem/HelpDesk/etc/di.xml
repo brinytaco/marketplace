@@ -14,20 +14,38 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <!-- Case Collection Resource -->
+    <!-- CaseItem -->
+    <preference for="Dem\HelpDesk\Api\Data\CaseItemRepositoryInterface" type="Dem\HelpDesk\Model\CaseItemRepository" />
+    <preference for="Dem\HelpDesk\Api\Data\CaseItemInterface" type="Dem\HelpDesk\Model\CaseItem" />
+
+    <virtualType name="DemHelpDeskCaseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Dem\HelpDesk\Model\Resource\CaseItem\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">DemHelpDeskCaseGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="DemHelpDeskCaseGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="dem_helpdesk_caseitem_listing_data_source" xsi:type="string">caseItemSearchResult</item>
+                <item name="dem_helpdesk_caseitem_grid_data_source" xsi:type="string">Dem\HelpDesk\Model\ResourceModel\CaseItem\Grid\Collection</item>
             </argument>
         </arguments>
     </type>
-    <virtualType name="caseItemSearchResult" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+    <type name="Dem\HelpDesk\Model\ResourceModel\CaseItem\Grid\Collection">
         <arguments>
             <argument name="mainTable" xsi:type="string">dem_helpdesk_case</argument>
             <argument name="resourceModel" xsi:type="string">Dem\HelpDesk\Model\ResourceModel\CaseItem</argument>
         </arguments>
-    </virtualType>
+    </type>
+
 
     <!-- Dependency Injection requirements -->
     <virtualType name="caseItemModel" type="Dem\HelpDesk\Model\CaseItem">
