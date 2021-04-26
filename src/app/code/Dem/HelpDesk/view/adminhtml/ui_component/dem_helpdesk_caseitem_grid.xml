@@ -83,30 +83,19 @@
     <!-- Grid column definition -->
     <columns name="dem_helpdesk_caseitem_grid_columns">
 
-<!--        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid.listing_top.bookmarks</item>
-                    <item name="namespace" xsi:type="string">current</item>
-                </item>
-                <item name="childDefaults" xsi:type="array">
-                    <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid_columns.actions</item>
-                        <item name="target" xsi:type="string">applyAction</item>
-                        <item name="params" xsi:type="array">
-                            <item name="0" xsi:type="string">edit</item>
-                            <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
-                        </item>
+        <!-- Make entire row clickable (requires actionsColumn defined below) -->
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid_columns.actions</item>
+                    <item name="target" xsi:type="string">applyAction</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">view</item>
+                        <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
                     </item>
-                    <item name="controlVisibility" xsi:type="boolean">true</item>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid.listing_top.bookmarks</item>
-                        <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
-                    </item>
-                </item>
-            </item>
-        </argument>-->
+                </param>
+            </childDefaults>
+        </settings>
 
         <!-- For Mass Actions
         <selectionsColumn name="ids">
@@ -171,7 +160,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Department</item>
-                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
@@ -197,7 +186,7 @@
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Created By</item>
-                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
@@ -255,6 +244,16 @@
                 </item>
             </argument>
         </column>
+
+        <actionsColumn name="actions" class="Dem\HelpDesk\Ui\Component\Listing\Column\ViewAction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">case_id</item>
+                    <item name="viewUrlPath" xsi:type="string">helpdesk/case/view</item>
+                    <item name="urlEntityParamName" xsi:type="string">id</item>
+                </item>
+            </argument>
+        </actionsColumn>
 
     </columns>
 </listing>

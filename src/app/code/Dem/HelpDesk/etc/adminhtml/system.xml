@@ -29,7 +29,7 @@
                     with Internal cases. However, each website must be enabled individually, and new cases
                     can only be created for enabled websites.]]>
                 </comment>
-                <label>General Configuration</label>
+                <label>General Settings</label>
                 <field id="enabled" translate="label" type="select" sortOrder="10"
                        showInDefault="0" showInWebsite="1" showInStore="0">
                     <label>Enable Help Desk?</label>

@@ -1,4 +1,6 @@
 <?php
+declare(strict_types=1);
+
 namespace Dem\HelpDesk\Model\ResourceModel\CaseItem\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;

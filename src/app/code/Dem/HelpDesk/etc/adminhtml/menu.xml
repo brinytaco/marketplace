@@ -1,11 +1,20 @@
 <?xml version="1.0"?>
 <!--
-/*
- * @author      Toby Crain <tcrain@directedgemedia.com>
- * @copyright © Direct Edge Media, Inc. All rights reserved.
+/**
+ * HelpDesk - Adminhtml Menu
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
+        <add id="Dem_HelpDesk::helpdesk" title="Help Desk" module="Dem_HelpDesk" sortOrder="1000" resource="Dem_HelpDesk::helpdesk" />
+        <add id="Dem_HelpDesk::helpdesk_cases" parent="Dem_HelpDesk::helpdesk" title="Manage Cases" module="Dem_HelpDesk" sortOrder="10" resource="Dem_HelpDesk::helpdesk_case" action="helpdesk/case/index"/>
+        <add id="Dem_HelpDesk::helpdesk_config" parent="Dem_HelpDesk::helpdesk" title="Configuration" module="Dem_HelpDesk" sortOrder="100" resource="Dem_HelpDesk::helpdesk_config" action="adminhtml/system_config/edit/section/dem_helpdesk/"/>
     </menu>
 </config>
