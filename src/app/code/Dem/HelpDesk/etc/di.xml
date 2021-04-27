@@ -15,7 +15,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- CaseItem -->
-    <preference for="Dem\HelpDesk\Api\Data\CaseItemRepositoryInterface" type="Dem\HelpDesk\Model\CaseItemRepository" />
+    <preference for="Dem\HelpDesk\Api\CaseItemRepositoryInterface" type="Dem\HelpDesk\Model\CaseItemRepository" />
     <preference for="Dem\HelpDesk\Api\Data\CaseItemInterface" type="Dem\HelpDesk\Model\CaseItem" />
 
     <virtualType name="DemHelpDeskCaseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
@@ -37,12 +37,6 @@
             <argument name="collections" xsi:type="array">
                 <item name="dem_helpdesk_caseitem_grid_data_source" xsi:type="string">Dem\HelpDesk\Model\ResourceModel\CaseItem\Grid\Collection</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Dem\HelpDesk\Model\ResourceModel\CaseItem\Grid\Collection">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">dem_helpdesk_case</argument>
-            <argument name="resourceModel" xsi:type="string">Dem\HelpDesk\Model\ResourceModel\CaseItem</argument>
         </arguments>
     </type>
 

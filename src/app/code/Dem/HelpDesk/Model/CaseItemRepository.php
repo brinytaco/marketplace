@@ -101,7 +101,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
      * @return mixed
      * @throws NoSuchEntityException
      */
-    public function getById($entityId)
+    public function get($entityId)
     {
         if (!isset($this->instances[$entityId])) {
             /** @var \Dem\HelpDesk\Api\Data\CaseItemInterface|\Magento\Framework\Model\AbstractModel $entity */

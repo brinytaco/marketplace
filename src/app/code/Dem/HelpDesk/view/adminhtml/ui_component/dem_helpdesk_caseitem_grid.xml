@@ -109,6 +109,8 @@
         </selectionsColumn>
         -->
 
+        <!-- Column "sortOrder" is natural by column "name" if no sortOrder is set -->
+
         <column name="case_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -250,7 +252,7 @@
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">case_id</item>
                     <item name="viewUrlPath" xsi:type="string">helpdesk/case/view</item>
-                    <item name="urlEntityParamName" xsi:type="string">id</item>
+                    <item name="urlEntityParamName" xsi:type="string">case_id</item>
                 </item>
             </argument>
         </actionsColumn>

@@ -47,7 +47,7 @@ class CaseItem extends AbstractDb
     }
 
     /**
-     * Set the case protectCode if new
+     * Set new case data and update "updated_at" timestamp
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
@@ -57,7 +57,7 @@ class CaseItem extends AbstractDb
         $object->setUpdatedAt($this->date->gmtDate());
         if ($object->isObjectNew()) {
             $object->setCreatedAt($this->date->gmtDate());
-            $object->setData('protect_code', sha1(microtime()));
+            $object->setProtectCode(sha1(microtime()));
         }
         return parent::_beforeSave($object);
     }

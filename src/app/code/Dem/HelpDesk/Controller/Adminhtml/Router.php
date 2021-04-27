@@ -61,9 +61,13 @@ class Router implements RouterInterface
             $request->setControllerName('caseItem');
         }
 
+        // If no controller specified, redirect to admin dashboard
         if ($request->getControllerName() == '') {
             $request->setModuleName('admin');
             $request->setControllerName('index');
+            return $this
+                ->actionFactory
+                ->create('Magento\Framework\App\Action\Redirect', ['request' => $request]);
         }
 
         return $this

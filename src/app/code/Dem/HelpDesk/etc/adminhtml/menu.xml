@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
  * HelpDesk - Adminhtml Menu
@@ -13,8 +13,28 @@
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
-        <add id="Dem_HelpDesk::helpdesk" title="Help Desk" module="Dem_HelpDesk" sortOrder="1000" resource="Dem_HelpDesk::helpdesk" />
-        <add id="Dem_HelpDesk::helpdesk_cases" parent="Dem_HelpDesk::helpdesk" title="Manage Cases" module="Dem_HelpDesk" sortOrder="10" resource="Dem_HelpDesk::helpdesk_case" action="helpdesk/case/index"/>
-        <add id="Dem_HelpDesk::helpdesk_config" parent="Dem_HelpDesk::helpdesk" title="Configuration" module="Dem_HelpDesk" sortOrder="100" resource="Dem_HelpDesk::helpdesk_config" action="adminhtml/system_config/edit/section/dem_helpdesk/"/>
+        <!-- @todo:
+            This (Dem_HelpDesk::base) should be a high-level menu item,
+            so that all new modules can be listed beneath instead
+            of having a bunch of new menu items at the top level. Can be replaced
+            once a default "base" or "root" module exists.
+
+            (This may involve simply creating a "root" module with nothing to it.)
+
+            Each module should have a top-level item with the parent of this one
+            "Dem_HelpDesk::base" (or whatever it ends up becoming) so that it
+            appears as a "group" in this context (like "Stores" menu does).
+
+            But group titles won't be visible unless:
+                a) There's more than one group
+                b) Additional groups have at least one menu item (or no header to show)
+        -->
+        <add id="Dem_HelpDesk::base" title="Direct Edge" translate="title" module="Dem_HelpDesk" resource="Dem_HelpDesk::base" sortOrder="0" />
+
+        <add id="Dem_HelpDesk::helpdesk" parent="Dem_HelpDesk::base" title="Help Desk" translate="title" module="Dem_HelpDesk" sortOrder="100" resource="Dem_HelpDesk::helpdesk" />
+        <add id="Dem_HelpDesk::helpdesk_cases" parent="Dem_HelpDesk::helpdesk" title="Manage Cases" translate="title" module="Dem_HelpDesk" sortOrder="10" resource="Dem_HelpDesk::helpdesk_cases" action="helpdesk/case/index"/>
+        <add id="Dem_HelpDesk::helpdesk_config" parent="Dem_HelpDesk::helpdesk" title="Configuration" translate="title" module="Dem_HelpDesk" sortOrder="20" resource="Dem_HelpDesk::helpdesk_config" action="adminhtml/system_config/edit/section/dem_helpdesk/"/>
+
+        <add id="Placeholder" parent="Dem_HelpDesk::base" title="Group Title" translate="title" module="Dem_HelpDesk" sortOrder="10" resource="Dem_HelpDesk::helpdesk" />
     </menu>
 </config>

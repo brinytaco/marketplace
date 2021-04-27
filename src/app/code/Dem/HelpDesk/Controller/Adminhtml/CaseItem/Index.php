@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
+use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
+
 /**
  * HelpDesk Controller - Adminhtml Case Grid (Index)
  *
@@ -16,7 +18,7 @@ namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Index extends \Dem\HelpDesk\Controller\Adminhtml\CaseItem
+class Index extends CaseItem
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page

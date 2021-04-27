@@ -28,7 +28,7 @@ interface CaseItemRepositoryInterface
      * @param $entityId
      * @return mixed
      */
-    public function getById($entityId);
+    public function get($entityId);
 
     /**
      * @param SearchCriteriaInterface $searchCriteria

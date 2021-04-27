@@ -25,6 +25,21 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     protected $aggregations;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaInterface
+     */
+    protected $searchCriteria;
+
+    /**
+     * @var int
+     */
+    protected $totalCount;
+
+    /**
+     * @var \Magento\Framework\Api\ExtensibleDataInterface[]
+     */
+    protected $items;
+
+    /**
      * Name prefix of events that are dispatched by model
      *
      * @var string
@@ -38,44 +53,25 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      */
     protected $_eventObject = 'helpdesk_case_grid_collection';
 
+
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param string $mainTable
-     * @param string $resourceModel
-     * @param string $model
-     * @param \Magento\Framework\DB\Adapter\AdapterInterface|string|null $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource
+     * Define resource model
      *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @return void
      */
-    public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        $mainTable,
-        $resourceModel,
-        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
-        $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
-    ) {
-        parent::__construct(
-            $entityFactory,
-            $logger,
-            $fetchStrategy,
-            $eventManager,
-            $connection,
-            $resource
+    public function _construct()
+    {
+        $this->_init(
+            \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
+            \Dem\HelpDesk\Model\ResourceModel\CaseItem::class
         );
-        $this->_init($model, $resourceModel);
-        $this->setMainTable($mainTable);
+
+        // Add department_name alias to grid filter
+        $this->addFilterToMap('department_name', 'd.name');
+        $this->addFilterToMap('case_number', 'case_id');
+        $this->addFilterToMap('website_id', 'main_table.website_id');
     }
+
 
     /**
      * @return AggregationInterface
@@ -92,6 +88,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     public function setAggregations($aggregations)
     {
         $this->aggregations = $aggregations;
+        return $this;
     }
 
     /**
@@ -101,7 +98,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      */
     public function getSearchCriteria()
     {
-        return null;
+        return $this->searchCriteria;
     }
 
     /**
@@ -109,10 +106,10 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
+        $this->searchCriteria = $searchCriteria;
         return $this;
     }
 
@@ -123,7 +120,10 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      */
     public function getTotalCount()
     {
-        return $this->getSize();
+        if (!isset($this->totalCount)) {
+            $this->totalCount = $this->getSize();
+        }
+        return $this->totalCount;
     }
 
     /**
@@ -131,10 +131,10 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      *
      * @param int $totalCount
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setTotalCount($totalCount)
     {
+        $this->totalCount = $totalCount;
         return $this;
     }
 
@@ -143,10 +143,10 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      *
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function setItems(array $items = null)
     {
+        $this->items = $items;
         return $this;
     }
 }
