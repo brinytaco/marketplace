@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * HelpDesk Case Layout - Grid
+ * HelpDesk Case UI Component - Grid
  *
  * =============================================================================
  *
@@ -252,7 +252,7 @@
                 <item name="config" xsi:type="array">
                     <item name="indexField" xsi:type="string">case_id</item>
                     <item name="viewUrlPath" xsi:type="string">helpdesk/caseitem/view</item>
-                    <item name="urlEntityParamName" xsi:type="string">case_id</item>
+                    <item name="urlEntityParamName" xsi:type="string">id</item>
                 </item>
             </argument>
         </actionsColumn>

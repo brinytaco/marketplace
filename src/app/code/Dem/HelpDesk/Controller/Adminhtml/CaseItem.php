@@ -137,7 +137,7 @@ abstract class CaseItem extends Action
         $frontendLabel = $this->helper->getConfiguredFrontendLabel();
 
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_case');
+        $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_cases');
         $resultPage->addBreadcrumb($frontendLabel, $frontendLabel);
         $resultPage->addBreadcrumb(__('Cases'), __('Cases'));
         return $resultPage;

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * HelpDesk Case Layout - Grid
+ * HelpDesk Case Layout - Create Form
  *
  * =============================================================================
  *
@@ -13,13 +13,14 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="styles"/>
+    <update handle="editor"/>
     <head>
         <!-- Translated -->
-        <title>Manage Cases</title>
+        <title>Open New Case</title>
    </head>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="dem_helpdesk_caseitem_grid"/>
+            <uiComponent name="dem_helpdesk_caseitem_create"/>
         </referenceContainer>
     </body>
 </page>

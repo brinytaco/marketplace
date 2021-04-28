@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * HelpDesk Case UI Component - Create Form
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">dem_helpdesk_caseitem_create.dem_helpdesk_caseitem_create_data_source</item>
+            <item name="deps" xsi:type="string">dem_helpdesk_caseitem_create.dem_helpdesk_caseitem_create_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Open New Case</item>
+        <item name="layout" xsi:type="array">
+            <item name="type" xsi:type="string">tabs</item>
+        </item>
+<!--        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\BackButton</item>
+            <item name="delete" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\DeleteButton</item>
+            <item name="reset" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\ResetButton</item>
+            <item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\SaveButton</item>
+        </item>-->
+    </argument>
+
+    <!-- Used to retrieve the form data -->
+    <dataSource name="dem_helpdesk_caseitem_create_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Dem\HelpDesk\Model\DataProvider\CaseItem</argument>
+            <argument name="name" xsi:type="string">dem_helpdesk_caseitem_create_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">case_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+
+    <!-- Separate fieldsets as desired -->
+    <fieldset name="general">
+
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Open New Case</item>
+            </item>
+        </argument>
+
+        <!-- This field represents form id and is hidden -->
+        <field name="case_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <!-- Object data field/column reference -->
+                    <item name="source" xsi:type="string">case_id</item>
+                    <!-- Element label, translatable -->
+                    <item name="label" xsi:type="string" translate="true">Case ID</item>
+                    <!-- Disable/don't render this element if false (defaults true) -->
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <!-- Object expected data type -->
+                    <item name="dataType" xsi:type="string">int</item>
+                    <!-- Form element type (input, hidden, checkbox, radio, select, multiselect, textarea) -->
+                    <item name="formElement" xsi:type="string">input</item>
+                    <!-- Default value, if any -->
+                    <item name="default" xsi:type="string"></item>
+                    <!-- Text to render before element -->
+                    <item name="addbefore" xsi:type="string"></item>
+                    <!-- Text to render after element -->
+                    <item name="addafter" xsi:type="string"></item>
+                    <!-- Placeholder text -->
+                    <item name="placeholder" xsi:type="string"></item>
+                    <!-- Description/note, text appears below input -->
+                    <item name="notice" xsi:type="string"></item>
+                    <!-- Tooltip displays question-mark icon. Mouseover displays
+                         description text. If "link" is provided, clicking tooltip
+                         navigates to the specified url -->
+                    <item name="tooltip" xsi:type="array">
+                        <item name="description" xsi:type="string">A very nice tooltip for you!</item>
+                        <!--<item name="link" xsi:type="string">[url]</item>-->
+                    </item>
+                    <!-- Validation classes. Add each class as separate item.
+                         "required-entry" values will render a red asterisk -->
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <!-- Custom class(es) are applied to the element's container,
+                         not the actual input -->
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="custom-css" xsi:type="boolean">true</item>
+                        <item name="my-styles" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="website">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">Website</item>
+                    <item name="required" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                </item>
+            </argument>
+        </field>
+
+    </fieldset>
+</form>

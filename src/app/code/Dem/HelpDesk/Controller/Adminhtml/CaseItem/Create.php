@@ -6,10 +6,10 @@ namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
 /**
- * HelpDesk Controller - Adminhtml Case Grid (Index)
+ * HelpDesk Controller - Adminhtml Case View
  *
  * Uses layout definition from:
- * view/adminhtml/layout/dem_helpdesk_caseitem_index.xml
+ * view/adminhtml/layout/dem_helpdesk_caseitem_create.xml
  *
  * =============================================================================
  *
@@ -18,7 +18,7 @@ use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Index extends CaseItem
+class Create extends CaseItem
 {
     /**
      * @return \Magento\Backend\Model\View\Result\Page
