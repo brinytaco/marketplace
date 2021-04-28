@@ -10,9 +10,6 @@ Because "case" is a php keyword, it's usage as a class identifier is forbidden.
 As a result, all class names and references will be regarded as "CaseItem" as
 needed.
 
-A custom router is added to provide for URI matching of "case" and dispatching
-to caseItem controller as needed.
-
 ## Installation details
 
 Before disabling or uninstalling this module, note that the following modules

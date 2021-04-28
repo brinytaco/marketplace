@@ -34,7 +34,7 @@ class View extends CaseItem
             } catch (\Exception $e) {
                 $this->logger->critical($e);
                 $this->messageManager->addErrorMessage(__('Exception occurred during case load'));
-                $resultRedirect->setPath('helpdesk/case/index');
+                $resultRedirect->setPath('helpdesk/caseitem/index');
                 return $resultRedirect;
             }
             $resultPage->getConfig()->getTitle()->prepend(sprintf("#%s", $case->getCaseNumber()));

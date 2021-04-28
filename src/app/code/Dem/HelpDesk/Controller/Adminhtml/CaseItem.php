@@ -27,6 +27,21 @@ abstract class CaseItem extends Action
      */
     const ACTION_RESOURCE = 'Dem_HelpDesk::helpdesk_cases';
 
+    /*
+     * @var array Valid action list
+     */
+    private $allowedActions = [
+        'create',
+        'follow',
+        'grid',
+        'index',
+        'refresh',
+        'reply',
+        'save',
+        'transfer',
+        'view',
+    ];
+
     /**
      * Core registry
      *

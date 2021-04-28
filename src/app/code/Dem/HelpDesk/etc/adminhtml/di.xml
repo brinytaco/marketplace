@@ -14,20 +14,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <!-- Add custom router -->
-    <type name="Magento\Framework\App\RouterList">
-        <arguments>
-            <argument name="routerList" xsi:type="array">
-                <item name="helpdesk" xsi:type="array">
-                    <item name="class" xsi:type="string">Dem\HelpDesk\Controller\Adminhtml\Router</item>
-                    <item name="disable" xsi:type="boolean">false</item>
-                    <!-- MUST BE less than 100 (default router) or it won't get called -->
-                    <item name="sortOrder" xsi:type="string">20</item>
-                </item>
-            </argument>
-        </arguments>
-    </type>
-
     <virtualType name="adminCaseItem" type="Dem\HelpDesk\Controller\Adminhtml\CaseItem">
         <arguments>
             <argument name="context" xsi:type="object">Magento\Backend\App\Action\Context</argument>

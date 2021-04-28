@@ -112,6 +112,6 @@ class View extends \Magento\Backend\Block\Widget\Container
      */
     public function getBackUrl()
     {
-        return $this->getUrl('helpdesk/case/');
+        return $this->getUrl('helpdesk/caseitem/');
     }
 }
