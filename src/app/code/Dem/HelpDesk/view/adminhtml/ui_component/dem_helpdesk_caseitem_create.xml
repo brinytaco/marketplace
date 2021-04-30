@@ -18,15 +18,19 @@
             <item name="deps" xsi:type="string">dem_helpdesk_caseitem_create.dem_helpdesk_caseitem_create_data_source</item>
         </item>
         <item name="label" xsi:type="string" translate="true">Open New Case</item>
+
+        <!-- ?? -->
         <item name="layout" xsi:type="array">
             <item name="type" xsi:type="string">tabs</item>
         </item>
-<!--        <item name="buttons" xsi:type="array">
-            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\BackButton</item>
-            <item name="delete" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\DeleteButton</item>
-            <item name="reset" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\ResetButton</item>
-            <item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\SaveButton</item>
-        </item>-->
+        <!-- Button set -->
+        <item name="buttons" xsi:type="array">
+            <!--<item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\BackButton</item>-->
+            <!--<item name="delete" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\DeleteButton</item>-->
+            <!--<item name="reset" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\ResetButton</item>-->
+            <!--<item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\SaveButton</item>-->
+        </item>
+        <item name="ajaxSave" xsi:type="boolean">false</item>
     </argument>
 
     <!-- Used to retrieve the form data -->
@@ -44,68 +48,139 @@
         </argument>
     </dataSource>
 
-    <!-- Separate fieldsets as desired -->
+    <!--
+        Separate fieldsets as desired.
+
+        NOTE: that input field names are rendered as "fieldsetName[fieldName]".
+        Consider this when naming fieldsets and when handling submitted field data.
+
+        IMPORTANT: When adding translatable strings, be sure that the wrapping
+        <item> tags for each string do not have any preceding or succeeding whitespace.
+        Whitespace is treated as part of the translation string and will not likely
+        match.
+    -->
     <fieldset name="general">
 
+        <!-- Add fieldset header/label if desired -->
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="label" xsi:type="string" translate="true">Open New Case</item>
             </item>
         </argument>
 
-        <!-- This field represents form id and is hidden -->
+        <!-- Case ID: Not used, here for field reference -->
         <field name="case_id">
             <argument name="data" xsi:type="array">
+                <!--
+                    Select options, if applicable. May be object (source class must
+                    have toOptionArray() method to draw from) or array of specific
+                    options. See example.
+                -->
+                <!--<item name="options" xsi:type="object">Dem\HelpDesk\Block\Grid\Column\Filter\CaseItem\Website</item>-->
+                <!--<item name="options" xsi:type="array">-->
+                    <!--<item name="1" xsi:type="array">-->
+                        <!--<item name="value" xsi:type="string">1</item>-->
+                        <!--<item name="label" xsi:type="string">Option #1</item>-->
+                    <!--</item>-->
+                    <!--<item name="2" xsi:type="array">-->
+                        <!--<item name="value" xsi:type="string">2</item>-->
+                        <!--<item name="label" xsi:type="string">Option #2</item>-->
+                    <!--</item>-->
+                    <!--<item name="3" xsi:type="array">-->
+                        <!--<item name="value" xsi:type="string">3</item>-->
+                        <!--<item name="label" xsi:type="string">Option #3</item>-->
+                    <!--</item>-->
+                <!--</item>-->
                 <item name="config" xsi:type="array">
                     <!-- Object data field/column reference -->
                     <item name="source" xsi:type="string">case_id</item>
+                    <!-- JS component if not default for formElement -->
+                    <!--<item name="component" xsi:type="string">Dem_HelpDesk/view/js/form/element/options</item>-->
                     <!-- Element label, translatable -->
-                    <item name="label" xsi:type="string" translate="true">Case ID</item>
-                    <!-- Disable/don't render this element if false (defaults true) -->
-                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="label" xsi:type="string" translate="true">Case</item>
+                    <!-- Should render this element (defaults false -->
+                    <item name="visible" xsi:type="boolean">false</item>
                     <!-- Object expected data type -->
                     <item name="dataType" xsi:type="string">int</item>
                     <!-- Form element type (input, hidden, checkbox, radio, select, multiselect, textarea) -->
                     <item name="formElement" xsi:type="string">input</item>
                     <!-- Default value, if any -->
                     <item name="default" xsi:type="string"></item>
+                    <!-- Set disabled property -->
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <!-- Set readonly property -->
+                    <item name="readonly" xsi:type="boolean">false</item>
                     <!-- Text to render before element -->
-                    <item name="addbefore" xsi:type="string"></item>
+                    <item name="addbefore" xsi:type="string" translate="true"></item>
                     <!-- Text to render after element -->
-                    <item name="addafter" xsi:type="string"></item>
+                    <item name="addafter" xsi:type="string" translate="true"></item>
                     <!-- Placeholder text -->
-                    <item name="placeholder" xsi:type="string"></item>
+                    <item name="placeholder" xsi:type="string" translate="true"></item>
                     <!-- Description/note, text appears below input -->
-                    <item name="notice" xsi:type="string"></item>
+                    <item name="notice" xsi:type="string" translate="true"></item>
                     <!-- Tooltip displays question-mark icon. Mouseover displays
                          description text. If "link" is provided, clicking tooltip
                          navigates to the specified url -->
                     <item name="tooltip" xsi:type="array">
-                        <item name="description" xsi:type="string">A very nice tooltip for you!</item>
+                        <!--<item name="description" xsi:type="string" translate="true">A very nice tooltip for you!</item>-->
                         <!--<item name="link" xsi:type="string">[url]</item>-->
                     </item>
                     <!-- Validation classes. Add each class as separate item.
                          "required-entry" values will render a red asterisk -->
                     <item name="validation" xsi:type="array">
-                        <item name="required-entry" xsi:type="boolean">true</item>
+                        <!--<item name="required-entry" xsi:type="boolean">true</item>-->
                     </item>
                     <!-- Custom class(es) are applied to the element's container,
                          not the actual input -->
                     <item name="additionalClasses" xsi:type="array">
-                        <item name="custom-css" xsi:type="boolean">true</item>
-                        <item name="my-styles" xsi:type="boolean">true</item>
+                        <!--<item name="custom-css" xsi:type="boolean">true</item>-->
+                        <!--<item name="my-styles" xsi:type="boolean">true</item>-->
                     </item>
                 </item>
             </argument>
         </field>
 
-        <field name="website">
+        <!--
+            Website:
+            If this field doesn't yet have a value, all other fields are disabled.
+            On change: reload department list via AJAX.
+        -->
+        <field name="website_id">
+
             <argument name="data" xsi:type="array">
+
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Website</item>
                 <item name="config" xsi:type="array">
+                    <!-- Object data field/column reference -->
+                    <item name="source" xsi:type="string">website_id</item>
+                    <!-- JS component if not default for formElement -->
+                    <!--<item name="component" xsi:type="string">Dem_HelpDesk/view/js/form/element/options</item>-->
+                    <!-- Element label, translatable -->
                     <item name="label" xsi:type="string" translate="true">Website</item>
-                    <item name="required" xsi:type="boolean">true</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <!-- Should render this element (defaults false -->
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <!-- Object expected data type -->
+                    <item name="dataType" xsi:type="string">select</item>
+                    <!-- Frontend element type -->
+                    <item name="formElement" xsi:type="string">select</item>
+                    <!-- Default value, if any -->
+                    <item name="default" xsi:type="string"></item>
+                    <!-- Set disabled property -->
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <!-- Set readonly property -->
+                    <item name="readonly" xsi:type="boolean">false</item>
+                    <!-- Text to render before element -->
+                    <item name="addbefore" xsi:type="string" translate="true"></item>
+                    <!-- Text to render after element -->
+                    <item name="addafter" xsi:type="string" translate="true"></item>
+                    <!-- Placeholder text -->
+                    <item name="placeholder" xsi:type="string" translate="true"></item>
+                    <!-- Description/note, text appears below input -->
+                    <item name="notice" xsi:type="string" translate="true"></item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+
                 </item>
             </argument>
         </field>

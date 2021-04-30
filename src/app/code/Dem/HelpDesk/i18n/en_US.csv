@@ -25,7 +25,10 @@
 "Case","Case"
 "This case no longer exists.","This case no longer exists."
 "Exception occurred during case load","Exception occurred during case load"
-"DE INTERNAL", "DE INTERNAL"
+"Admin", "DE INTERNAL"
+
+# Case Create/View
+"Website","Website"
 
 # Case statuses
 "New","New"

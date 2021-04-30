@@ -18,6 +18,7 @@
     <preference for="Dem\HelpDesk\Api\CaseItemRepositoryInterface" type="Dem\HelpDesk\Model\CaseItemRepository" />
     <preference for="Dem\HelpDesk\Api\Data\CaseItemInterface" type="Dem\HelpDesk\Model\CaseItem" />
 
+
     <virtualType name="DemHelpDeskCaseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Dem\HelpDesk\Model\Resource\CaseItem\Collection</argument>
@@ -47,13 +48,6 @@
             <argument name="context" xsi:type="object">Magento\Framework\Model\Context</argument>
             <argument name="registry" xsi:type="object">Magento\Framework\Registry</argument>
             <argument name="department" xsi:type="object">Dem\HelpDesk\Model\Department</argument>
-        </arguments>
-    </virtualType>
-
-    <virtualType name="gridFilterWebsite" type="Dem\HelpDesk\Block\Grid\Column\Filter\CaseItem\Website">
-        <arguments>
-            <argument name="helper" xsi:type="object" shared="true">Dem\HelpDesk\Helper\Data</argument>
-            <argument name="store" xsi:type="object">Magento\Store\Model\System\Store</argument>
         </arguments>
     </virtualType>
 

@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * HelpDesk Model - Source CaseItem
+ * HelpDesk Model - Source CaseItem Priority
  *
  * =============================================================================
  *
@@ -16,7 +17,7 @@ use Magento\Framework\DataObject;
  * @since      1.0.0
  *
  */
-class Priority
+class Priority implements OptionSourceInterface
 {
     /**
      * Case priorities
@@ -24,6 +25,29 @@ class Priority
     const CASE_PRIORITY_NORMAL   = 0;
     const CASE_PRIORITY_URGENT   = 1;
     const CASE_PRIORITY_CRITICAL = 2;
+
+    /**
+     * Return array of case priority options
+     *
+     * Adminhtml view, so include Admin website,
+     * but rewrite the label
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        $priorityCollection = \Dem\HelpDesk\Model\Source\CaseItem\Priority::getCasePriorityCollection();
+
+        // Grid filter, always add empty option
+        $options = [
+            '' => ['label' => ' ', 'value' => '']
+        ];
+
+        foreach ($priorityCollection as $priority) {
+            $options[] = ['label' => $priority->getLabel(), 'value' => $priority->getId()];
+        }
+        return $options;
+    }
 
     /**
      * Get available case priorities as \Magento\Framework\Data\Collection

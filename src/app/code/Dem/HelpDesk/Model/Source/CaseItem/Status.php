@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * HelpDesk Model - Source CaseItem
+ * HelpDesk Model - Source CaseItem Status
  *
  * =============================================================================
  *
@@ -16,7 +17,7 @@ use Magento\Framework\DataObject;
  * @since      1.0.0
  *
  */
-class Status
+class Status implements OptionSourceInterface
 {
     /**
      * Case status
@@ -28,6 +29,29 @@ class Status
     const CASE_STATUS_INACTIVE_PENDING = 45;
     const CASE_STATUS_RESOLVED = 70;
     const CASE_STATUS_ARCHIVED = 90;
+
+    /**
+     * Return array of case status options
+     *
+     * Adminhtml view, so include Admin website,
+     * but rewrite the label
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        $statusCollection = \Dem\HelpDesk\Model\Source\CaseItem\Status::getCaseStatusCollection(true);
+
+        // Grid filter, always add empty option
+        $options = [
+            '' => ['label' => ' ', 'value' => '']
+        ];
+
+        foreach ($statusCollection as $status) {
+            $options[] = ['label' => $status->getLabel(), 'value' => $status->getId()];
+        }
+        return $options;
+    }
 
     /**
      * Get available case statuses as \Magento\Framework\Data\Collection

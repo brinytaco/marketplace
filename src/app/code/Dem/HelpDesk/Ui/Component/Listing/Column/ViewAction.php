@@ -62,7 +62,7 @@ class ViewAction extends Column
                             'href' => $this->urlBuilder->getUrl(
                                 $viewUrlPath,
                                 [
-                                    $urlEntityParamName => $item['id']
+                                    $urlEntityParamName => $item['case_id']
                                 ]
                             ),
                             'label' => __('View')

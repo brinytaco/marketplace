@@ -34,7 +34,7 @@
             <argument name="class" xsi:type="string">DemHelpDeskCaseGridDataProvider</argument>
             <argument name="name" xsi:type="string">dem_helpdesk_caseitem_grid_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">case_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">case_id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
@@ -117,6 +117,7 @@
                     <item name="sortOrder" xsi:type="number">0</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -133,6 +134,7 @@
                     <item name="sortOrder" xsi:type="number">10</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Case Number</item>
                     <item name="visible" xsi:type="boolean">true</item>
@@ -140,13 +142,14 @@
             </argument>
         </column>
 
-        <column name="website_id" component="Magento_Ui/js/grid/columns/select">
+        <column name="website_id">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Dem\HelpDesk\Block\Grid\Column\Filter\CaseItem\Website</item>
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Website</item>
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">20</item>
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Website</item>
                     <item name="visible" xsi:type="boolean">true</item>
@@ -160,6 +163,7 @@
                     <item name="sortOrder" xsi:type="number">30</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Department</item>
                     <item name="visible" xsi:type="boolean">true</item>
@@ -167,12 +171,13 @@
             </argument>
         </column>
 
-        <column name="created_at" component="Magento_Ui/js/grid/columns/date">
+        <column name="created_at">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">40</item>
                     <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Created At</item>
                     <item name="visible" xsi:type="boolean">true</item>
@@ -186,6 +191,7 @@
                     <item name="sortOrder" xsi:type="number">50</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Created By</item>
                     <item name="visible" xsi:type="boolean">true</item>
@@ -193,12 +199,13 @@
             </argument>
         </column>
 
-        <column name="updated_at" component="Magento_Ui/js/grid/columns/date">
+        <column name="updated_at">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">60</item>
                     <item name="filter" xsi:type="string">dateRange</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Updated At</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -212,6 +219,7 @@
                     <item name="sortOrder" xsi:type="number">70</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Updated By</item>
                     <item name="visible" xsi:type="boolean">false</item>
@@ -219,13 +227,14 @@
             </argument>
         </column>
 
-        <column name="priority" component="Magento_Ui/js/grid/columns/select">
+        <column name="priority">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Dem\HelpDesk\Block\Grid\Column\Filter\CaseItem\Priority</item>
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Priority</item>
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">80</item>
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Priority</item>
                     <item name="visible" xsi:type="boolean">true</item>
@@ -233,13 +242,14 @@
             </argument>
         </column>
 
-        <column name="status_id" component="Magento_Ui/js/grid/columns/select">
+        <column name="status_id">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Dem\HelpDesk\Block\Grid\Column\Filter\CaseItem\Status</item>
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Status</item>
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">90</item>
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="sorting" xsi:type="string">asc</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                     <item name="visible" xsi:type="boolean">true</item>
