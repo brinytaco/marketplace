@@ -7,7 +7,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Data\OptionSourceInterface;
 
 /**
- * HelpDesk Model - Source CaseItem Status
+ * HelpDesk Source Model - CaseItem Status
  *
  * =============================================================================
  *
@@ -31,6 +31,11 @@ class Status implements OptionSourceInterface
     const CASE_STATUS_ARCHIVED = 90;
 
     /**
+     * @var array
+     */
+    protected $optionArray = [];
+
+    /**
      * Return array of case status options
      *
      * Adminhtml view, so include Admin website,
@@ -42,15 +47,12 @@ class Status implements OptionSourceInterface
     {
         $statusCollection = \Dem\HelpDesk\Model\Source\CaseItem\Status::getCaseStatusCollection(true);
 
-        // Grid filter, always add empty option
-        $options = [
-            '' => ['label' => ' ', 'value' => '']
-        ];
+        $this->optionArray[] = ['label' => __('-- Please Select --'), 'value' => ''];
 
         foreach ($statusCollection as $status) {
-            $options[] = ['label' => $status->getLabel(), 'value' => $status->getId()];
+            $this->optionArray[] = ['label' => $status->getLabel(), 'value' => $status->getId()];
         }
-        return $options;
+        return $this->optionArray;
     }
 
     /**

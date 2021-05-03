@@ -5,6 +5,7 @@ namespace Dem\HelpDesk\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 
 /**
@@ -44,9 +45,15 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
     protected $helper;
 
     /**
+     * @var SearchCriteriaBuilderFactory
+     */
+    private $searchCriteriaBuilderFactory;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Dem\HelpDesk\Model\Department $department
+     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
@@ -55,11 +62,13 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Dem\HelpDesk\Model\Department $department,
+        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [])
     {
         $this->department = $department;
+        $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -89,6 +98,11 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
         return $values;
     }
 
+    /**
+     * Load website model
+     *
+     * @return \Magento\Store\Model\Website
+     */
     public function getWebsite()
     {
         if (!isset($this->website)) {

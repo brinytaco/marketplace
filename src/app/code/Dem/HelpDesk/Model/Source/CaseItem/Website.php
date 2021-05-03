@@ -3,8 +3,10 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
+use Magento\Framework\Data\OptionSourceInterface;
+
 /**
- * HelpDesk Block - Adminhtml Grid Column Filter CaseItem Website
+ * HelpDesk Source Model - CaseItem Website
  *
  * =============================================================================
  *
@@ -13,7 +15,7 @@ namespace Dem\HelpDesk\Model\Source\CaseItem;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Website implements \Magento\Framework\Data\OptionSourceInterface
+class Website implements OptionSourceInterface
 {
     /**
      * @var \Dem\HelpDesk\Helper\Data

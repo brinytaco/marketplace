@@ -85,7 +85,7 @@ abstract class CaseItem extends Action
     protected $logger;
 
     /**
-     * @var type \Dem\HelpDesk\Helper\Data
+     * @var \Dem\HelpDesk\Helper\Data
      */
     protected $helper;
 

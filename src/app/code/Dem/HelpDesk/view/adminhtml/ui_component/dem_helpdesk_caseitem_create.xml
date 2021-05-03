@@ -185,5 +185,45 @@
             </argument>
         </field>
 
+        <field name="department_id">
+
+            <argument name="data" xsi:type="array">
+
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Department</item>
+                <item name="config" xsi:type="array">
+                    <!-- Object data field/column reference -->
+                    <item name="source" xsi:type="string">department_id</item>
+                    <!-- JS component if not default for formElement -->
+                    <!--<item name="component" xsi:type="string">Dem_HelpDesk/view/js/form/element/options</item>-->
+                    <!-- Element label, translatable -->
+                    <item name="label" xsi:type="string" translate="true">Department</item>
+                    <!-- Should render this element (defaults false -->
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <!-- Object expected data type -->
+                    <item name="dataType" xsi:type="string">select</item>
+                    <!-- Frontend element type -->
+                    <item name="formElement" xsi:type="string">select</item>
+                    <!-- Default value, if any -->
+                    <item name="default" xsi:type="string"></item>
+                    <!-- Set disabled property -->
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <!-- Set readonly property -->
+                    <item name="readonly" xsi:type="boolean">false</item>
+                    <!-- Text to render before element -->
+                    <item name="addbefore" xsi:type="string" translate="true"></item>
+                    <!-- Text to render after element -->
+                    <item name="addafter" xsi:type="string" translate="true"></item>
+                    <!-- Placeholder text -->
+                    <item name="placeholder" xsi:type="string" translate="true"></item>
+                    <!-- Description/note, text appears below input -->
+                    <item name="notice" xsi:type="string" translate="true">For routing purposes</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+
+                </item>
+            </argument>
+        </field>
+
     </fieldset>
 </form>
