@@ -14,19 +14,5 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <virtualType name="adminCaseItem" type="Dem\HelpDesk\Controller\Adminhtml\CaseItem">
-        <arguments>
-            <argument name="context" xsi:type="object">Magento\Backend\App\Action\Context</argument>
-            <argument name="registry" xsi:type="object">Magento\Framework\Registry</argument>
-            <argument name="translateInline" xsi:type="object">Magento\Framework\Translate\InlineInterface</argument>
-            <argument name="resultPageFactory" xsi:type="object">Magento\Framework\View\Result\PageFactory</argument>
-            <argument name="resultJsonFactory" xsi:type="object">Magento\Framework\Controller\Result\JsonFactory</argument>
-            <argument name="resultLayoutFactory" xsi:type="object">Magento\Framework\View\Result\LayoutFactory</argument>
-            <argument name="resultRawFactory" xsi:type="object">Magento\Framework\Controller\Result\RawFactory</argument>
-            <argument name="caseRepository" xsi:type="object">Dem\HelpDesk\Api\CaseItemRepositoryInterface</argument>
-            <argument name="logger" xsi:type="object">Psr\Log\LoggerInterface</argument>
-            <argument name="helper" xsi:type="object" shared="true">Dem\HelpDesk\Helper\Data</argument>
-        </arguments>
-    </virtualType>
 
 </config>

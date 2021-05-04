@@ -15,8 +15,14 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
     <!-- CaseItem -->
-    <preference for="Dem\HelpDesk\Api\CaseItemRepositoryInterface" type="Dem\HelpDesk\Model\CaseItemRepository" />
     <preference for="Dem\HelpDesk\Api\Data\CaseItemInterface" type="Dem\HelpDesk\Model\CaseItem" />
+    <preference for="Dem\HelpDesk\Api\CaseItemRepositoryInterface" type="Dem\HelpDesk\Model\CaseItemRepository" />
+    <preference for="Dem\HelpDesk\Api\Data\CaseItemSearchResultInterface" type="Dem\HelpDesk\Model\CaseItemSearchResult" />
+    <!-- Department -->
+    <preference for="Dem\HelpDesk\Api\Data\DepartmentInterface" type="Dem\HelpDesk\Model\Department" />
+    <preference for="Dem\HelpDesk\Api\DepartmentRepositoryInterface" type="Dem\HelpDesk\Model\DepartmentRepository" />
+    <preference for="Dem\HelpDesk\Api\Data\DepartmentSearchResultInterface" type="Dem\HelpDesk\Model\DepartmentSearchResult" />
+
 
 
     <virtualType name="DemHelpDeskCaseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">

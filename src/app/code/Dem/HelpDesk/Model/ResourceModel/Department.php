@@ -16,11 +16,20 @@ namespace Dem\HelpDesk\Model\ResourceModel;
 class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     */
+    protected $date;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @return void
      */
-    public function __construct(\Magento\Framework\Model\ResourceModel\Db\Context $context)
-    {
+    public function __construct(
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
+    ) {
+        $this->date = $date;
         parent::__construct($context);
     }
 
@@ -33,13 +42,18 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * After save
+     * Set new case data and update "updated_at" timestamp
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        return parent::_afterSave($object);
+        $object->setUpdatedAt($this->date->gmtDate());
+        if ($object->isObjectNew()) {
+            $object->setCreatedAt($this->date->gmtDate());
+            $object->setProtectCode(sha1(microtime()));
+        }
+        return parent::_beforeSave($object);
     }
 }

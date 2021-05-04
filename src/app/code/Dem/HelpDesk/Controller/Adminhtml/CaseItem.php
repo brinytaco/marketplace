@@ -152,7 +152,7 @@ abstract class CaseItem extends Action
     {
         $id = $this->getRequest()->getParam('case_id');
         try {
-            $case = $this->caseRepository->get($id);
+            $case = $this->caseRepository->getById($id);
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('This case no longer exists.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);

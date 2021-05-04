@@ -18,11 +18,6 @@ use \Dem\HelpDesk\Helper\Config as Config;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * Current area
      *
      * @var string
@@ -65,7 +60,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Fetch instance of StoreManagerInterface
-     * @return type
+     * @return \Magento\Store\Model\StoreManagerInterface
      */
     public static function getStoreManager()
     {
@@ -78,7 +73,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $websiteId
      * @return \Magento\Store\Api\Data\WebsiteInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public static function getWebsite($websiteId = null)
     {

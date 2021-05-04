@@ -38,6 +38,13 @@ interface CaseItemInterface
      *
      * @return int|null
      */
+    public function getId();
+
+    /**
+     * Get ID
+     *
+     * @return int|null
+     */
     public function getCaseId();
 
     /**

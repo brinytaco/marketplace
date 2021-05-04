@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Api\Data;
 
-use Magento\Framework\Api\SearchResultsInterface;
-
 /**
  * HelpDesk Api Interface - Case Search Results
  *
@@ -15,7 +13,7 @@ use Magento\Framework\Api\SearchResultsInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-interface CaseItemSearchResultsInterface extends SearchResultsInterface
+interface CaseItemSearchResultInterface extends \Magento\Framework\Api\SearchResultsInterface
 {
     /**
      * Get entity list.

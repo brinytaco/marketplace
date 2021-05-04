@@ -35,44 +35,6 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
     protected $website;
 
     /**
-     * @var \Dem\HelpDesk\Model\Department
-     */
-    protected $department;
-
-    /**
-     * @var Dem\HelpDesk\Helper\Data
-     */
-    protected $helper;
-
-    /**
-     * @var SearchCriteriaBuilderFactory
-     */
-    private $searchCriteriaBuilderFactory;
-
-    /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Dem\HelpDesk\Model\Department $department
-     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Dem\HelpDesk\Model\Department $department,
-        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = [])
-    {
-        $this->department = $department;
-        $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-    }
-
-    /**
      * @return void
      */
     protected function _construct()
@@ -105,9 +67,9 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
      */
     public function getWebsite()
     {
-        if (!isset($this->website)) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $this->website = $objectManager->create('\Magento\Store\Model\Website')->load($this->getWebsiteId());
+        if (!$this->website->getId()) {
+            /* @TODO: Should be repository load */
+            $this->website->load($this->getWebsiteId());
         }
         return $this->website;
     }
@@ -152,6 +114,7 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
     public function getDepartment()
     {
         if (!$this->department->getId()) {
+            /* @TODO: Should be repository load */
             $this->department->load($this->getDepartmentId());
         }
         return $this->department;

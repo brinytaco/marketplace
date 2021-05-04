@@ -3,23 +3,18 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
-use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Api\Search\FilterGroup;
-use Magento\Framework\Api\SortOrder;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\StateException;
-use Magento\Framework\Exception\ValidatorException;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\CaseItemInterfaceFactory;
-use Dem\HelpDesk\Api\Data\CaseItemSearchResultsInterfaceFactory;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem as CaseItemResource;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory as CaseItemCollectionFactory;
+use Dem\HelpDesk\Api\Data\CaseItemSearchResultInterfaceFactory;
+use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
 
 /**
- * HelpDesk Model Repository - Case
+ * HelpDesk Model Repository - CaseItem
  *
  * =============================================================================
  *
@@ -32,165 +27,117 @@ use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory as CaseItemColle
 class CaseItemRepository implements CaseItemRepositoryInterface
 {
     /**
-     * @var array
+     * @var CaseItemFactory
      */
-    protected $instances = [];
+    private $caseItemFactory;
 
     /**
-     * @var CaseItemResource
+     * @var CaseItem
      */
-    protected $resource;
+    private $caseItemResource;
 
     /**
      * @var CaseItemCollectionFactory
      */
-    protected $caseItemCollectionFactory;
+    private $caseItemCollectionFactory;
 
     /**
-     * @var CaseItemSearchResultsInterfaceFactory
+     * @var CaseItemSearchResultInterfaceFactory
      */
-    protected $searchResultsFactory;
-
+    private $searchResultFactory;
     /**
-     * @var CaseItemInterfaceFactory
+     * @var CollectionProcessorInterface
      */
-    protected $caseItemInterfaceFactory;
-
-    /**
-     * @var DataObjectHelper
-     */
-    protected $dataObjectHelper;
+    private $collectionProcessor;
 
     public function __construct(
-        CaseItemResource $resource,
-        CaseItemCollectionFactory $caseItemCollectionFactory,
-        CaseItemSearchResultsInterfaceFactory $caseItemSearchResultsInterfaceFactory,
-        CaseItemInterfaceFactory $caseItemInterfaceFactory,
-        DataObjectHelper $dataObjectHelper
+        CaseItemFactory $caseItemFactory,
+        CaseItem $caseItemResource,
+        CollectionFactory $caseItemCollectionFactory,
+        CaseItemSearchResultInterfaceFactory $caseItemSearchResultInterfaceFactory,
+        CollectionProcessorInterface $collectionProcessor
     ) {
-        $this->resource = $resource;
+        $this->caseItemFactory = $caseItemFactory;
+        $this->caseItemResource = $caseItemResource;
         $this->caseItemCollectionFactory = $caseItemCollectionFactory;
-        $this->searchResultsFactory = $caseItemSearchResultsInterfaceFactory;
-        $this->caseItemInterfaceFactory = $caseItemInterfaceFactory;
-        $this->dataObjectHelper = $dataObjectHelper;
+        $this->searchResultFactory = $caseItemSearchResultInterfaceFactory;
+        $this->collectionProcessor = $collectionProcessor;
     }
 
     /**
-     * @param CaseItemInterface $entity
-     * @return CaseItemInterface
-     * @throws CouldNotSaveException
+     * @param int $id
+     * @return \Magento4u\SampleRepository\Api\Data\CaseItemInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function save(CaseItemInterface $entity)
+    public function getById($id)
     {
-        try {
-            /** @var CaseItemInterface|\Magento\Framework\Model\AbstractModel $entity */
-            $this->resource->save($entity);
-        } catch (\Exception $exception) {
-            throw new CouldNotSaveException(__(
-                'Could not save the entity: %1',
-                $exception->getMessage()
-            ));
+        $caseItem = $this->caseItemFactory->create();
+        $this->caseItemResource->load($caseItem, $id);
+        if (!$caseItem->getId()) {
+            throw new NoSuchEntityException(__('Unable to find CaseItem with ID "%1"', $id));
         }
-        return $entity;
+        return $caseItem;
     }
 
     /**
-     * Get case record
-     *
-     * @param $entityId
-     * @return mixed
-     * @throws NoSuchEntityException
-     */
-    public function get($entityId)
-    {
-        if (!isset($this->instances[$entityId])) {
-            /** @var \Dem\HelpDesk\Api\Data\CaseItemInterface|\Magento\Framework\Model\AbstractModel $entity */
-            $entity = $this->caseItemInterfaceFactory->create();
-            $this->resource->load($entity, $entityId);
-            if (!$entity->getId()) {
-                throw new NoSuchEntityException(__('Requested case doesn\'t exist'));
-            }
-            $this->instances[$entityId] = $entity;
-        }
-        return $this->instances[$entityId];
-    }
-
-    /**
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\CaseItemSearchResultsInterface
+     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @return \Magento4u\SampleRepository\Api\Data\CaseItemSearchResultInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        /** @var \Dem\HelpDesk\Api\Data\CaseItemSearchResultsInterface $searchResults */
-        $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($searchCriteria);
-
-        /** @var \Dem\HelpDesk\Model\ResourceModel\CaseItem\Collection $collection */
         $collection = $this->caseItemCollectionFactory->create();
+        $this->collectionProcessor->process($searchCriteria, $collection);
+        $searchResults = $this->searchResultFactory->create();
 
-        //Add filters from root filter group to the collection
-        /** @var FilterGroup $group */
-        foreach ($searchCriteria->getFilterGroups() as $group) {
-            $this->addFilterGroupToCollection($group, $collection);
-        }
-        $sortOrders = $searchCriteria->getSortOrders();
-        /** @var SortOrder $sortOrder */
-        if ($sortOrders) {
-            foreach ($searchCriteria->getSortOrders() as $sortOrder) {
-                $field = $sortOrder->getField();
-                $collection->addOrder(
-                    $field,
-                    ($sortOrder->getDirection() == SortOrder::SORT_ASC) ? 'ASC' : 'DESC'
-                );
-            }
-        } else {
-            $field = 'entity_id';
-            $collection->addOrder($field, 'ASC');
-        }
-        $collection->setCurPage($searchCriteria->getCurrentPage());
-        $collection->setPageSize($searchCriteria->getPageSize());
+        $searchResults->setSearchCriteria($searchCriteria);
+        $searchResults->setItems($collection->getItems());
 
-        $data = [];
-        foreach ($collection as $datum) {
-            $dataDataObject = $this->caseItemInterfaceFactory->create();
-            $this->dataObjectHelper->populateWithArray($dataDataObject, $datum->getData(), CaseItemInterface::class);
-            $data[] = $dataDataObject;
-        }
-        $searchResults->setTotalCount($collection->getSize());
-        return $searchResults->setItems($data);
+        return $searchResults;
     }
 
     /**
-     * @param CaseItemInterface $entity
-     * @return bool
-     * @throws CouldNotSaveException
-     * @throws StateException
+     * @param \Magento4u\SampleRepository\Api\Data\CaseItemInterface $caseItem
+     * @return \Magento4u\SampleRepository\Api\Data\CaseItemInterface
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function delete(CaseItemInterface $entity)
+    public function save(CaseItemInterface $caseItem)
     {
-        /** @var \Dem\HelpDesk\Api\Data\CaseItemInterface|\Magento\Framework\Model\AbstractModel $entity */
-        $id = $entity->getId();
+        $this->caseItemResource->save($caseItem);
+        return $caseItem;
+    }
+
+    /**
+     * @param \Magento4u\SampleRepository\Api\Data\CaseItemInterface $caseItem
+     * @return bool true on success
+     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     */
+    public function delete(CaseItemInterface $caseItem)
+    {
         try {
-            unset($this->instances[$id]);
-            $this->resource->delete($entity);
-        } catch (ValidatorException $e) {
-            throw new CouldNotSaveException(__($e->getMessage()));
-        } catch (\Exception $e) {
-            throw new StateException(
-                __('Unable to delete case %1', $id)
+            $this->caseItemResource->delete($caseItem);
+        } catch (\Exception $exception) {
+            throw new CouldNotDeleteException(
+                __('Could not delete the entry: %1', $exception->getMessage())
             );
         }
-        unset($this->instances[$id]);
+
         return true;
+
     }
 
     /**
-     * @param $entityId
-     * @return bool
+     * @param int $id
+     * @return \Magento4u\SampleRepository\Api\Data\CaseItemInterface
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    public function deleteById($entityId)
+    public function deleteById($id)
     {
-        $entity = $this->getById($entityId);
-        return $this->delete($entity);
+        $caseItem = $this->caseItemFactory->create();
+        $this->caseItemResource->load($caseItem, $id);
+        if (!$caseItem->getId()) {
+            throw new NoSuchEntityException(__('Unable to find CaseItem with ID "%1"', $id));
+        }
+        return $this->delete($caseItem);
     }
 }

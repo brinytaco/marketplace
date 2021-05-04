@@ -36,6 +36,17 @@ class Status implements OptionSourceInterface
     protected $optionArray = [];
 
     /**
+     * @var \Magento\Framework\Data\CollectionFactory
+     */
+    protected $collectionFactory;
+
+    public function __construct(
+        \Magento\Framework\Data\CollectionFactory $collectionFactory
+    ) {
+        $this->collectionFactory = $collectionFactory;
+    }
+
+    /**
      * Return array of case status options
      *
      * Adminhtml view, so include Admin website,
@@ -45,7 +56,7 @@ class Status implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $statusCollection = \Dem\HelpDesk\Model\Source\CaseItem\Status::getCaseStatusCollection(true);
+        $statusCollection = $this->getOptions(true);
 
         $this->optionArray[] = ['label' => __('-- Please Select --'), 'value' => ''];
 
@@ -61,7 +72,7 @@ class Status implements OptionSourceInterface
      * @param boolean $auto | Include automatic status types
      * @return \Magento\Framework\Data\Collection
      */
-    public static function getCaseStatusCollection($auto = true)
+    public function getOptions($auto = true)
     {
         $statuses = array(
             self::CASE_STATUS_NEW => new DataObject(array(
@@ -101,9 +112,7 @@ class Status implements OptionSourceInterface
             )),
         );
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $collectionFactory = $objectManager->get('Magento\Framework\Data\CollectionFactory');
-        $caseStatuses = $collectionFactory->create();
+        $caseStatuses = $this->collectionFactory->create();
         foreach ($statuses as $status) {
             if (!$auto && (int)$status->getAutomatic()) {
                 continue;

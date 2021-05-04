@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Api;
 
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Api\Data\DepartmentInterface;
 
 /**
- * HelpDesk Api Interface - CaseItem Repository
+ * HelpDesk Api Interface - Department Repository
  *
  * =============================================================================
  *
@@ -15,14 +15,14 @@ use Dem\HelpDesk\Api\Data\CaseItemInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-interface CaseItemRepositoryInterface
+interface DepartmentRepositoryInterface
 {
     /**
-     * @param CaseItemInterface $entity
+     * @param DepartmentInterface $entity
      * @return \Dem\HelpDesk\Api\Data\StudentInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(CaseItemInterface $entity);
+    public function save(DepartmentInterface $entity);
 
     /**
      * @param $entityId
@@ -33,17 +33,17 @@ interface CaseItemRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\CaseItemSearchResultsInterface
+     * @return \Dem\HelpDesk\Api\Data\DepartmentSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
-     * @param CaseItemInterface $entity
+     * @param DepartmentInterface $entity
      * @return bool true on success
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function delete(CaseItemInterface $entity);
+    public function delete(DepartmentInterface $entity);
 
     /**
      * @param $entityId

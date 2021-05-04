@@ -32,6 +32,17 @@ class Priority implements OptionSourceInterface
     protected $optionArray = [];
 
     /**
+     * @var \Magento\Framework\Data\CollectionFactory
+     */
+    protected $collectionFactory;
+
+    public function __construct(
+        \Magento\Framework\Data\CollectionFactory $collectionFactory
+    ) {
+        $this->collectionFactory = $collectionFactory;
+    }
+
+    /**
      * Return array of case priority options
      *
      * Adminhtml view, so include Admin website,
@@ -41,7 +52,7 @@ class Priority implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $priorityCollection = \Dem\HelpDesk\Model\Source\CaseItem\Priority::getCasePriorityCollection();
+        $priorityCollection = $this->getOptions();
 
         $this->optionArray[] = ['label' => __('-- Please Select --'), 'value' => ''];
 
@@ -52,11 +63,11 @@ class Priority implements OptionSourceInterface
     }
 
     /**
-     * Get available case priorities as \Magento\Framework\Data\Collection
+     * Get available case priority options
      *
-     * @return \Magento\Framework\Data\Collection
+     * @return array
      */
-    public static function getCasePriorityCollection()
+    public function getOptions()
     {
         $priorities = array(
             self::CASE_PRIORITY_NORMAL => new DataObject(array(
@@ -76,9 +87,7 @@ class Priority implements OptionSourceInterface
             )),
         );
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $collectionFactory = $objectManager->get('Magento\Framework\Data\CollectionFactory');
-        $casePriorities = $collectionFactory->create();
+        $casePriorities = $this->collectionFactory->create();
         foreach ($priorities as $priority) {
             $casePriorities->addItem($priority);
         }

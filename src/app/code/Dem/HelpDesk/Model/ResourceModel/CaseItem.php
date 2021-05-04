@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
 
-use Magento\Framework\Model\ResourceModel\Db\Context;
-use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 
 /**
@@ -26,13 +23,13 @@ class CaseItem extends AbstractDb
     protected $date;
 
     /**
-     * @param Context $context
-     * @param DateTime $date
+     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @return void
      */
     public function __construct(
-        Context $context,
-        DateTime $date
+        \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->date = $date;
         parent::__construct($context);
