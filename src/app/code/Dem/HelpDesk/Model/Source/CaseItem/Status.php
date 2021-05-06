@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
 use Magento\Framework\DataObject;
-use Magento\Framework\Data\OptionSourceInterface;
+use Dem\HelpDesk\Model\Source\SourceOptions;
 
 /**
  * HelpDesk Source Model - CaseItem Status
@@ -17,7 +17,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  * @since      1.0.0
  *
  */
-class Status implements OptionSourceInterface
+class Status extends SourceOptions
 {
     /**
      * Case status
@@ -31,22 +31,6 @@ class Status implements OptionSourceInterface
     const CASE_STATUS_ARCHIVED = 90;
 
     /**
-     * @var array
-     */
-    protected $optionArray = [];
-
-    /**
-     * @var \Magento\Framework\Data\CollectionFactory
-     */
-    protected $collectionFactory;
-
-    public function __construct(
-        \Magento\Framework\Data\CollectionFactory $collectionFactory
-    ) {
-        $this->collectionFactory = $collectionFactory;
-    }
-
-    /**
      * Return array of case status options
      *
      * Adminhtml view, so include Admin website,
@@ -56,9 +40,9 @@ class Status implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $statusCollection = $this->getOptions(true);
+        parent::toOptionArray();
 
-        $this->optionArray[] = ['label' => __('-- Please Select --'), 'value' => ''];
+        $statusCollection = $this->getOptions(true);
 
         foreach ($statusCollection as $status) {
             $this->optionArray[] = ['label' => $status->getLabel(), 'value' => $status->getId()];

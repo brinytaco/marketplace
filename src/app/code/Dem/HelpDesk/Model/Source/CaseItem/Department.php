@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
-use Magento\Framework\Data\OptionSourceInterface;
+use Dem\HelpDesk\Model\Source\SourceOptions;
 
 /**
  * HelpDesk Source Model - CaseItem Department
@@ -15,77 +15,92 @@ use Magento\Framework\Data\OptionSourceInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Department implements OptionSourceInterface
+class Department extends SourceOptions
 {
-    /**
-     * @var \Dem\HelpDesk\Helper\Data
-     */
-    protected $helper;
-
-    /**
-     * @var \Magento\Store\Model\System\Store
-     */
-    protected $store;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var array
-     */
-    protected $optionArray = [];
-
-    /**
-     * @var \Dem\HelpDesk\Model\DepartmentRepository
-     */
-    private $departmentRepository;
-
-    /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
-     */
-    protected $searchCriteriaBuilder;
-    /**
-     * @var \Magento\Framework\Data\CollectionFactory
-     */
-    protected $collectionFactory;
-
-    /**
-     * @param \Dem\HelpDesk\Helper\Data $helper
-     * @param \Magento\Store\Model\System\Store $store
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Dem\HelpDesk\Model\DepartmentRepository $departmentRepository
-     * @return void
-     */
-    public function __construct(
-        \Dem\HelpDesk\Helper\Data $helper,
-        \Magento\Store\Model\System\Store $store,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Dem\HelpDesk\Model\DepartmentRepository $departmentRepository
-    ) {
-        $this->helper = $helper;
-        $this->store = $store;
-        $this->request = $request;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->departmentRepository = $departmentRepository;
-    }
-
     /**
      * Return array of available departments for all websites
      *
      * @return array
      */
-    public function toOptionArray()
+    public function toOptionArray($addEmpty = true)
     {
-        $departmentList = $this->departmentRepository->getList($this->searchCriteriaBuilder->create());
-        foreach ($departmentList as $department) {
+        if ($addEmpty) {
+            parent::toOptionArray();
+        }
 
+        $websiteId = $this->getCurrentWebsiteId();
+
+        // Website must be set
+        if ($websiteId !== false) {
+
+            // Add website filters
+            $websiteFilter = $this->addWebsiteFilter($websiteId);
+
+            $searchCriteria = $this->searchCriteriaBuilder
+                ->setFilterGroups([$websiteFilter])
+                ->create();
+
+            $departmentList = $this->departmentRepository->getList($searchCriteria);
+
+            foreach ($departmentList->getItems() as $department) {
+                $this->optionArray[] = [
+                    'label' => $department->getName(),
+                    'value' => $department->getId()
+                ];
+            }
         }
 
         return $this->optionArray;
+    }
+
+    /**
+     * Get current website. If adminhtml area, get registry value.
+     *
+     * @return int|bool
+     */
+    public function getCurrentWebsiteId()
+    {
+        /* @var $website \Magento\Store\Api\Data\WebsiteInterface */
+        if ($this->helper->getIsAdminArea()) {
+            $website = $this->coreRegistry->registry('current_website');
+        } else {
+            $website = $this->helper::getWebsite();
+        }
+        if ($website) {
+            return $website->getId();
+        }
+        return false;
+    }
+
+    /**
+     * Create website filter group (OR condition)
+     *
+     * @param int $websiteId
+     * @return \Magento\Framework\Api\Search\FilterGroup
+     */
+    protected function addWebsiteFilter($websiteId)
+    {
+        // Apply current website condition
+        $filter1 = $this->filterBuilder
+            ->setField("website_id")
+            ->setConditionType("eq")
+            ->setValue($websiteId)
+            ->create();
+
+        // Apply default department condition
+        $filter2 = $this->filterBuilder
+            ->setField("department_id")
+            ->setConditionType("eq")
+            ->setValue(\Dem\HelpDesk\Helper\Config::HELPDESK_DEPARTMENT_DEFAULT_ID)
+            ->create();
+
+        // Filter group (OR)
+        $websiteFilterGroup = $this->filterGroupBuilder
+            ->addFilter($filter1)
+            ->addFilter($filter2)
+            ->create();
+
+        return $websiteFilterGroup;
     }
 
 }

@@ -66,7 +66,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Magento4u\SampleRepository\Api\Data\DepartmentInterface
+     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id)
@@ -81,7 +81,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento4u\SampleRepository\Api\Data\DepartmentSearchResultInterface
+     * @return \Dem\HelpDesk\Api\Data\DepartmentSearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
@@ -97,8 +97,8 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     }
 
     /**
-     * @param \Magento4u\SampleRepository\Api\Data\DepartmentInterface $department
-     * @return \Magento4u\SampleRepository\Api\Data\DepartmentInterface
+     * @param \Dem\HelpDesk\Api\Data\DepartmentInterface $department
+     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function save(DepartmentInterface $department)
@@ -108,7 +108,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     }
 
     /**
-     * @param \Magento4u\SampleRepository\Api\Data\DepartmentInterface $department
+     * @param \Dem\HelpDesk\Api\Data\DepartmentInterface $department
      * @return bool true on success
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
@@ -128,7 +128,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Magento4u\SampleRepository\Api\Data\DepartmentInterface
+     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function deleteById($id)

@@ -77,7 +77,20 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
         if ($website instanceof \Magento\Store\Api\Data\WebsiteInterface) {
             $website = $website->getId();
         }
-
         return ((int)$website === self::HELPDESK_WEBSITE_ID_ADMIN);
+    }
+
+    /**
+     * Check if website is admin
+     *
+     * @param \Dem\HelpDesk\Api\Data\DepartmentInterface|int $department
+     * @return boolean
+     */
+    public static function isDefaultDepartment($department)
+    {
+        if ($department instanceof \Dem\HelpDesk\Api\Data\DepartmentInterface) {
+            $department = $department->getId();
+        }
+        return ((int)$department === self::HELPDESK_DEPARTMENT_DEFAULT_ID);
     }
 }

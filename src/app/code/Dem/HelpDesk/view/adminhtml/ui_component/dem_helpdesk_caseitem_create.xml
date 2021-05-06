@@ -25,10 +25,8 @@
         </item>
         <!-- Button set -->
         <item name="buttons" xsi:type="array">
-            <!--<item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\BackButton</item>-->
-            <!--<item name="delete" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\DeleteButton</item>-->
-            <!--<item name="reset" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\ResetButton</item>-->
-            <!--<item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Edit\SaveButton</item>-->
+            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\View\BackButton</item>
+            <item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\View\SaveButton</item>
         </item>
         <item name="ajaxSave" xsi:type="boolean">false</item>
     </argument>
@@ -64,7 +62,7 @@
         <!-- Add fieldset header/label if desired -->
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">Open New Case</item>
+                <item name="label" xsi:type="string" translate="true">How Can We Help You?</item>
             </item>
         </argument>
 
@@ -95,7 +93,7 @@
                     <!-- Object data field/column reference -->
                     <item name="source" xsi:type="string">case_id</item>
                     <!-- JS component if not default for formElement -->
-                    <!--<item name="component" xsi:type="string">Dem_HelpDesk/view/js/form/element/options</item>-->
+                    <!--<item name="component" xsi:type="string">Dem_HelpDesk/js/form/element/options</item>-->
                     <!-- Element label, translatable -->
                     <item name="label" xsi:type="string" translate="true">Case</item>
                     <!-- Should render this element (defaults false -->
@@ -140,21 +138,15 @@
             </argument>
         </field>
 
-        <!--
-            Website:
-            If this field doesn't yet have a value, all other fields are disabled.
-            On change: reload department list via AJAX.
-        -->
         <field name="website_id">
-
             <argument name="data" xsi:type="array">
-
                 <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Website</item>
                 <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
                     <!-- Object data field/column reference -->
                     <item name="source" xsi:type="string">website_id</item>
                     <!-- JS component if not default for formElement -->
-                    <!--<item name="component" xsi:type="string">Dem_HelpDesk/view/js/form/element/options</item>-->
+                    <item name="component" xsi:type="string">Dem_HelpDesk/js/create/element/website</item>
                     <!-- Element label, translatable -->
                     <item name="label" xsi:type="string" translate="true">Website</item>
                     <!-- Should render this element (defaults false -->
@@ -180,25 +172,23 @@
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
-
                 </item>
             </argument>
         </field>
 
         <field name="department_id">
-
             <argument name="data" xsi:type="array">
-
                 <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Department</item>
                 <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
                     <!-- Object data field/column reference -->
                     <item name="source" xsi:type="string">department_id</item>
                     <!-- JS component if not default for formElement -->
-                    <!--<item name="component" xsi:type="string">Dem_HelpDesk/view/js/form/element/options</item>-->
+                    <item name="component" xsi:type="string">Dem_HelpDesk/js/create/element/department</item>
                     <!-- Element label, translatable -->
                     <item name="label" xsi:type="string" translate="true">Department</item>
                     <!-- Should render this element (defaults false -->
-                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="visible" xsi:type="boolean">true</item>
                     <!-- Object expected data type -->
                     <item name="dataType" xsi:type="string">select</item>
                     <!-- Frontend element type -->
@@ -206,7 +196,7 @@
                     <!-- Default value, if any -->
                     <item name="default" xsi:type="string"></item>
                     <!-- Set disabled property -->
-                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
                     <!-- Set readonly property -->
                     <item name="readonly" xsi:type="boolean">false</item>
                     <!-- Text to render before element -->
@@ -216,11 +206,67 @@
                     <!-- Placeholder text -->
                     <item name="placeholder" xsi:type="string" translate="true"></item>
                     <!-- Description/note, text appears below input -->
-                    <item name="notice" xsi:type="string" translate="true">For routing purposes</item>
+                    <item name="notice" xsi:type="string" translate="true">For proper routing of your request.</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
                     </item>
+                </item>
+            </argument>
+        </field>
 
+        <field name="subject">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="source" xsi:type="string">subject</item>
+                    <item name="label" xsi:type="string" translate="true">Subject</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="placeholder" xsi:type="string" translate="true">Subject</item>
+                    <item name="notice" xsi:type="string" translate="true">A short description of your question or issue.</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="priority">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Priority</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="source" xsi:type="string">priority</item>
+                    <item name="label" xsi:type="string" translate="true">Priority</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="message">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="source" xsi:type="string">message</item>
+                    <item name="label" xsi:type="string" translate="true">Question/Issue</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="rows" xsi:type="number">10</item>
+                    <item name="notice" xsi:type="string" translate="true">10 words minimum. Please provide as much information as possible to allow for proper handling of your request.</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
         </field>

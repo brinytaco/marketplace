@@ -8,6 +8,11 @@
 # @author     Toby Crain
 # @since      1.0.0
 #
+# NOTE: These commented lines aren't really comments, but translation is only
+#       concerned with lines matching entry value (quoted).
+#
+
+# General
 "ID","ID"
 "Manage Cases","Manage Cases"
 "Open New Case","Open New Case"
@@ -26,9 +31,21 @@
 "This case no longer exists.","This case no longer exists."
 "Exception occurred during case load","Exception occurred during case load"
 "Admin", "DE INTERNAL"
+"How Can We Help You?","How Can We Help You?"
 
-# Case Create/View
+# Case Create/View Form
 "Website","Website"
+"Department","Department"
+"Subject","Subject"
+"Priority","Priority"
+"Question/Issue","Question/Issue"
+"A short description of your question or issue.","A short description of your question or issue."
+"For proper routing of your request.","For proper routing of your request."
+"10 words minimum. Please provide as much information as possible to allow for proper handling of your request.","10 words minimum. Please provide as much information as possible to allow for proper handling of your request."
+"Back","Back"
+"Save","Save"
+"Submit","Submit"
+"Reset","Reset"
 
 # Case statuses
 "New","New"

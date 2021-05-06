@@ -45,7 +45,7 @@ abstract class CaseItem extends Action
     /**
      * Core registry
      *
-     * @var Registry
+     * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 

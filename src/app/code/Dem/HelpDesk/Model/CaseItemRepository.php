@@ -66,7 +66,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Magento4u\SampleRepository\Api\Data\CaseItemInterface
+     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id)
@@ -81,7 +81,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento4u\SampleRepository\Api\Data\CaseItemSearchResultInterface
+     * @return \Dem\HelpDesk\Api\Data\CaseItemSearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
@@ -97,8 +97,8 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     }
 
     /**
-     * @param \Magento4u\SampleRepository\Api\Data\CaseItemInterface $caseItem
-     * @return \Magento4u\SampleRepository\Api\Data\CaseItemInterface
+     * @param \Dem\HelpDesk\Api\Data\CaseItemInterface $caseItem
+     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function save(CaseItemInterface $caseItem)
@@ -108,7 +108,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     }
 
     /**
-     * @param \Magento4u\SampleRepository\Api\Data\CaseItemInterface $caseItem
+     * @param \Dem\HelpDesk\Api\Data\CaseItemInterface $caseItem
      * @return bool true on success
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
@@ -128,7 +128,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Magento4u\SampleRepository\Api\Data\CaseItemInterface
+     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function deleteById($id)

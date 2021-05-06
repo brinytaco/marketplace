@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
-use Magento\Framework\Data\OptionSourceInterface;
+use Dem\HelpDesk\Model\Source\SourceOptions;
 
 /**
  * HelpDesk Source Model - CaseItem Website
@@ -15,44 +15,8 @@ use Magento\Framework\Data\OptionSourceInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Website implements OptionSourceInterface
+class Website extends SourceOptions
 {
-    /**
-     * @var \Dem\HelpDesk\Helper\Data
-     */
-    protected $helper;
-
-    /**
-     * @var \Magento\Store\Model\System\Store
-     */
-    protected $store;
-
-    /**
-     * @var \Magento\Framework\App\RequestInterface
-     */
-    protected $request;
-
-    /**
-     * @var array
-     */
-    protected $optionArray = [];
-
-    /**
-     * @param \Dem\HelpDesk\Helper\Data $helper
-     * @param \Magento\Store\Model\System\Store $store
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @return void
-     */
-    public function __construct(
-            \Dem\HelpDesk\Helper\Data $helper,
-            \Magento\Store\Model\System\Store $store,
-            \Magento\Framework\App\RequestInterface $request
-    ) {
-        $this->helper = $helper;
-        $this->store = $store;
-        $this->request = $request;
-    }
-
     /**
      * Return array of website names
      *
@@ -62,11 +26,16 @@ class Website implements OptionSourceInterface
     {
         // Should add empty option
         $addEmptyOption = $this->getShouldAddEmptyOption();
+        if ($addEmptyOption) {
+            parent::toOptionArray();
+        }
 
         // Adminhtml view, so include Admin website
         $includeAdmin = $this->helper->getIsAdminArea();
 
-        $this->optionArray = $this->store->getWebsiteValuesForForm($addEmptyOption, $includeAdmin);
+        $websiteOptions = $this->store->getWebsiteValuesForForm(false, $includeAdmin);
+
+        $this->optionArray = array_merge($this->optionArray, $websiteOptions);
 
         $this->filterDefaultWebsite();
         $this->filterDisabledWebsites();

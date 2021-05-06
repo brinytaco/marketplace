@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
 use Magento\Framework\DataObject;
-use Magento\Framework\Data\OptionSourceInterface;
+use Dem\HelpDesk\Model\Source\SourceOptions;
 
 /**
  * HelpDesk Source Model - CaseItem Priority
@@ -17,7 +17,7 @@ use Magento\Framework\Data\OptionSourceInterface;
  * @since      1.0.0
  *
  */
-class Priority implements OptionSourceInterface
+class Priority extends SourceOptions
 {
     /**
      * Case priorities
@@ -25,22 +25,6 @@ class Priority implements OptionSourceInterface
     const CASE_PRIORITY_NORMAL   = 0;
     const CASE_PRIORITY_URGENT   = 1;
     const CASE_PRIORITY_CRITICAL = 2;
-
-    /**
-     * @var array
-     */
-    protected $optionArray = [];
-
-    /**
-     * @var \Magento\Framework\Data\CollectionFactory
-     */
-    protected $collectionFactory;
-
-    public function __construct(
-        \Magento\Framework\Data\CollectionFactory $collectionFactory
-    ) {
-        $this->collectionFactory = $collectionFactory;
-    }
 
     /**
      * Return array of case priority options
@@ -52,9 +36,9 @@ class Priority implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $priorityCollection = $this->getOptions();
+        parent::toOptionArray();
 
-        $this->optionArray[] = ['label' => __('-- Please Select --'), 'value' => ''];
+        $priorityCollection = $this->getOptions();
 
         foreach ($priorityCollection as $priority) {
             $this->optionArray[] = ['label' => $priority->getLabel(), 'value' => $priority->getId()];

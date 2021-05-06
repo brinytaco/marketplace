@@ -72,7 +72,7 @@ class Department extends AbstractModel implements IdentityInterface, DepartmentI
      */
     public function getId()
     {
-        return $this->getData(DepartmentInterface::CASE_ID);
+        return $this->getData(DepartmentInterface::DEPARTMENT_ID);
     }
 
     /**
@@ -82,7 +82,7 @@ class Department extends AbstractModel implements IdentityInterface, DepartmentI
      */
     public function getDepartmentId()
     {
-        return $this->getData(DepartmentInterface::CASE_ID);
+        return $this->getData(DepartmentInterface::DEPARTMENT_ID);
     }
 
     /**

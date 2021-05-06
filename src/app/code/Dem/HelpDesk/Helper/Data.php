@@ -76,7 +76,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public static function getWebsite($websiteId = null)
     {
-        if ($websiteId) {
+        if (!is_null($websiteId)) {
             return self::getStoreManager()->getWebsite($websiteId);
         }
 
