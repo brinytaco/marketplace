@@ -7,10 +7,6 @@ define([
     'use strict';
     return select.extend({
 
-        initialize: function() {
-            return this._super();
-        },
-
         /**
          * On change, enable/disable form elements
          *

@@ -23,16 +23,12 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
 {
     const CURRENT_KEY = 'current_case';
     const CACHE_TAG = 'helpdesk_case';
+    const EVENT_PREFIX = 'helpdesk_case';
 
     /**
      * @var string
      */
-    protected $_eventPrefix = 'helpdesk_case';
-
-    /**
-     * @var \Magento\Store\Model\Website
-     */
-    protected $website;
+    protected $_eventPrefix = self::EVENT_PREFIX;
 
     /**
      * @return void
@@ -61,20 +57,6 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
     }
 
     /**
-     * Load website model
-     *
-     * @return \Magento\Store\Model\Website
-     */
-    public function getWebsite()
-    {
-        if (!$this->website->getId()) {
-            /* @TODO: Should be repository load */
-            $this->website->load($this->getWebsiteId());
-        }
-        return $this->website;
-    }
-
-    /**
      * Load case by protect code (frontend)
      *
      * @param string $protectCode
@@ -95,31 +77,6 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
         return parent::afterLoad();
     }
 
-    /**
-     * Set case number dynamically
-     *
-     * @return \Dem\HelpDesk\Model\CaseItem
-     */
-//    public function getCaseNumber()
-//    {
-//        if (!$this->hasData('case_number')) {
-//            $websiteId = str_pad($this->getWebsiteId(), 3, '0', STR_PAD_LEFT);
-//            $caseId = str_pad($this->getCaseId(), 6, '0', STR_PAD_LEFT);
-//            $caseNumber = $websiteId . '-' . $caseId;
-//            $this->setData('case_number', $caseNumber);
-//        }
-//        return $this->getData('case_number');
-//    }
-
-    public function getDepartment()
-    {
-        if (!$this->department->getId()) {
-            /* @TODO: Should be repository load */
-            $this->department->load($this->getDepartmentId());
-        }
-        return $this->department;
-    }
-
 
     /**
      * Get ID
@@ -138,6 +95,13 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
      */
     public function getCaseNumber()
     {
+//        if (!$this->hasData('case_number')) {
+//            $websiteId = str_pad($this->getWebsiteId(), 3, '0', STR_PAD_LEFT);
+//            $caseId = str_pad($this->getCaseId(), 6, '0', STR_PAD_LEFT);
+//            $caseNumber = $websiteId . '-' . $caseId;
+//            $this->setData('case_number', $caseNumber);
+//        }
+//        return $this->getData('case_number');
         return '';
     }
 

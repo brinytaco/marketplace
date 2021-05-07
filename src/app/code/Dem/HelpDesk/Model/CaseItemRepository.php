@@ -10,7 +10,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 use Dem\HelpDesk\Api\Data\CaseItemSearchResultInterfaceFactory;
 use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
 
 /**
@@ -32,7 +32,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     private $caseItemFactory;
 
     /**
-     * @var CaseItem
+     * @var Resource
      */
     private $caseItemResource;
 
@@ -52,7 +52,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     public function __construct(
         CaseItemFactory $caseItemFactory,
-        CaseItem $caseItemResource,
+        Resource $caseItemResource,
         CollectionFactory $caseItemCollectionFactory,
         CaseItemSearchResultInterfaceFactory $caseItemSearchResultInterfaceFactory,
         CollectionProcessorInterface $collectionProcessor

@@ -6,7 +6,6 @@ namespace Dem\HelpDesk\Controller\Adminhtml;
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\InputException;
-use Psr\Log\LoggerInterface;
 
 /**
  * HelpDesk - Adminhtml Abstract Controller
@@ -27,21 +26,6 @@ abstract class CaseItem extends Action
      */
     const ACTION_RESOURCE = 'Dem_HelpDesk::helpdesk_cases';
 
-    /*
-     * @var array Valid action list
-     */
-    private $allowedActions = [
-        'create',
-        'follow',
-        'grid',
-        'index',
-        'refresh',
-        'reply',
-        'save',
-        'transfer',
-        'view',
-    ];
-
     /**
      * Core registry
      *
@@ -53,6 +37,11 @@ abstract class CaseItem extends Action
      * @var \Magento\Framework\Translate\InlineInterface
      */
     protected $translateInline;
+
+    /**
+     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     */
+    protected $resultRedirectFactory;
 
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -77,10 +66,15 @@ abstract class CaseItem extends Action
     /**
      * @var \Dem\HelpDesk\Api\CaseItemRepositoryInterface
      */
-    protected $caseRepository;
+    protected $caseItemRepository;
 
     /**
-     * @var LoggerInterface
+     * @var \Dem\HelpDesk\Api\DepartmentRepositoryInterface
+     */
+    protected $departmentRepository;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
 
@@ -88,6 +82,11 @@ abstract class CaseItem extends Action
      * @var \Dem\HelpDesk\Helper\Data
      */
     protected $helper;
+
+    /**
+     * @var \Dem\HelpDesk\Model\CaseItemManagement
+     */
+    protected $caseItemManager;
 
     /**
      * Data constructor.
@@ -99,8 +98,10 @@ abstract class CaseItem extends Action
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseRepository
-     * @param LoggerInterface $logger
+     * @param \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseItemRepository
+     * @param \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory
+     * @param \Dem\HelpDesk\Model\CaseItemManagement $caseItemManager
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Dem\HelpDesk\Helper\Data $helper
      */
     public function __construct(
@@ -111,17 +112,22 @@ abstract class CaseItem extends Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseRepository,
-        LoggerInterface $logger,
+        \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseItemRepository,
+        \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory,
+        \Dem\HelpDesk\Model\CaseItemManagement $caseItemManager,
+        \Psr\Log\LoggerInterface $logger,
         \Dem\HelpDesk\Helper\Data $helper
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->translateInline = $translateInline;
+        $this->resultRedirectFactory = $context->getResultRedirectFactory();
         $this->resultPageFactory = $resultPageFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->resultRawFactory = $resultRawFactory;
-        $this->caseRepository = $caseRepository;
+        $this->caseItemRepository = $caseItemRepository;
+        $this->caseItemFactory = $caseItemFactory;
+        $this->caseItemManager = $caseItemManager;
         $this->logger = $logger;
         $this->helper = $helper;
         parent::__construct($context);
@@ -152,7 +158,7 @@ abstract class CaseItem extends Action
     {
         $id = $this->getRequest()->getParam('case_id');
         try {
-            $case = $this->caseRepository->getById($id);
+            $case = $this->caseItemRepository->getById($id);
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('This case no longer exists.'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);

@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Helper;
 
-use \Dem\HelpDesk\Helper\Config as Config;
+use \Dem\HelpDesk\Helper\Config;
+use \Magento\Framework\App\ObjectManager;
 
 /**
  * HelpDesk Helper - Data
@@ -25,11 +26,19 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     private $currentArea;
 
     /**
+     * @var \Magento\Backend\Model\Auth\Session
+     */
+    private $authSession;
+
+    /**
      * @param \Magento\Framework\App\Helper\Context $context
+     * @param \Magento\Backend\Model\Auth\Session $authSession
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Backend\Model\Auth\Session $authSession
     ) {
+        $this->authSession = $authSession;
         parent::__construct($context);
     }
 
@@ -59,12 +68,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Fetch current backend session user
+     *
+     * @return \Magento\Backend\Model\Auth\Session
+     */
+    public static function getBackendSession()
+    {
+        $objectManager = ObjectManager::getInstance();
+        return $objectManager->get('Magento\Backend\Model\Auth\Session');
+    }
+
+    /**
      * Fetch instance of StoreManagerInterface
      * @return \Magento\Store\Model\StoreManagerInterface
      */
     public static function getStoreManager()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $objectManager = ObjectManager::getInstance();
         return $objectManager->get('Magento\Store\Model\StoreManagerInterface');
     }
 
@@ -101,7 +121,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getCurrentArea()
     {
         if (!isset($this->currentArea)) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $objectManager = ObjectManager::getInstance();
             $this->currentArea = $objectManager->get('Magento\Framework\App\State');
         }
         return $this->currentArea->getAreaCode();
