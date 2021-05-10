@@ -15,6 +15,8 @@ namespace Dem\HelpDesk\Model\ResourceModel\Department;
  */
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
+    const EVENT_PREFIX = 'helpdesk_department_collection';
+
     /**
      * Identifier field name for collection items
      *
@@ -27,14 +29,14 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @var string
      */
-    protected $_eventPrefix = 'dem_helpdesk_department_collection';
+    protected $_eventPrefix = self::EVENT_PREFIX;
 
     /**
      * Name of event parameter
      *
      * @var string
      */
-    protected $_eventObject = 'department_collection';
+    protected $_eventObject = 'helpdesk_department_collection';
 
     /**
      * Define resource model

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model;
 
 use Magento\Framework\Model\AbstractModel;
+use Dem\HelpDesk\Api\Data\ReplyInterface;
 
 /**
  * HelpDesk Model - Reply
@@ -16,23 +17,158 @@ use Magento\Framework\Model\AbstractModel;
  * @since      1.0.0
  *
  */
-class Reply extends AbstractModel
+class Reply extends AbstractModel implements ReplyInterface
 {
-    const AUTHOR_TYPE_CREATOR = 'CREATOR';
-    const AUTHOR_TYPE_SYSTEM = 'SYSTEM';
-    const AUTHOR_TYPE_HELPDESK_USER = 'HELPDESK_USER';
-    
+    const EVENT_PREFIX = 'helpdesk_reply';
+
     /**
      * @var string
      */
-    protected $_eventPrefix = 'helpdesk_reply';
+    protected $_eventPrefix = self::EVENT_PREFIX;
+    protected $_eventObject = self::EVENT_PREFIX;
 
     /**
      * @return void
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\CaseItem::class);
+        $this->_init(\Dem\HelpDesk\Model\ResourceModel\Reply::class);
+    }
+
+    /**
+     * Get ID
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->getData(ReplyInterface::REPLY_ID);
+    }
+
+    /**
+     * Get author id
+     *
+     * @return int|null
+     */
+    public function getAuthorId()
+    {
+        return $this->getData(ReplyInterface::AUTHOR_ID);
+    }
+
+    /**
+     * Set author id
+     *
+     * @param int $authorId
+     * @return ReplyInterface
+     */
+    public function setAuthorId($authorId)
+    {
+        return $this->setData(ReplyInterface::AUTHOR_ID, $authorId);
+    }
+
+    /**
+     * Get author type
+     *
+     * @return string
+     */
+    public function getAuthorType()
+    {
+        return $this->getData(ReplyInterface::AUTHOR_TYPE);
+    }
+
+    /**
+     * Set author type
+     *
+     * @param string $authorType
+     * @return ReplyInterface
+     */
+    public function setAuthorType($authorType)
+    {
+        return $this->setData(ReplyInterface::AUTHOR_TYPE, $authorType);
+    }
+
+    /**
+     * Get reply text
+     *
+     * @return string
+     */
+    public function getReplyText()
+    {
+        return $this->getData(ReplyInterface::REPLY_TEXT);
+    }
+
+    /**
+     * Set reply text
+     *
+     * @param string $replyText
+     * @return ReplyInterface
+     */
+    public function setReplyText($replyText)
+    {
+        return $this->setData(ReplyInterface::REPLY_TEXT, $replyText);
+    }
+
+    /**
+     * Get remote ip address
+     *
+     * @return string
+     */
+    public function getRemoteIp()
+    {
+        return $this->getData(ReplyInterface::REMOTE_IP);
+    }
+
+    /**
+     * Set remote ip address
+     *
+     * @param string $remoteIp
+     * @return ReplyInterface
+     */
+    public function setRemoteIp($remoteIp)
+    {
+        return $this->setData(ReplyInterface::REMOTE_IP, $remoteIp);
+    }
+
+    /**
+     * Get status id
+     *
+     * @return int
+     */
+    public function getStatusId()
+    {
+        return $this->getData(ReplyInterface::STATUS_ID);
+    }
+
+    /**
+     * Set status id
+     *
+     * @param int $statusId
+     * @return ReplyInterface
+     */
+    public function setStatusId($statusId)
+    {
+        return $this->setData(ReplyInterface::STATUS_ID, $statusId);
+    }
+
+    /**
+     * Get created at
+     *
+     * @return string
+     */
+    public function getCreatedAt()
+    {
+        return $this->getData(ReplyInterface::CREATED_AT);
+    }
+
+    /**
+     * set created at
+     *
+     * @param $createdAt
+     * @return ReplyInterface
+     */
+    public function setCreatedAt($createdAt)
+    {
+        return $this->setData(ReplyInterface::CREATED_AT, $createdAt);
     }
 
 }

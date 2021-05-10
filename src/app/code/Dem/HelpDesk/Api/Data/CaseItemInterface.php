@@ -41,13 +41,6 @@ interface CaseItemInterface
     public function getId();
 
     /**
-     * Get ID
-     *
-     * @return int|null
-     */
-    public function getCaseId();
-
-    /**
      * Get case number
      *
      * @return string

@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
 
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
-
 /**
- * HelpDesk Resource Model - Department
+ * HelpDesk Resource Model - Reply
  *
  * =============================================================================
  *
@@ -15,8 +13,9 @@ use Dem\HelpDesk\Api\Data\DepartmentInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Reply extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
+
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
@@ -40,7 +39,7 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('dem_helpdesk_department', 'department_id');
+        $this->_init('dem_helpdesk_case_reply', 'reply_id');
     }
 
     /**
@@ -51,13 +50,7 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        // New case, set protect_code value
-        if ($object->isObjectNew()) {
-            $object->setCreatedAt($this->date->gmtDate());
-        } else {
-            // Set "updated_at"
-            $object->setUpdatedAt($this->date->gmtDate());
-        }
+        $object->setCreatedAt($this->date->gmtDate());
 
         return parent::_beforeSave($object);
     }

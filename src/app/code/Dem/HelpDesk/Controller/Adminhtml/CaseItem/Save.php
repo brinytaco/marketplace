@@ -58,38 +58,58 @@ class Save extends CaseItem
                     $data
                 );
 
+                /*
+                 * CaseitemManager addReply/initial/system
+                 * Passes replyinterface
+                 * Case sets data array
+                 * on afterSave(transaction)
+                 *   - save replies
+                 *   - save followers
+                 */
 
+                /* @var $creator \Magento\User\Model\User */
+                $creator = $this->helper->getBackendSession()->getUser();
 
-//                $replyUserType = \Dem\HelpDesk\Model\Reply::AUTHOR_TYPE_CREATOR;
-                // Add initial user message
-//                $case->addReply(array(
-//                    'author_id' => $creator->getId(),
-//                    'author_type' => $userType,
-//                    'reply_text' => $requestData['message'],
-//                    'mark_as_read' => json_encode(array($userType => array($creator->getId()))),
-//                    'remote_ip' => $_SERVER['REMOTE_ADDR'],
-//                ));
+                /* @var $initialReply \Dem\HelpDesk\Model\Reply */
+                $initialReply = $this->replyManager->createInitialReply(
+                    $this->replyFactory->create(),
+                    $case,
+                    $creator->getId(),
+                    $data['message']
+                );
 
-                $caseManager = $case->getCaseManagerName();
+                $case->addReplyToSave($initialReply);
 
-                $statusChangeMessage = __('New case created and assigned to "%s"', $caseManager);
-//                $case->addSystemMessage($statusChangeMessage);
+                // Get Case Manager Name
+                $caseManager = 'Placeholder';//$case->getCaseManagerName();
+
+                $systemMessage = __('New case created and assigned to "%s"', $caseManager);
+
+                /* @var $systemReply \Dem\HelpDesk\Model\Reply */
+                $systemReply = $this->replyManager->createSystemReply(
+                    $this->replyFactory->create(),
+                    $case,
+                    $systemMessage
+                );
+
+                $case->addReplyToSave($systemReply);
 
                 // Add followers to new case creation
 //                $case->addDefaultFollowers();
 
                 $this->caseItemRepository->save($case);
 
-                // Saving status or case manager change
-//                $session->addSuccess($statusChangeMessage);
+                // Send emails
+//                $this->caseItemManager->sendReplyMessages();
 
-/************************************/
+
 
                 // Done Saving customer, finish save action
                 $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY, $case);
-                $this->messageManager->addSuccessMessage($statusChangeMessage);
+                $this->messageManager->addSuccessMessage($systemMessage);
 
-                $resultRedirect->setPath('*/*/view', ['case_id' => $case->getId()]);
+                $resultRedirect->setPath('*/*/');
+//                $resultRedirect->setPath('*/*/view', ['case_id' => $case->getId()]);
 
             } catch (HelpDeskException $exception) {
                 $this->messageManager->addExceptionMessage(
@@ -100,7 +120,7 @@ class Save extends CaseItem
             } catch (\Exception $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,
-                    __('Something went wrong while saving the case.')
+                    $exception->getMessage()//__('Something went wrong while saving the case.')
                 );
                 $resultRedirect->setPath('*/*/');
             }

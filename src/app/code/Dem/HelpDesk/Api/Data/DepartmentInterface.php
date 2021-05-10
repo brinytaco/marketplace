@@ -34,13 +34,6 @@ interface DepartmentInterface
     public function getId();
 
     /**
-     * Get ID
-     *
-     * @return int|null
-     */
-    public function getDepartmentId();
-
-    /**
      * Get website id
      *
      * @return int

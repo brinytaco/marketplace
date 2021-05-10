@@ -67,6 +67,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->getConfiguredEnabledFlag($websiteId);
     }
 
+    public static function getServerRemoteIp()
+    {
+        return $_SERVER['REMOTE_ADDR'];
+    }
+
     /**
      * Fetch current backend session user
      *

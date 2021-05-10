@@ -4,9 +4,8 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\DataObject\IdentityInterface;
-use Magento\Framework\Api\SearchCriteriaBuilderFactory;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Api\Data\ReplyInterface;
 
 /**
  * HelpDesk Model - Case
@@ -19,7 +18,7 @@ use Dem\HelpDesk\Api\Data\CaseItemInterface;
  * @since      1.0.0
  *
  */
-class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInterface
+class CaseItem extends AbstractModel implements CaseItemInterface
 {
     const CURRENT_KEY = 'current_case';
     const CACHE_TAG = 'helpdesk_case';
@@ -29,6 +28,9 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
      * @var string
      */
     protected $_eventPrefix = self::EVENT_PREFIX;
+    protected $_eventObject = self::EVENT_PREFIX;
+
+    protected $repliesToSave = [];
 
     /**
      * @return void
@@ -38,52 +40,13 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
         $this->_init(\Dem\HelpDesk\Model\ResourceModel\CaseItem::class);
     }
 
-    /**
-     * @return array
-     */
-    public function getIdentities()
-    {
-        return [self::CACHE_TAG . '_' . $this->getId()];
-    }
-
-    /**
-     * @return array
-     */
-    public function getDefaultValues()
-    {
-        $values = [];
-
-        return $values;
-    }
-
-    /**
-     * Load case by protect code (frontend)
-     *
-     * @param string $protectCode
-     * @return \Dem\HelpDesk\Model\CaseItem
-     */
-    public function loadByCode(string $protectCode)
-    {
-        return $this->load($protectCode, 'protect_code');
-    }
-
-    /**
-     * After load
-     *
-     * @return \Dem\HelpDesk\Model\CaseItem
-     */
-    public function afterLoad()
-    {
-        return parent::afterLoad();
-    }
-
 
     /**
      * Get ID
      *
      * @return int|null
      */
-    public function getCaseId()
+    public function getId()
     {
         return $this->getData(CaseItemInterface::CASE_ID);
     }
@@ -449,6 +412,37 @@ class CaseItem extends AbstractModel implements IdentityInterface, CaseItemInter
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(CaseItemInterface::UPDATED_AT, $updatedAt);
+    }
+
+    /**************************************************************************/
+    /**************************************************************************/
+
+    /**
+     * Get repliesToSave array
+     *
+     * @return array
+     */
+    public function getRepliesToSave()
+    {
+        return $this->repliesToSave;
+    }
+
+    /**
+     * Add data to repliesToSave array
+     *
+     * @param ReplyInterface $reply
+     * @return CaseItemInterface
+     */
+    public function addReplyToSave(ReplyInterface $reply)
+    {
+        $this->repliesToSave[] = $reply;
+        return $this;
+    }
+
+    public function clearRepliesToSave()
+    {
+        $this->repliesToSave = [];
+        return $this;
     }
 
 }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model;
 
 use Magento\Framework\Model\AbstractModel;
-use Magento\Framework\DataObject\IdentityInterface;
 use Dem\HelpDesk\Api\Data\DepartmentInterface;
 
 /**
@@ -18,15 +17,17 @@ use Dem\HelpDesk\Api\Data\DepartmentInterface;
  * @since      1.0.0
  *
  */
-class Department extends AbstractModel implements IdentityInterface, DepartmentInterface
+class Department extends AbstractModel implements DepartmentInterface
 {
     const CURRENT_KEY = 'current_department';
     const CACHE_TAG = 'helpdesk_department';
+    const EVENT_PREFIX = 'helpdesk_department';
 
     /**
      * @var string
      */
-    protected $_eventPrefix = 'helpdesk_department';
+    protected $_eventPrefix = self::EVENT_PREFIX;
+    protected $_eventObject = self::EVENT_PREFIX;
 
     /**
      * @return void
@@ -34,24 +35,6 @@ class Department extends AbstractModel implements IdentityInterface, DepartmentI
     protected function _construct()
     {
         $this->_init(\Dem\HelpDesk\Model\ResourceModel\Department::class);
-    }
-
-    /**
-     * @return array
-     */
-    public function getIdentities()
-    {
-        return [self::CACHE_TAG . '_' . $this->getId()];
-    }
-
-    /**
-     * @return array
-     */
-    public function getDefaultValues()
-    {
-        $values = [];
-
-        return $values;
     }
 
     /**
@@ -71,16 +54,6 @@ class Department extends AbstractModel implements IdentityInterface, DepartmentI
      * @return int|null
      */
     public function getId()
-    {
-        return $this->getData(DepartmentInterface::DEPARTMENT_ID);
-    }
-
-    /**
-     * Get ID
-     *
-     * @return int|null
-     */
-    public function getDepartmentId()
     {
         return $this->getData(DepartmentInterface::DEPARTMENT_ID);
     }

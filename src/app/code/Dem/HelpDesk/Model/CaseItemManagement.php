@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model;
 
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Api\Data\ReplyInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 
 
@@ -28,9 +29,9 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
     protected $coreRegistry;
 
     /**
-     * @var \Dem\HelpDesk\Api\DepartmentRepositoryInterface
+     * @var \Magento\Framework\Event\ManagerInterface
      */
-    protected $departmentRepository;
+    protected $eventManager;
 
     /**
      * @var \Psr\Log\LoggerInterface
@@ -43,39 +44,23 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
     protected $helper;
 
     /**
-     * @var \Dem\HelpDesk\Model\CaseItemManagement
-     */
-    protected $caseItemManager;
-
-    /**
-     * @var \Magento\Framework\Event\ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
      * Data constructor.
      *
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseRepository
-     * @param \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Dem\HelpDesk\Helper\Data $helper
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
-        \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseRepository,
-        \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Psr\Log\LoggerInterface $logger,
         \Dem\HelpDesk\Helper\Data $helper
     ) {
         $this->coreRegistry = $coreRegistry;
-        $this->caseRepository = $caseRepository;
-        $this->departmentRepository = $departmentRepository;
+        $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->helper = $helper;
-        $this->eventManager = $eventManager;
     }
 
     /**
@@ -139,8 +124,6 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
                 throw new HelpDeskException(__('The case `%s` cannot be empty.', $field));
             }
         }
-
-        /** @todo Check for 10 word minimum in message body */
     }
 
     /**
