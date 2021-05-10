@@ -23,15 +23,23 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $date;
 
     /**
+     * @var \Dem\HelpDesk\Model\UserRepository
+     */
+    protected $userRepository;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param \Dem\HelpDesk\Model\UserRepository $userRepository
      * @return void
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date
+        \Magento\Framework\Stdlib\DateTime\DateTime $date,
+        \Dem\HelpDesk\Model\UserRepository $userRepository
     ) {
         $this->date = $date;
+        $this->userRepository = $userRepository;
         parent::__construct($context);
     }
 
@@ -71,6 +79,9 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
         // Get user repository and load user
+        $user = $this->userRepository->getById($object->getCaseManagerId());
+        $object->setCaseManagerName($user->getName());
+        $object->setCaseManagerEmail($user->getEmail());
 
         parent::_afterLoad($object);
     }

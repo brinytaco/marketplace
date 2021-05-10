@@ -50,6 +50,12 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
 
     /**
      *
+     * @var \Dem\HelpDesk\Api\Data\CaseInterface
+     */
+    protected $caseItem;
+
+    /**
+     *
      * @var \Dem\HelpDesk\Api\Data\DepartmentInterface
      */
     protected $department;
@@ -183,7 +189,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
      */
     protected function validateDepartmentByWebsiteId($websiteId, $departmentId)
     {
-        $department = $this->loadDepartmentModel($departmentId);
+        $department = $this->loadDepartmentById($departmentId);
 
         // Default department selection is always valid
         if (! \Dem\HelpDesk\Helper\Config::isDefaultDepartment($departmentId)) {
@@ -194,23 +200,30 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
     }
 
     /**
-     * Load and set department for this case
+     * Get loaded department model
      *
      * @param type $departmentId
-     * @return \Dem\HelpDesk\Model\Department
+     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * Load department model by id
+     *
+     * @param type $departmentId
+     * @return void
      * @throws HelpDeskException
      */
-    public function loadDepartmentModel($departmentId)
+    protected function loadDepartmentById($departmentId)
     {
-        /* @var $department \Dem\HelpDesk\Model\Department */
-        $department = $this->departmentRepository->getById($departmentId);
-        if (!$department) {
+        /* @var $department \Dem\HelpDesk\Api\Data\DepartmentInterface */
+        $this->department = $this->departmentRepository->getById($departmentId);
+        if (!$this->department) {
             throw new HelpDeskException(__('Invalid department selected'));
         }
-
-        $this->department = $department;
-debugprint($department);
-        return $department;
     }
 
 }

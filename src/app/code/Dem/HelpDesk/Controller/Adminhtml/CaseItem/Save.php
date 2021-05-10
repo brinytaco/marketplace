@@ -72,11 +72,13 @@ class Save extends CaseItem
 
                 $case->addReplyToSave($initialReply);
 
+                $department = $this->caseItemManager->getDepartment();
+
                 // Get Case Manager Name
-                $caseManager = 'Placeholder';//$case->getCaseManagerName();
+                $caseManagerName = $department->getCaseManagerName();
 
                 // Translate immediately for saving
-                $systemMessage = __('New case created and assigned to `%1`', $caseManager)->render();
+                $systemMessage = __('New case created and assigned to `%1`', $caseManagerName)->render();
 
 
                 /* @var $systemReply \Dem\HelpDesk\Model\Reply */
@@ -114,7 +116,7 @@ class Save extends CaseItem
             } catch (\Exception $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,
-                    $exception->getMessage()//__('Something went wrong while saving the case.')
+                    __('Something went wrong while saving the case.')
                 );
                 $resultRedirect->setPath('*/*/');
             }
