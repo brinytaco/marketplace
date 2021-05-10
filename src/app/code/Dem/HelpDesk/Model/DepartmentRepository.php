@@ -74,7 +74,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
         $department = $this->departmentFactory->create();
         $this->departmentResource->load($department, $id);
         if (!$department->getId()) {
-            throw new NoSuchEntityException(__('Unable to find Department with ID "%1"', $id));
+            throw new NoSuchEntityException(__('Unable to find department with ID `%1`', $id));
         }
         return $department;
     }
@@ -136,7 +136,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
         $department = $this->departmentFactory->create();
         $this->departmentResource->load($department, $id);
         if (!$department->getId()) {
-            throw new NoSuchEntityException(__('Unable to find Department with ID "%1"', $id));
+            throw new NoSuchEntityException(__('Unable to find department with ID `%1`', $id));
         }
         return $this->delete($department);
     }

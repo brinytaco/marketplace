@@ -45,7 +45,7 @@ class ReplyRepository implements ReplyRepositoryInterface
      * @var ReplySearchResultInterfaceFactory
      */
     private $searchResultFactory;
-    
+
     /**
      * @var CollectionProcessorInterface
      */
@@ -75,7 +75,7 @@ class ReplyRepository implements ReplyRepositoryInterface
         $reply = $this->replyFactory->create();
         $this->replyResource->load($reply, $id);
         if (!$reply->getId()) {
-            throw new NoSuchEntityException(__('Unable to find reply with ID "%1"', $id));
+            throw new NoSuchEntityException(__('Unable to find reply with ID `%1`', $id));
         }
         return $reply;
     }
@@ -137,7 +137,7 @@ class ReplyRepository implements ReplyRepositoryInterface
         $reply = $this->replyFactory->create();
         $this->replyResource->load($reply, $id);
         if (!$reply->getId()) {
-            throw new NoSuchEntityException(__('Unable to find reply with ID "%1"', $id));
+            throw new NoSuchEntityException(__('Unable to find reply with ID `%1`', $id));
         }
         return $this->delete($reply);
     }

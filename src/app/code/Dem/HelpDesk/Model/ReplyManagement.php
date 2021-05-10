@@ -164,7 +164,7 @@ class ReplyManagement implements \Dem\HelpDesk\Api\ReplyManagementInterface
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The reply `%s` cannot be empty.', $requiredField));
+                throw new HelpDeskException(__('The reply `%1` cannot be empty.', $requiredField));
             }
         }
 
@@ -172,7 +172,7 @@ class ReplyManagement implements \Dem\HelpDesk\Api\ReplyManagementInterface
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The reply `%s` cannot be empty.', $field));
+                throw new HelpDeskException(__('The reply `%1` cannot be empty.', $field));
             }
         }
 

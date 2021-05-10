@@ -44,23 +44,31 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
     protected $helper;
 
     /**
+     * @var \Dem\HelpDesk\Model\DepartmentRepository
+     */
+    protected $departmentRepository;
+
+    /**
      * Data constructor.
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Dem\HelpDesk\Helper\Data $helper
+     * @param \Dem\HelpDesk\Model\DepartmentRepository $departmentRepository
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Psr\Log\LoggerInterface $logger,
-        \Dem\HelpDesk\Helper\Data $helper
+        \Dem\HelpDesk\Helper\Data $helper,
+        \Dem\HelpDesk\Model\DepartmentRepository $departmentRepository
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->eventManager = $eventManager;
         $this->logger = $logger;
         $this->helper = $helper;
+        $this->departmentRepository = $departmentRepository;
     }
 
     /**
@@ -113,7 +121,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The case `%s` cannot be empty.', $requiredField));
+                throw new HelpDeskException(__('The case `%1` cannot be empty.', $requiredField));
             }
         }
 
@@ -121,7 +129,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The case `%s` cannot be empty.', $field));
+                throw new HelpDeskException(__('The case `%1` cannot be empty.', $field));
             }
         }
     }

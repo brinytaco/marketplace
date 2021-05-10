@@ -52,6 +52,7 @@ class Save extends CaseItem
         if ($data) {
             try {
 
+                /* $caseItemManager \Dem\HelpDesk\Model\CaseItemManagement */
                 /* @var $case \Dem\HelpDesk\Model\CaseItem */
                 $case = $this->caseItemManager->createCase(
                     $this->caseItemFactory->create(),
@@ -83,7 +84,9 @@ class Save extends CaseItem
                 // Get Case Manager Name
                 $caseManager = 'Placeholder';//$case->getCaseManagerName();
 
-                $systemMessage = __('New case created and assigned to "%s"', $caseManager);
+                // Translate immediately for saving
+                $systemMessage = __('New case created and assigned to `%1`', $caseManager)->render();
+
 
                 /* @var $systemReply \Dem\HelpDesk\Model\Reply */
                 $systemReply = $this->replyManager->createSystemReply(

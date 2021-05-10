@@ -74,7 +74,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
         $caseItem = $this->caseItemFactory->create();
         $this->caseItemResource->load($caseItem, $id);
         if (!$caseItem->getId()) {
-            throw new NoSuchEntityException(__('Unable to find CaseItem with ID "%1"', $id));
+            throw new NoSuchEntityException(__('Unable to find case with ID `%1`', $id));
         }
         return $caseItem;
     }
@@ -136,7 +136,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
         $caseItem = $this->caseItemFactory->create();
         $this->caseItemResource->load($caseItem, $id);
         if (!$caseItem->getId()) {
-            throw new NoSuchEntityException(__('Unable to find CaseItem with ID "%1"', $id));
+            throw new NoSuchEntityException(__('Unable to find case with ID `%1`', $id));
         }
         return $this->delete($caseItem);
     }
