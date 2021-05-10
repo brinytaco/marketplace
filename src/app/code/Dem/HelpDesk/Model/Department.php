@@ -38,17 +38,6 @@ class Department extends AbstractModel implements DepartmentInterface
     }
 
     /**
-     * After load, set display names
-     *
-     * @return \Dem\HelpDesk\Model\Department
-     */
-    protected function _afterLoad()
-    {
-        parent::_afterLoad();
-        return $this;
-    }
-
-    /**
      * Get ID
      *
      * @return int|null

@@ -7,14 +7,14 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\CaseItemSearchResultInterfaceFactory;
-use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem as CaseItemResource;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
+use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
+use Dem\HelpDesk\Api\Data\DepartmentUserSearchResultInterfaceFactory;
+use Dem\HelpDesk\Api\DepartmentUserRepositoryInterface;
+use Dem\HelpDesk\Model\ResourceModel\DepartmentUser as Resource;
+use Dem\HelpDesk\Model\ResourceModel\DepartmentUser\CollectionFactory;
 
 /**
- * HelpDesk Model Repository - CaseItem
+ * HelpDesk Model Repository - DepartmentUser
  *
  * =============================================================================
  *
@@ -24,37 +24,38 @@ use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
  * @since      1.0.0
  *
  */
-class CaseItemRepository implements CaseItemRepositoryInterface
+class DepartmentUserRepository implements DepartmentUserRepositoryInterface
 {
     /**
-     * @var CaseItemFactory
+     * @var DepartmentUserFactory
      */
     private $factory;
 
     /**
-     * @var CaseItemResource
+     * @var Resource
      */
     private $resource;
 
     /**
-     * @var CaseItemCollectionFactory
+     * @var DepartmentUserCollectionFactory
      */
     private $collectionFactory;
 
     /**
-     * @var CaseItemSearchResultInterfaceFactory
+     * @var DepartmentUserSearchResultInterfaceFactory
      */
     private $searchResultFactory;
+
     /**
      * @var CollectionProcessorInterface
      */
     private $collectionProcessor;
 
     public function __construct(
-        CaseItemFactory $factory,
-        CaseItemResource $resource,
+        DepartmentUserFactory $factory,
+        Resource $resource,
         CollectionFactory $collectionFactory,
-        CaseItemSearchResultInterfaceFactory $searchResultFactory,
+        DepartmentUserSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->factory = $factory;
@@ -66,22 +67,22 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
+     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id)
     {
-        $caseItem = $this->factory->create();
-        $this->resource->load($caseItem, $id);
-        if (!$caseItem->getId()) {
-            throw new NoSuchEntityException(__('Unable to find case with ID `%1`', $id));
+        $user = $this->factory->create();
+        $this->resource->load($user, $id);
+        if (!$user->getId()) {
+            throw new NoSuchEntityException(__('Unable to find user with ID `%1`', $id));
         }
-        return $caseItem;
+        return $user;
     }
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\CaseItemSearchResultInterface
+     * @return \Dem\HelpDesk\Api\Data\DepartmentUserSearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
@@ -97,28 +98,28 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\CaseItemInterface $caseItem
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
+     * @param \Dem\HelpDesk\Api\Data\DepartmentUserInterface $user
+     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save(CaseItemInterface $caseItem)
+    public function save(DepartmentUserInterface $user)
     {
-        $this->resource->save($caseItem);
-        return $caseItem;
+        $this->resource->save($user);
+        return $user;
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\CaseItemInterface $caseItem
+     * @param \Dem\HelpDesk\Api\Data\DepartmentUserInterface $user
      * @return bool true on success
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function delete(CaseItemInterface $caseItem)
+    public function delete(DepartmentUserInterface $user)
     {
         try {
-            $this->resource->delete($caseItem);
+            $this->resource->delete($user);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
-                __('Could not delete the entry: %1', $exception->getMessage())
+                __('Could not delete the user: %1', $exception->getMessage())
             );
         }
 
@@ -128,16 +129,16 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
+     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function deleteById($id)
     {
-        $caseItem = $this->factory->create();
-        $this->resource->load($caseItem, $id);
-        if (!$caseItem->getId()) {
-            throw new NoSuchEntityException(__('Unable to find case with ID `%1`', $id));
+        $user = $this->factory->create();
+        $this->resource->load($user, $id);
+        if (!$user->getId()) {
+            throw new NoSuchEntityException(__('Unable to find user with ID `%1`', $id));
         }
-        return $this->delete($caseItem);
+        return $this->delete($user);
     }
 }

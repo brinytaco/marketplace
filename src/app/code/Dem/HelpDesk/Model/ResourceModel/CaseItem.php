@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
 
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-
 /**
  * HelpDesk Resource Model - Case
  *
@@ -18,9 +16,9 @@ use Dem\HelpDesk\Api\Data\CaseItemInterface;
 class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
-     * @var \Dem\HelpDesk\Model\ResourceModel\Reply
+     * @var \Dem\HelpDesk\Model\ResourceModel\ReplyRepositoryInterface
      */
-    protected $replyResource;
+    protected $replyRepository;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
@@ -30,16 +28,16 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Dem\HelpDesk\Model\ResourceModel\Reply $replyResource
+     * @param \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository
      * @return void
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Dem\HelpDesk\Model\ResourceModel\Reply $replyResource
+        \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository
     ) {
         $this->date = $date;
-        $this->replyResource = $replyResource;
+        $this->replyRepository = $replyRepository;
         parent::__construct($context);
     }
 
@@ -93,14 +91,15 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function saveNewReplies(\Magento\Framework\Model\AbstractModel $object)
     {
+        /* @var $reply \Dem\HelpDesk\Api\Data\ReplyInterface */
         $replies = $object->getRepliesToSave();
         if (count($replies)) {
-            /* $reply \Dem\HelpDesk\Api\Data\ReplyInterface */
             foreach ($replies as $reply) {
                 $reply->setCaseId($object->getId());
-                $this->replyResource->save($reply);
+                $this->replyRepository->save($reply);
             }
         }
+        $object->clearRepliesToSave();
         return $this;
     }
 }

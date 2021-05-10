@@ -29,17 +29,17 @@ class ReplyRepository implements ReplyRepositoryInterface
     /**
      * @var ReplyFactory
      */
-    private $replyFactory;
+    private $factory;
 
     /**
      * @var Resource
      */
-    private $replyResource;
+    private $resource;
 
     /**
      * @var ReplyCollectionFactory
      */
-    private $replyCollectionFactory;
+    private $collectionFactory;
 
     /**
      * @var ReplySearchResultInterfaceFactory
@@ -52,16 +52,16 @@ class ReplyRepository implements ReplyRepositoryInterface
     private $collectionProcessor;
 
     public function __construct(
-        ReplyFactory $replyFactory,
-        Resource $replyResource,
-        CollectionFactory $replyCollectionFactory,
-        ReplySearchResultInterfaceFactory $replySearchResultInterfaceFactory,
+        ReplyFactory $factory,
+        Resource $resource,
+        CollectionFactory $collectionFactory,
+        ReplySearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
-        $this->replyFactory = $replyFactory;
-        $this->replyResource = $replyResource;
-        $this->replyCollectionFactory = $replyCollectionFactory;
-        $this->searchResultFactory = $replySearchResultInterfaceFactory;
+        $this->factory = $factory;
+        $this->resource = $resource;
+        $this->collectionFactory = $collectionFactory;
+        $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -72,8 +72,8 @@ class ReplyRepository implements ReplyRepositoryInterface
      */
     public function getById($id)
     {
-        $reply = $this->replyFactory->create();
-        $this->replyResource->load($reply, $id);
+        $reply = $this->factory->create();
+        $this->resource->load($reply, $id);
         if (!$reply->getId()) {
             throw new NoSuchEntityException(__('Unable to find reply with ID `%1`', $id));
         }
@@ -87,7 +87,7 @@ class ReplyRepository implements ReplyRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->replyCollectionFactory->create();
+        $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults = $this->searchResultFactory->create();
 
@@ -104,7 +104,7 @@ class ReplyRepository implements ReplyRepositoryInterface
      */
     public function save(ReplyInterface $reply)
     {
-        $this->replyResource->save($reply);
+        $this->resource->save($reply);
         return $reply;
     }
 
@@ -116,7 +116,7 @@ class ReplyRepository implements ReplyRepositoryInterface
     public function delete(ReplyInterface $reply)
     {
         try {
-            $this->replyResource->delete($reply);
+            $this->resource->delete($reply);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __('Could not delete the reply: %1', $exception->getMessage())
@@ -134,8 +134,8 @@ class ReplyRepository implements ReplyRepositoryInterface
      */
     public function deleteById($id)
     {
-        $reply = $this->replyFactory->create();
-        $this->replyResource->load($reply, $id);
+        $reply = $this->factory->create();
+        $this->resource->load($reply, $id);
         if (!$reply->getId()) {
             throw new NoSuchEntityException(__('Unable to find reply with ID `%1`', $id));
         }

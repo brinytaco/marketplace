@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Model\ResourceModel\Department;
+namespace Dem\HelpDesk\Model\ResourceModel\DepartmentUser;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 
@@ -17,14 +17,14 @@ use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
  */
 class Collection extends AbstractCollection
 {
-    const EVENT_PREFIX = 'helpdesk_department_collection';
+    const EVENT_PREFIX = 'helpdesk_department_user_collection';
 
     /**
      * Identifier field name for collection items
      *
      * @var string
      */
-    protected $_idFieldName = 'department_id';
+    protected $_idFieldName = 'dept_user_id';
 
     /**
      * Name prefix of events that are dispatched by model
@@ -38,7 +38,7 @@ class Collection extends AbstractCollection
      *
      * @var string
      */
-    protected $_eventObject = 'helpdesk_department_collection';
+    protected $_eventObject = 'helpdesk_department_user_collection';
 
     /**
      * Define resource model
@@ -48,8 +48,8 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(
-            \Dem\HelpDesk\Model\Department::class,
-            \Dem\HelpDesk\Model\ResourceModel\Department::class
+            \Dem\HelpDesk\Model\DepartmentUser::class,
+            \Dem\HelpDesk\Model\ResourceModel\DepartmentUser::class
         );
     }
 }

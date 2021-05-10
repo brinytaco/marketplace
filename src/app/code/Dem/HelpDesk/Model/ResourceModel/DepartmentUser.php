@@ -13,7 +13,7 @@ namespace Dem\HelpDesk\Model\ResourceModel;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class DepartmentUser extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
@@ -46,7 +46,7 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('dem_helpdesk_department', 'department_id');
+        $this->_init('dem_helpdesk_department_user', 'dept_user_id');
     }
 
     /**
@@ -66,21 +66,5 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         }
 
         return parent::_beforeSave($object);
-    }
-
-    /**
-     * Perform actions after object load
-     *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
-     * @return $this
-     */
-    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
-    {
-        // Get user repository and load user
-        $user = $this->userRepository->getById($object->getCaseManagerId());
-        $object->setCaseManagerName($user->getName());
-        $object->setCaseManagerEmail($user->getEmail());
-
-        parent::_afterLoad($object);
     }
 }

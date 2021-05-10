@@ -180,11 +180,11 @@ abstract class CaseItem extends Action
         try {
             $case = $this->caseItemRepository->getById($id);
         } catch (NoSuchEntityException $e) {
-            $this->messageManager->addErrorMessage(__('This case no longer exists.'));
+            $this->messageManager->addErrorMessage(__('The requested case no longer exists'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         } catch (InputException $e) {
-            $this->messageManager->addErrorMessage(__('This case no longer exists.'));
+            $this->messageManager->addErrorMessage(__('The requested case no longer exists'));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }

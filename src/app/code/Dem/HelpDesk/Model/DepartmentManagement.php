@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
-use Dem\HelpDesk\Api\Data\UserInterface;
+use Dem\HelpDesk\Api\Data\DepartmentInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 
 
 /**
- * HelpDesk Model - User Management
+ * HelpDesk Model - DepartmentUser Management
  *
  * =============================================================================
  *
@@ -17,7 +17,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class UserManagement implements \Dem\HelpDesk\Api\UserManagementInterface
+class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInterface
 {
 
     /**
@@ -80,7 +80,7 @@ class UserManagement implements \Dem\HelpDesk\Api\UserManagementInterface
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The user `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The reply `%1` cannot be empty', $requiredField));
             }
         }
 
@@ -88,7 +88,7 @@ class UserManagement implements \Dem\HelpDesk\Api\UserManagementInterface
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The user `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The reply `%1` cannot be empty', $field));
             }
         }
 
@@ -103,8 +103,9 @@ class UserManagement implements \Dem\HelpDesk\Api\UserManagementInterface
     public function getRequiredFields()
     {
         return array(
-            'user_text',
-            'author_type'
+            'website_id',
+            'case_manager_id',
+            'name'
         );
     }
 

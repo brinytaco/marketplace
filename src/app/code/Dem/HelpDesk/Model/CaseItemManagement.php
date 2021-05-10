@@ -133,7 +133,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The case `%1` cannot be empty.', $requiredField));
+                throw new HelpDeskException(__('The case `%1` cannot be empty', $requiredField));
             }
         }
 
@@ -141,7 +141,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The case `%1` cannot be empty.', $field));
+                throw new HelpDeskException(__('The case `%1` cannot be empty', $field));
             }
         }
     }
@@ -225,5 +225,69 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
             throw new HelpDeskException(__('Invalid department selected'));
         }
     }
+
+
+
+    /**
+     * Add default department followers to new/transfer case follower collection
+     * and prepare for saving (_afterSave)
+     *
+     * @param Dem_HelpDesk_Model_Case $case
+     * @param boolean $clear
+     * @return Dem_HelpDesk_Model_Resource_Follower_Collection
+     */
+//    public function addDefaultFollowers($case, $clear = false)
+//    {
+//        /* @var $dept Dem_HelpDesk_Model_Department */
+//        $dept = $case->getDepartment();
+//
+//        $isDefaultDept = (boolean) ((int)$dept->getId() === Dem_HelpDesk_Model_Case::DEPARTMENT_DEFAULT_ID);
+//
+//        /* @var $deptFollowers Varien_Data_Collection */
+//        $deptFollowers = $dept->getDefaultFollowers();
+//
+//        // Set user type for follower entries
+//        $userType = ($isDefaultDept || !(int)$case->getWebsiteId()) ? Dem_HelpDesk_Model_Case::USER_TYPE_ADMIN : Dem_HelpDesk_Model_Case::USER_TYPE_CUSTOMER;
+//
+//        // When clear is set to true, this is a dept transfer/escalation.
+//        // Retain existing followers that ARE users of the new department, or
+//        // when the new department is the default (anyone can follow)
+//        if ($clear && !$isDefaultDept) {
+//            $this->_removeCaseFollowers($case, $dept);
+//        }
+//
+//        /* @var $followersCollection Dem_HelpDesk_Model_Resource_Follower_Collection */
+//        $followersCollection = $case->getFollowersCollection();
+//
+//        if ($deptFollowers->getSize()) {
+//
+//            // $deptFollowers are qualified admin/customer entities
+//            foreach ($deptFollowers as $follower) {
+//
+//                // Creator and case manager can't be added as followers, since they are always included in notifications
+//                if ($follower->getUserId() === $case->getCreatorId() || $follower->getUserId() === $case->getCaseManager()->getId()) {
+//                    self::log(sprintf('Unable to add user #%s as a follower. User is creator or case manager', $follower->getUserId()));
+//                    continue;
+//                }
+//
+//                // Unique users only
+//                elseif (!in_array($follower->getUserId(), $followersCollection->getColumnValues('user_id'))) {
+//
+//                    /* @var $item Dem_HelpDesk_Model_Follower */
+//                    $item = Mage::getModel('helpdesk/follower')->setData(array(
+//                        'case_id' => $case->getId(),
+//                        'user_id' => $follower->getUserId(),
+//                        'user_type' => $userType,
+//                        'name' => $follower->getName(),
+//                        'email' => $follower->getEmail()
+//                    ));
+//
+//                    $followersCollection->addItem($item);
+//                }
+//            }
+//        }
+//
+//        return $followersCollection;
+//    }
 
 }

@@ -34,26 +34,13 @@ class Save extends CaseItem
             return $resultRedirect;
         }
 
-        /*
-         * 1) Validate post
-         * 2) Validate department is valid for current website
-         * 3) caseFactory->create()
-         * 4) case->setData()
-         * 5) add initial reply to case
-         * 6) add system reply to case
-         * 7) add default followers to case
-         * 8) save case
-         *      a) afterSave -> create replies
-         * 9) redirect on success/error
-         */
-
         $data = $this->getRequest()->getPostValue('case');
 
         if ($data) {
             try {
 
-                /* @var $caseItemManager \Dem\HelpDesk\Model\CaseItemManagement */
-                /* @var $case \Dem\HelpDesk\Model\CaseItem */
+                /* @var $caseItemManager \Dem\HelpDesk\Api\Data\CaseItemManagementInterface */
+                /* @var $case \Dem\HelpDesk\Api\Data\CaseItemInterface */
                 $case = $this->caseItemManager->createCase(
                     $this->caseItemFactory->create(),
                     $data
@@ -62,7 +49,8 @@ class Save extends CaseItem
                 /* @var $creator \Magento\User\Model\User */
                 $creator = $this->helper->getBackendSession()->getUser();
 
-                /* @var $initialReply \Dem\HelpDesk\Model\Reply */
+                /* @var $replyManager \Dem\HelpDesk\Api\Data\ReplyManagementInterface */
+                /* @var $initialReply \Dem\HelpDesk\Api\Data\ReplyInterface */
                 $initialReply = $this->replyManager->createInitialReply(
                     $this->replyFactory->create(),
                     $case,
@@ -72,6 +60,7 @@ class Save extends CaseItem
 
                 $case->addReplyToSave($initialReply);
 
+                /* @var $department \Dem\HelpDesk\Api\Data\DepartmentInterface */
                 $department = $this->caseItemManager->getDepartment();
 
                 // Get Case Manager Name
@@ -81,7 +70,7 @@ class Save extends CaseItem
                 $systemMessage = __('New case created and assigned to `%1`', $caseManagerName)->render();
 
 
-                /* @var $systemReply \Dem\HelpDesk\Model\Reply */
+                /* @var $initialReply \Dem\HelpDesk\Api\Data\ReplyInterface */
                 $systemReply = $this->replyManager->createSystemReply(
                     $this->replyFactory->create(),
                     $case,
@@ -90,9 +79,10 @@ class Save extends CaseItem
 
                 $case->addReplyToSave($systemReply);
 
-                // Add followers to new case creation
-//                $case->addDefaultFollowers();
+                // Get department users who are followers
+                $case->addDefaultFollowers();
 
+                /* @var $caseItemRepository \Dem\HelpDesk\Api\Data\CaseItemRepositoryInterface */
                 $this->caseItemRepository->save($case);
 
                 // Send emails
@@ -116,7 +106,7 @@ class Save extends CaseItem
             } catch (\Exception $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,
-                    __('Something went wrong while saving the case.')
+                    __('Something went wrong while saving the case')
                 );
                 $resultRedirect->setPath('*/*/');
             }

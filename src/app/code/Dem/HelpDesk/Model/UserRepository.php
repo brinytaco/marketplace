@@ -29,17 +29,17 @@ class UserRepository implements UserRepositoryInterface
     /**
      * @var UserFactory
      */
-    private $userFactory;
+    private $factory;
 
     /**
      * @var Resource
      */
-    private $userResource;
+    private $resource;
 
     /**
      * @var UserCollectionFactory
      */
-    private $userCollectionFactory;
+    private $collectionFactory;
 
     /**
      * @var UserSearchResultInterfaceFactory
@@ -52,16 +52,16 @@ class UserRepository implements UserRepositoryInterface
     private $collectionProcessor;
 
     public function __construct(
-        UserFactory $userFactory,
-        Resource $userResource,
-        CollectionFactory $userCollectionFactory,
-        UserSearchResultInterfaceFactory $userSearchResultInterfaceFactory,
+        UserFactory $factory,
+        Resource $resource,
+        CollectionFactory $collectionFactory,
+        UserSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
-        $this->userFactory = $userFactory;
-        $this->userResource = $userResource;
-        $this->userCollectionFactory = $userCollectionFactory;
-        $this->searchResultFactory = $userSearchResultInterfaceFactory;
+        $this->factory = $factory;
+        $this->resource = $resource;
+        $this->collectionFactory = $collectionFactory;
+        $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -72,8 +72,8 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getById($id)
     {
-        $user = $this->userFactory->create();
-        $this->userResource->load($user, $id);
+        $user = $this->factory->create();
+        $this->resource->load($user, $id);
         if (!$user->getId()) {
             throw new NoSuchEntityException(__('Unable to find user with ID `%1`', $id));
         }
@@ -87,7 +87,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->userCollectionFactory->create();
+        $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults = $this->searchResultFactory->create();
 
@@ -104,7 +104,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function save(UserInterface $user)
     {
-        $this->userResource->save($user);
+        $this->resource->save($user);
         return $user;
     }
 
@@ -116,7 +116,7 @@ class UserRepository implements UserRepositoryInterface
     public function delete(UserInterface $user)
     {
         try {
-            $this->userResource->delete($user);
+            $this->resource->delete($user);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __('Could not delete the user: %1', $exception->getMessage())
@@ -134,8 +134,8 @@ class UserRepository implements UserRepositoryInterface
      */
     public function deleteById($id)
     {
-        $user = $this->userFactory->create();
-        $this->userResource->load($user, $id);
+        $user = $this->factory->create();
+        $this->resource->load($user, $id);
         if (!$user->getId()) {
             throw new NoSuchEntityException(__('Unable to find user with ID `%1`', $id));
         }

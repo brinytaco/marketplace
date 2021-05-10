@@ -29,17 +29,17 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     /**
      * @var DepartmentFactory
      */
-    private $departmentFactory;
+    private $factory;
 
     /**
      * @var Department
      */
-    private $departmentResource;
+    private $resource;
 
     /**
      * @var DepartmentCollectionFactory
      */
-    private $departmentCollectionFactory;
+    private $collectionFactory;
 
     /**
      * @var DepartmentSearchResultInterfaceFactory
@@ -51,16 +51,16 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     private $collectionProcessor;
 
     public function __construct(
-        DepartmentFactory $departmentFactory,
-        Department $departmentResource,
-        CollectionFactory $departmentCollectionFactory,
-        DepartmentSearchResultInterfaceFactory $departmentSearchResultInterfaceFactory,
+        DepartmentFactory $factory,
+        Department $resource,
+        CollectionFactory $collectionFactory,
+        DepartmentSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
-        $this->departmentFactory = $departmentFactory;
-        $this->departmentResource = $departmentResource;
-        $this->departmentCollectionFactory = $departmentCollectionFactory;
-        $this->searchResultFactory = $departmentSearchResultInterfaceFactory;
+        $this->factory = $factory;
+        $this->resource = $resource;
+        $this->collectionFactory = $collectionFactory;
+        $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -71,8 +71,8 @@ class DepartmentRepository implements DepartmentRepositoryInterface
      */
     public function getById($id)
     {
-        $department = $this->departmentFactory->create();
-        $this->departmentResource->load($department, $id);
+        $department = $this->factory->create();
+        $this->resource->load($department, $id);
         if (!$department->getId()) {
             throw new NoSuchEntityException(__('Unable to find department with ID `%1`', $id));
         }
@@ -86,7 +86,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->departmentCollectionFactory->create();
+        $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults = $this->searchResultFactory->create();
 
@@ -103,7 +103,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
      */
     public function save(DepartmentInterface $department)
     {
-        $this->departmentResource->save($department);
+        $this->resource->save($department);
         return $department;
     }
 
@@ -115,7 +115,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     public function delete(DepartmentInterface $department)
     {
         try {
-            $this->departmentResource->delete($department);
+            $this->resource->delete($department);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
                 __('Could not delete the entry: %1', $exception->getMessage())
@@ -133,8 +133,8 @@ class DepartmentRepository implements DepartmentRepositoryInterface
      */
     public function deleteById($id)
     {
-        $department = $this->departmentFactory->create();
-        $this->departmentResource->load($department, $id);
+        $department = $this->factory->create();
+        $this->resource->load($department, $id);
         if (!$department->getId()) {
             throw new NoSuchEntityException(__('Unable to find department with ID `%1`', $id));
         }

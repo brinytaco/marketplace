@@ -445,4 +445,16 @@ class CaseItem extends AbstractModel implements CaseItemInterface
         return $this;
     }
 
+    /**************************************************************************/
+    /**************************************************************************/
+
+    /**
+     * Set followers to specified user_id list
+     */
+    public function setFollowers()
+    {
+        // Retrieve default followers by department
+        // Maybe this list of user_ids is already included in department data
+
+    }
 }
