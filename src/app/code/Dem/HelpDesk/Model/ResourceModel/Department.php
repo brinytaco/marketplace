@@ -61,4 +61,17 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return parent::_beforeSave($object);
     }
+
+    /**
+     * Perform actions after object load
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     */
+    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    {
+        // Get user repository and load user
+
+        parent::_afterLoad($object);
+    }
 }

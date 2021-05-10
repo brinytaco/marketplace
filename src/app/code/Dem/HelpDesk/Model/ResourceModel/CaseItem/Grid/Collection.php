@@ -70,6 +70,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
         $this->addFilterToMap('department_name', 'd.name');
         $this->addFilterToMap('case_number', 'case_id');
         $this->addFilterToMap('website_id', 'main_table.website_id');
+        $this->addFilterToMap('case_manager_name', 'u.name');
     }
 
 

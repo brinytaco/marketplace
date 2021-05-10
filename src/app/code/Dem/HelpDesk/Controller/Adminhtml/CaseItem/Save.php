@@ -52,21 +52,12 @@ class Save extends CaseItem
         if ($data) {
             try {
 
-                /* $caseItemManager \Dem\HelpDesk\Model\CaseItemManagement */
+                /* @var $caseItemManager \Dem\HelpDesk\Model\CaseItemManagement */
                 /* @var $case \Dem\HelpDesk\Model\CaseItem */
                 $case = $this->caseItemManager->createCase(
                     $this->caseItemFactory->create(),
                     $data
                 );
-
-                /*
-                 * CaseitemManager addReply/initial/system
-                 * Passes replyinterface
-                 * Case sets data array
-                 * on afterSave(transaction)
-                 *   - save replies
-                 *   - save followers
-                 */
 
                 /* @var $creator \Magento\User\Model\User */
                 $creator = $this->helper->getBackendSession()->getUser();

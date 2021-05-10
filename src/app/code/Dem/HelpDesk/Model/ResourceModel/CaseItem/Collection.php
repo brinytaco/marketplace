@@ -71,6 +71,13 @@ class Collection extends AbstractCollection
             ['department_name' => 'name']
         );
 
+        // Add case_manager name to select
+        $this->getSelect()->join(
+            ['u' => $this->getTable('dem_helpdesk_user')],
+            'd.case_manager_id = u.user_id',
+            ['case_manager_name' => 'u.name', 'case_manager_email' => 'u.email']
+        );
+
         // Dynamically retrieve the "case number" string
         $this->addExpressionFieldToSelect(
             'case_number',

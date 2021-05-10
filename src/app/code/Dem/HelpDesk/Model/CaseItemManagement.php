@@ -49,6 +49,12 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
     protected $departmentRepository;
 
     /**
+     *
+     * @var \Dem\HelpDesk\Api\Data\DepartmentInterface
+     */
+    protected $department;
+
+    /**
      * Data constructor.
      *
      * @param \Magento\Framework\Registry $coreRegistry
@@ -177,15 +183,34 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
      */
     protected function validateDepartmentByWebsiteId($websiteId, $departmentId)
     {
+        $department = $this->loadDepartmentModel($departmentId);
+
         // Default department selection is always valid
         if (! \Dem\HelpDesk\Helper\Config::isDefaultDepartment($departmentId)) {
-
-            /* @var $department \Dem\HelpDesk\Model\Department */
-            $department = $this->departmentRepository->getById($departmentId);
-            if (!$department || $department->getWebsiteId() != $websiteId) {
+            if ($department->getWebsiteId() != $websiteId) {
                 throw new HelpDeskException(__('Invalid department selected'));
             }
         }
+    }
+
+    /**
+     * Load and set department for this case
+     *
+     * @param type $departmentId
+     * @return \Dem\HelpDesk\Model\Department
+     * @throws HelpDeskException
+     */
+    public function loadDepartmentModel($departmentId)
+    {
+        /* @var $department \Dem\HelpDesk\Model\Department */
+        $department = $this->departmentRepository->getById($departmentId);
+        if (!$department) {
+            throw new HelpDeskException(__('Invalid department selected'));
+        }
+
+        $this->department = $department;
+debugprint($department);
+        return $department;
     }
 
 }
