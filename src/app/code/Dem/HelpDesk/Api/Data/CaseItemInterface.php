@@ -21,6 +21,7 @@ interface CaseItemInterface
     const CASE_ID               = 'case_id';
     const WEBSITE_ID            = 'website_id';
     const DEPARTMENT_ID         = 'department_id';
+    const DEPARTMENT_NAME       = 'department_name';
     const CASE_NUMBER           = 'case_number';
     const PROTECT_CODE          = 'protect_code';
     const CREATOR_CUSTOMER_ID   = 'creator_customer_id';

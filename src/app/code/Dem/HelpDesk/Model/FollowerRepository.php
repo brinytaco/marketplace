@@ -7,8 +7,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Dem\HelpDesk\Api\Data\FollowerInterface;
-use Dem\HelpDesk\Api\Data\FollowerSearchResultInterfaceFactory;
 use Dem\HelpDesk\Api\FollowerRepositoryInterface;
 use Dem\HelpDesk\Model\ResourceModel\Follower as Resource;
 use Dem\HelpDesk\Model\ResourceModel\Follower\CollectionFactory;
@@ -43,9 +43,9 @@ class FollowerRepository implements FollowerRepositoryInterface
     private $collectionFactory;
 
     /**
-     * @var FollowerSearchResultInterfaceFactory
+     * @var SearchResultsInterfaceFactory
      */
-    private $searchResultFactory;
+    private $searchResultsFactory;
 
     /**
      * @var CollectionProcessorInterface
@@ -56,13 +56,13 @@ class FollowerRepository implements FollowerRepositoryInterface
         FollowerFactory $factory,
         Resource $resource,
         CollectionFactory $collectionFactory,
-        FollowerSearchResultInterfaceFactory $searchResultFactory,
+        SearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->factory = $factory;
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
-        $this->searchResultFactory = $searchResultFactory;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -83,14 +83,14 @@ class FollowerRepository implements FollowerRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\FollowerSearchResultInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
-        $searchResults = $this->searchResultFactory->create();
+        $searchResults = $this->searchResultsFactory->create();
 
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());

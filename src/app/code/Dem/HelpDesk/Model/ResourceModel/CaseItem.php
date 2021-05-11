@@ -26,6 +26,11 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $followerRepository;
 
     /**
+     * @var \Dem\HelpDesk\Api\DepartmentRepositoryInterface
+     */
+    protected $departmentRepository;
+
+    /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
@@ -35,17 +40,20 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository
      * @param \Dem\HelpDesk\Api\FollowerRepositoryInterface $followerRepository
+     * @param \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
      * @return void
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository,
-        \Dem\HelpDesk\Api\FollowerRepositoryInterface $followerRepository
+        \Dem\HelpDesk\Api\FollowerRepositoryInterface $followerRepository,
+        \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
     ) {
         $this->date = $date;
         $this->replyRepository = $replyRepository;
         $this->followerRepository = $followerRepository;
+        $this->departmentRepository = $departmentRepository;
         parent::__construct($context);
     }
 
@@ -62,13 +70,12 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
+     * @since 1.0.0
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
-        $websiteId = str_pad($object->getWebsiteId(), 3, '0', STR_PAD_LEFT);
-        $caseId = str_pad($object->getCaseId(), 6, '0', STR_PAD_LEFT);
-        $caseNumber = $websiteId . '-' . $caseId;
-        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_NUMBER, $caseNumber);
+        $this->setCaseNumber($object);
+
         return parent::_afterLoad($object);
     }
 
@@ -77,6 +84,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 1.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -97,6 +105,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 1.0.0
      */
     protected function _afterSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -112,6 +121,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 1.0.0
      */
     protected function saveReplies(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -131,6 +141,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 1.0.0
      */
     protected function saveFollowers(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -142,6 +153,37 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             $this->followerRepository->save($follower);
         }
         $object->clearFollowersToSave();
+        return $this;
+    }
+
+    /**
+     * Build and set case number value
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setCaseNumber(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $websiteId = str_pad($object->getWebsiteId(), 3, '0', STR_PAD_LEFT);
+        $caseId = str_pad($object->getCaseId(), 6, '0', STR_PAD_LEFT);
+        $caseNumber = $websiteId . '-' . $caseId;
+        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_NUMBER, $caseNumber);
+        return $this;
+    }
+
+    /**
+     * Retrieve and set department_name value
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setDepartmentName(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /* @var $department \Dem\HelpDesk\Api\Data\DepartmentInterface */
+        $department = $this->departmentRepository->getById($object->getDepartmentId());
+        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::DEPARTMENT_NAME, $department->getName());
         return $this;
     }
 }

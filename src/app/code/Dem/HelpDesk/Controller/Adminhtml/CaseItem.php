@@ -84,7 +84,7 @@ abstract class CaseItem extends Action
     protected $helper;
 
     /**
-     * @var \Dem\HelpDesk\Model\CaseItemManagement
+     * @var \Dem\HelpDesk\Model\Service\CaseItemManagement
      */
     protected $caseItemManager;
 
@@ -94,7 +94,7 @@ abstract class CaseItem extends Action
     protected $caseItemFactory;
 
     /**
-     * @var \Dem\HelpDesk\Model\ReplyManagement
+     * @var \Dem\HelpDesk\Model\Service\ReplyManagement
      */
     protected $replyManager;
 
@@ -104,7 +104,7 @@ abstract class CaseItem extends Action
     protected $replyFactory;
 
     /**
-     * @var \Dem\HelpDesk\Model\FollowerManagement
+     * @var \Dem\HelpDesk\Model\Service\FollowerManagement
      */
     protected $followerManager;
 
@@ -112,6 +112,11 @@ abstract class CaseItem extends Action
      * @var \Dem\HelpDesk\Model\FollowerFactory
      */
     protected $followerFactory;
+
+    /**
+     * @var \Dem\HelpDesk\Model\Service\Notifications
+     */
+    protected $notificationService;
 
     /**
      * Data constructor.
@@ -125,11 +130,12 @@ abstract class CaseItem extends Action
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
      * @param \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseItemRepository
      * @param \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory
-     * @param \Dem\HelpDesk\Model\CaseItemManagement $caseItemManager
-     * @param \Dem\HelpDesk\Model\ReplyManagement $replyManager
+     * @param \Dem\HelpDesk\Model\Service\CaseItemManagement $caseItemManager
      * @param \Dem\HelpDesk\Model\ReplyFactory $replyFactory
-     * @param \Dem\HelpDesk\Model\FollowerManagement $followerManager
+     * @param \Dem\HelpDesk\Model\Service\ReplyManagement $replyManager
      * @param \Dem\HelpDesk\Model\FollowerFactory $followerFactory
+     * @param \Dem\HelpDesk\Model\Service\FollowerManagement $followerManager
+     * @param \Dem\HelpDesk\Model\Service\Notifications $notificationService
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Dem\HelpDesk\Helper\Data $helper
      */
@@ -143,11 +149,12 @@ abstract class CaseItem extends Action
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
         \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseItemRepository,
         \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory,
-        \Dem\HelpDesk\Model\CaseItemManagement $caseItemManager,
-        \Dem\HelpDesk\Model\ReplyManagement $replyManager,
+        \Dem\HelpDesk\Model\Service\CaseItemManagement $caseItemManager,
         \Dem\HelpDesk\Model\ReplyFactory $replyFactory,
-        \Dem\HelpDesk\Model\FollowerManagement $followerManager,
+        \Dem\HelpDesk\Model\Service\ReplyManagement $replyManager,
         \Dem\HelpDesk\Model\FollowerFactory $followerFactory,
+        \Dem\HelpDesk\Model\Service\FollowerManagement $followerManager,
+        \Dem\HelpDesk\Model\Service\Notifications $notificationService,
         \Psr\Log\LoggerInterface $logger,
         \Dem\HelpDesk\Helper\Data $helper
     ) {
@@ -165,6 +172,7 @@ abstract class CaseItem extends Action
         $this->replyFactory = $replyFactory;
         $this->followerManager = $followerManager;
         $this->followerFactory = $followerFactory;
+        $this->notificationService = $notificationService;
         $this->logger = $logger;
         $this->helper = $helper;
         parent::__construct($context);
@@ -174,6 +182,7 @@ abstract class CaseItem extends Action
      * Init layout, menu and breadcrumb
      *
      * @return \Magento\Backend\Model\View\Result\Page
+     * @since 1.0.0
      */
     protected function _initAction()
     {
@@ -190,6 +199,7 @@ abstract class CaseItem extends Action
      * Initialize order model instance
      *
      * @return \Dem\HelpDesk\Api\Data\CaseItemRepositoryInterface|false
+     * @since 1.0.0
      */
     protected function _initCase()
     {
@@ -210,7 +220,10 @@ abstract class CaseItem extends Action
     }
 
     /**
+     * Check is valid post request
+     *
      * @return bool
+     * @since 1.0.0
      */
     protected function isValidPostRequest()
     {

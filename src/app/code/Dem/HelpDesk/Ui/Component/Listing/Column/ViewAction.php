@@ -49,6 +49,7 @@ class ViewAction extends Column
      *
      * @param array $dataSource
      * @return array
+     * @since 1.0.0
      */
     public function prepareDataSource(array $dataSource)
     {

@@ -47,6 +47,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Api\Data\WebsiteInterface|int $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function isEnabled($websiteId)
     {
@@ -67,6 +68,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->getConfiguredEnabledFlag($websiteId);
     }
 
+    /**
+     * Get remote ip address from SERVER ENV
+     *
+     * @return string
+     * @since 1.0.0
+     */
     public static function getServerRemoteIp()
     {
         return $_SERVER['REMOTE_ADDR'];
@@ -76,6 +83,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Fetch current backend session user
      *
      * @return \Magento\Backend\Model\Auth\Session
+     * @since 1.0.0
      */
     public static function getBackendSession()
     {
@@ -86,6 +94,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Fetch instance of StoreManagerInterface
      * @return \Magento\Store\Model\StoreManagerInterface
+     * @since 1.0.0
      */
     public static function getStoreManager()
     {
@@ -98,6 +107,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param int $websiteId
      * @return \Magento\Store\Api\Data\WebsiteInterface
+     * @since 1.0.0
      */
     public static function getWebsite($websiteId = null)
     {
@@ -112,6 +122,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get list of websites (excluding default)
      *
      * @return \Magento\Store\Api\Data\WebsiteInterface[]
+     * @since 1.0.0
      */
     public static function getWebsites()
     {
@@ -122,6 +133,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get current area (admin|frontend)
      *
      * @return string
+     * @since 1.0.0
      */
     public function getCurrentArea()
     {
@@ -136,6 +148,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if current area is admin
      *
      * @return bool
+     * @since 1.0.0
      */
     public function getIsAdminArea()
     {
@@ -146,6 +159,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Check if current area is frontend
      *
      * @return bool
+     * @since 1.0.0
      */
     public function getIsFrontendArea()
     {
@@ -163,6 +177,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function getConfiguredEnabledFlag($websiteId = null)
     {
@@ -180,6 +195,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function getConfiguredFrontendLabel($websiteId = null)
     {
@@ -197,6 +213,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function getConfiguredSenderEmail($websiteId = null)
     {
@@ -214,6 +231,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function getConfiguredDepartmentLabel($websiteId = null)
     {
@@ -231,6 +249,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function getConfiguredNotifyActiveFlag($websiteId = null)
     {
@@ -248,6 +267,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function getConfiguredSessionTimeoutMinutes($websiteId = null)
     {
@@ -265,6 +285,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function getConfiguredInactiveIntervalDays($websiteId = null)
     {
@@ -282,6 +303,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param null|int|string $websiteId
      * @return bool
+     * @since 1.0.0
      */
     public function getConfiguredArchiveIntervalDays($websiteId = null)
     {

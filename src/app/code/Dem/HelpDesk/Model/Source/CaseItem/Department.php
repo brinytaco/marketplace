@@ -21,6 +21,7 @@ class Department extends SourceOptions
      * Return array of available departments for all websites
      *
      * @return array
+     * @since 1.0.0
      */
     public function toOptionArray($addEmpty = true)
     {
@@ -57,6 +58,7 @@ class Department extends SourceOptions
      * Get current website. If adminhtml area, get registry value.
      *
      * @return int|bool
+     * @since 1.0.0
      */
     public function getCurrentWebsiteId()
     {
@@ -77,6 +79,7 @@ class Department extends SourceOptions
      *
      * @param int $websiteId
      * @return \Magento\Framework\Api\Search\FilterGroup
+     * @since 1.0.0
      */
     protected function addWebsiteFilter($websiteId)
     {

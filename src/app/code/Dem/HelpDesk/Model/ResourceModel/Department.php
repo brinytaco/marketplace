@@ -70,6 +70,7 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 1.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -88,6 +89,7 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 1.0.0
      */
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
@@ -111,6 +113,6 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $object->setDefaultFollowers($defaultFollowers);
 
-        parent::_afterLoad($object);
+        return parent::_afterLoad($object);
     }
 }

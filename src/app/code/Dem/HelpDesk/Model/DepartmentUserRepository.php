@@ -7,8 +7,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
-use Dem\HelpDesk\Api\Data\DepartmentUserSearchResultInterfaceFactory;
 use Dem\HelpDesk\Api\DepartmentUserRepositoryInterface;
 use Dem\HelpDesk\Model\ResourceModel\DepartmentUser as Resource;
 use Dem\HelpDesk\Model\ResourceModel\DepartmentUser\CollectionFactory;
@@ -43,9 +43,9 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
     private $collectionFactory;
 
     /**
-     * @var DepartmentUserSearchResultInterfaceFactory
+     * @var SearchResultsInterfaceFactory
      */
-    private $searchResultFactory;
+    private $searchResultsFactory;
 
     /**
      * @var CollectionProcessorInterface
@@ -56,13 +56,13 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
         DepartmentUserFactory $factory,
         Resource $resource,
         CollectionFactory $collectionFactory,
-        DepartmentUserSearchResultInterfaceFactory $searchResultFactory,
+        SearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->factory = $factory;
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
-        $this->searchResultFactory = $searchResultFactory;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -83,14 +83,14 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserSearchResultInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
-        $searchResults = $this->searchResultFactory->create();
+        $searchResults = $this->searchResultsFactory->create();
 
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());

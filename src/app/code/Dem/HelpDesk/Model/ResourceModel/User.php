@@ -47,10 +47,16 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 1.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $object->setCreatedAt($this->date->gmtDate());
+        if ($object->isObjectNew()) {
+            $object->setCreatedAt($this->date->gmtDate());
+        } else {
+            // Set "updated_at"
+            $object->setUpdatedAt($this->date->gmtDate());
+        }
 
         return parent::_beforeSave($object);
     }

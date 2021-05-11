@@ -21,6 +21,7 @@ class Website extends SourceOptions
      * Return array of website names
      *
      * @return array
+     * @since 1.0.0
      */
     public function toOptionArray()
     {
@@ -47,6 +48,7 @@ class Website extends SourceOptions
      * Should add empty select option under specific circumstances
      *
      * @return boolean
+     * @since 1.0.0
      */
     protected function getShouldAddEmptyOption()
     {
@@ -57,6 +59,7 @@ class Website extends SourceOptions
     /**
      * Remove default website from optionArray
      * @return void
+     * @since 1.0.0
      */
     protected function filterDefaultWebsite()
     {
@@ -71,6 +74,7 @@ class Website extends SourceOptions
      * Remove non-helpdesk-enabled websites from optionArray
      *
      * @return void
+     * @since 1.0.0
      */
     protected function filterDisabledWebsites()
     {

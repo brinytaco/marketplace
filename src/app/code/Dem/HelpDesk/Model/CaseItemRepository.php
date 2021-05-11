@@ -7,8 +7,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\CaseItemSearchResultInterfaceFactory;
 use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem as CaseItemResource;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
@@ -43,9 +43,9 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     private $collectionFactory;
 
     /**
-     * @var CaseItemSearchResultInterfaceFactory
+     * @var SearchResultsInterfaceFactory
      */
-    private $searchResultFactory;
+    private $searchResultsFactory;
     /**
      * @var CollectionProcessorInterface
      */
@@ -55,13 +55,13 @@ class CaseItemRepository implements CaseItemRepositoryInterface
         CaseItemFactory $factory,
         CaseItemResource $resource,
         CollectionFactory $collectionFactory,
-        CaseItemSearchResultInterfaceFactory $searchResultFactory,
+        SearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->factory = $factory;
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
-        $this->searchResultFactory = $searchResultFactory;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -82,14 +82,14 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\CaseItemSearchResultInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
-        $searchResults = $this->searchResultFactory->create();
+        $searchResults = $this->searchResultsFactory->create();
 
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());

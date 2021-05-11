@@ -114,7 +114,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getDepartmentName()
     {
-        return '';
+        return $this->getData(CaseItemInterface::DEPARTMENT_NAME);
     }
 
     /**
@@ -418,6 +418,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * Get repliesToSave array
      *
      * @return array
+     * @since 1.0.0
      */
     public function getRepliesToSave()
     {
@@ -429,6 +430,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      *
      * @param ReplyInterface $reply
      * @return CaseItemInterface
+     * @since 1.0.0
      */
     public function addReplyToSave(ReplyInterface $reply)
     {
@@ -444,6 +446,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * Reset replies
      *
      * @return CaseItemInterface
+     * @since 1.0.0
      */
     public function clearRepliesToSave()
     {
@@ -458,6 +461,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * Get followers array
      *
      * @return array
+     * @since 1.0.0
      */
     public function getFollowersToSave()
     {
@@ -470,6 +474,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * @param FollowerInterface $follower
      * @param bool $delete Flag existing for removal
      * @return CaseItemInterface
+     * @since 1.0.0
      */
     public function addFollowerToSave(FollowerInterface $follower, $delete = false)
     {
@@ -486,6 +491,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * Reset followers
      *
      * @return CaseItemInterface
+     * @since 1.0.0
      */
     public function clearFollowersToSave()
     {

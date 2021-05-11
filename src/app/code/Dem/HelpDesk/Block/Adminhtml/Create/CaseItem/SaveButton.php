@@ -47,6 +47,7 @@ class SaveButton implements ButtonProviderInterface
      * Retrieve button data
      *
      * @return array button configuration
+     * @since 1.0.0
      */
     public function getButtonData()
     {

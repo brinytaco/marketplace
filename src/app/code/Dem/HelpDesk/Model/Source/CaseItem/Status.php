@@ -37,6 +37,7 @@ class Status extends SourceOptions
      * but rewrite the label
      *
      * @return array
+     * @since 1.0.0
      */
     public function toOptionArray()
     {
@@ -55,6 +56,7 @@ class Status extends SourceOptions
      *
      * @param boolean $auto | Include automatic status types
      * @return \Magento\Framework\Data\Collection
+     * @since 1.0.0
      */
     public function getOptions($auto = true)
     {

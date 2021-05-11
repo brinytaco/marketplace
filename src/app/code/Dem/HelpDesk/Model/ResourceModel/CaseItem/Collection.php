@@ -58,10 +58,11 @@ class Collection extends AbstractCollection
      * department_name
      * case_manager_name
      *
+     * @return $this
+     * @since 1.0.0
      */
     protected function _initSelect()
     {
-
         parent::_initSelect();
 
         // Add department name to select
@@ -88,6 +89,12 @@ class Collection extends AbstractCollection
         return $this;
     }
 
+    /**
+     * Add case_number (dynamic) to collection select
+     *
+     * @return string
+     * @since 1.0.0
+     */
     public function getCaseNumberExpressionSelect()
     {
         return "CONCAT_WS('-', LPAD(main_table.website_id, 3, '0'), LPAD(main_table.case_id, 6, '0'))";

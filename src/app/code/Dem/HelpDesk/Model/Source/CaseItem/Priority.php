@@ -33,6 +33,7 @@ class Priority extends SourceOptions
      * but rewrite the label
      *
      * @return array
+     * @since 1.0.0
      */
     public function toOptionArray()
     {
@@ -50,6 +51,7 @@ class Priority extends SourceOptions
      * Get available case priority options
      *
      * @return array
+     * @since 1.0.0
      */
     public function getOptions()
     {

@@ -1,15 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Model;
+namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\FollowerInterface;
+use Dem\HelpDesk\Api\Data\UserInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 
 
 /**
- * HelpDesk Model - Follower Management
+ * HelpDesk Model - User Management
  *
  * =============================================================================
  *
@@ -18,7 +17,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterface
+class UserManagement implements \Dem\HelpDesk\Api\UserManagementInterface
 {
 
     /**
@@ -63,33 +62,6 @@ class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterfac
         $this->helper = $helper;
     }
 
-
-    /**
-     * Create standard follower
-     *
-     * @param FollowerInterface $follower
-     * @param CaseItemInterface $case
-     * @param int $authorId
-     * @param string $authorType
-     * @param string $followerText
-     * @param int|null $statusId
-     * @param bool|null $isInitial
-     * @return FollowerInterface
-     */
-    public function createFollower(
-        FollowerInterface $follower,
-        CaseItemInterface $case,
-        $userId
-    ) {
-        $data = array(
-            'case_id'     => $case->getId(),
-            'user_id'     => $userId,
-        );
-        $this->validate($data);
-
-        return $follower->addData($data);
-    }
-
     /**
      * Validate submitted data
      *
@@ -108,7 +80,7 @@ class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterfac
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The follower `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The user `%1` cannot be empty', $requiredField));
             }
         }
 
@@ -116,10 +88,11 @@ class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterfac
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The follower `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The user `%1` cannot be empty', $field));
             }
         }
 
+        /** @todo Check for 10 word minimum in message body */
     }
 
     /**
@@ -130,7 +103,8 @@ class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterfac
     public function getRequiredFields()
     {
         return array(
-            'user_id'
+            'user_text',
+            'author_type'
         );
     }
 

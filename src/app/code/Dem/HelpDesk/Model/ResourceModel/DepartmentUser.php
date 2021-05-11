@@ -54,6 +54,7 @@ class DepartmentUser extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
      *
      * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
      * @return $this
+     * @since 1.0.0
      */
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {

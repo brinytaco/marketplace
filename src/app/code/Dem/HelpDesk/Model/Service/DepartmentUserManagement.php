@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Model;
+namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
+use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 
 
@@ -17,7 +17,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInterface
+class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManagementInterface
 {
 
     /**
@@ -103,9 +103,8 @@ class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInte
     public function getRequiredFields()
     {
         return array(
-            'website_id',
-            'case_manager_id',
-            'name'
+            'department_id',
+            'user_id'
         );
     }
 

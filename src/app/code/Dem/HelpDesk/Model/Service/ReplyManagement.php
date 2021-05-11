@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Model;
+namespace Dem\HelpDesk\Model\Service;
 
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 use Dem\HelpDesk\Api\Data\ReplyInterface;

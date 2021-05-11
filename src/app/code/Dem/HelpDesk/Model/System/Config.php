@@ -1,14 +1,17 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
+declare(strict_types=1);
+
 namespace Dem\HelpDesk\Model\System;
 
 /**
- * Config category field backend
+ * HelpDesk System Model - Configuration
  *
- * @author      Magento Core Team <core@magentocommerce.com>
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
  */
 class Config extends \Magento\Framework\App\Config\Value
 {

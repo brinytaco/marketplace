@@ -1,14 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Model;
+namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
+use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Api\Data\FollowerInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 
 
 /**
- * HelpDesk Model - DepartmentUser Management
+ * HelpDesk Model - Follower Management
  *
  * =============================================================================
  *
@@ -17,7 +18,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManagementInterface
+class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterface
 {
 
     /**
@@ -62,6 +63,33 @@ class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManage
         $this->helper = $helper;
     }
 
+
+    /**
+     * Create standard follower
+     *
+     * @param FollowerInterface $follower
+     * @param CaseItemInterface $case
+     * @param int $authorId
+     * @param string $authorType
+     * @param string $followerText
+     * @param int|null $statusId
+     * @param bool|null $isInitial
+     * @return FollowerInterface
+     */
+    public function createFollower(
+        FollowerInterface $follower,
+        CaseItemInterface $case,
+        $userId
+    ) {
+        $data = array(
+            'case_id'     => $case->getId(),
+            'user_id'     => $userId,
+        );
+        $this->validate($data);
+
+        return $follower->addData($data);
+    }
+
     /**
      * Validate submitted data
      *
@@ -80,7 +108,7 @@ class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManage
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The reply `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The follower `%1` cannot be empty', $requiredField));
             }
         }
 
@@ -88,11 +116,10 @@ class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManage
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The reply `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The follower `%1` cannot be empty', $field));
             }
         }
 
-        /** @todo Check for 10 word minimum in message body */
     }
 
     /**
@@ -103,7 +130,6 @@ class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManage
     public function getRequiredFields()
     {
         return array(
-            'department_id',
             'user_id'
         );
     }

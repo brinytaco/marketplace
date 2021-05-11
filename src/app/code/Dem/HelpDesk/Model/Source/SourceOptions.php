@@ -111,6 +111,7 @@ abstract class SourceOptions implements OptionSourceInterface
      * Get empty select option text
      *
      * @return string
+     * @since 1.0.0
      */
     public static function getEmptySelectOptionText()
     {
@@ -121,6 +122,7 @@ abstract class SourceOptions implements OptionSourceInterface
      * Return array of select options
      *
      * @return array
+     * @since 1.0.0
      */
     public function toOptionArray()
     {

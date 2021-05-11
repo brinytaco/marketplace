@@ -57,6 +57,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Api\Data\WebsiteInterface|int $website
      * @return bool
+     * @since 1.0.0
      */
     public static function isDefaultWebsite($website)
     {
@@ -71,6 +72,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Magento\Store\Api\Data\WebsiteInterface|int $website
      * @return boolean
+     * @since 1.0.0
      */
     public static function isAdminWebsite($website)
     {
@@ -85,6 +87,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param \Dem\HelpDesk\Api\Data\DepartmentInterface|int $department
      * @return boolean
+     * @since 1.0.0
      */
     public static function isDefaultDepartment($department)
     {

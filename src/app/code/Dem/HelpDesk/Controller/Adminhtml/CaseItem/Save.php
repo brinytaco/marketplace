@@ -38,7 +38,7 @@ class Save extends CaseItem
         if ($data) {
             try {
 
-                /* @var $caseItemManager \Dem\HelpDesk\Model\CaseItemManagement */
+                /* @var $caseItemManager \Dem\HelpDesk\Model\Service\CaseItemManagement */
                 /* @var $case \Dem\HelpDesk\Model\CaseItem */
                 $case = $this->caseItemManager->createCase(
                     $this->caseItemFactory->create(),
@@ -48,7 +48,7 @@ class Save extends CaseItem
                 /* @var $creator \Magento\User\Model\User */
                 $creator = $this->helper->getBackendSession()->getUser();
 
-                /* @var $replyManager \Dem\HelpDesk\Model\ReplyManagement */
+                /* @var $replyManager \Dem\HelpDesk\Model\Service\ReplyManagement */
                 /* @var $initialReply \Dem\HelpDesk\Model\Reply */
                 $initialReply = $this->replyManager->createInitialReply(
                     $this->replyFactory->create(),
@@ -82,17 +82,14 @@ class Save extends CaseItem
                 /* @var $caseItemRepository \Dem\HelpDesk\Model\CaseItemRepository */
                 $this->caseItemRepository->save($case);
 
-                // Send emails
-//                $this->caseItemManager->sendReplyMessages();
-
-
+                // Send notifications
+                $this->notificationService->sendNewCaseNotifications($case);
 
                 // Done Saving customer, finish save action
                 $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY, $case);
                 $this->messageManager->addSuccessMessage($systemMessage);
 
-                $resultRedirect->setPath('*/*/');
-//                $resultRedirect->setPath('*/*/view', ['case_id' => $case->getId()]);
+                $resultRedirect->setPath('*/*/view', ['case_id' => $case->getId()]);
 
             } catch (HelpDeskException $exception) {
                 $this->messageManager->addExceptionMessage(
@@ -123,7 +120,7 @@ class Save extends CaseItem
     {
         $defaultFollowers = $department->getDefaultFollowers();
 
-        /* @var $followerManager \Dem\HelpDesk\Model\FollowerManagement */
+        /* @var $followerManager \Dem\HelpDesk\Model\Service\FollowerManagement */
         /* @var $follower \Dem\HelpDesk\Model\Follower */
         foreach ($defaultFollowers as $userId) {
             $follower = $this->followerManager->createFollower(

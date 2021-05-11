@@ -38,21 +38,14 @@ class CaseItem extends \Magento\Ui\DataProvider\AbstractDataProvider
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
+    /**
+     * Get collection data
+     *
+     * @return array
+     * @since 1.0.0
+     */
     public function getData()
     {
-        if (isset($this->loadedData)) {
-            return $this->loadedData;
-        }
-
-        $items = $this->collection->getItems();
-        $this->loadedData = array();
-
-        foreach ($items as $contact) {
-            $this->loadedData[$contact->getId()]['contact'] = $contact->getData();
-        }
-
-
-        return $this->loadedData;
-
+        return parent::getData();
     }
 }

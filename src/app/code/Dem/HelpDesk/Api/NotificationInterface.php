@@ -1,13 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Model;
-
-use Magento\Framework\Api\SearchResults;
-use Dem\HelpDesk\Api\Data\DepartmentSearchResultInterface;
+namespace Dem\HelpDesk\Api;
 
 /**
- * HelpDesk Model - CaseItem SearchResults
+ * HelpDesk Api Interface - User Management
  *
  * =============================================================================
  *
@@ -15,9 +12,8 @@ use Dem\HelpDesk\Api\Data\DepartmentSearchResultInterface;
  * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
  * @author     Toby Crain
  * @since      1.0.0
- *
  */
-class DepartmentSearchResult extends SearchResults implements DepartmentSearchResultInterface
+interface NotificationInterface
 {
 
 }

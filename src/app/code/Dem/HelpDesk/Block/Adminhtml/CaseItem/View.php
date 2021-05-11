@@ -65,6 +65,7 @@ class View extends \Magento\Backend\Block\Widget\Container
      * Retrieve registered Case model
      *
      * @return \Dem\HelpDesk\Model\CaseItem
+     * @since 1.0.0
      */
     public function getCase()
     {
@@ -75,6 +76,7 @@ class View extends \Magento\Backend\Block\Widget\Container
      * Retrieve Case Identifier
      *
      * @return int
+     * @since 1.0.0
      */
     public function getCaseId()
     {
@@ -85,6 +87,7 @@ class View extends \Magento\Backend\Block\Widget\Container
      * Get header text
      *
      * @return \Magento\Framework\Phrase
+     * @since 1.0.0
      */
     public function getHeaderText()
     {
@@ -99,6 +102,7 @@ class View extends \Magento\Backend\Block\Widget\Container
      *
      * @param string $resourceId
      * @return bool
+     * @since 1.0.0
      */
     protected function _isAllowedAction($resourceId)
     {
@@ -109,6 +113,7 @@ class View extends \Magento\Backend\Block\Widget\Container
      * Return back url for view grid
      *
      * @return string
+     * @since 1.0.0
      */
     public function getBackUrl()
     {

@@ -76,6 +76,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
 
     /**
      * @return AggregationInterface
+     * @since 1.0.0
      */
     public function getAggregations()
     {
@@ -85,6 +86,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     /**
      * @param AggregationInterface $aggregations
      * @return $this
+     * @since 1.0.0
      */
     public function setAggregations($aggregations)
     {
@@ -96,6 +98,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
+     * @since 1.0.0
      */
     public function getSearchCriteria()
     {
@@ -107,6 +110,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
+     * @since 1.0.0
      */
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
@@ -118,6 +122,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      * Get total count.
      *
      * @return int
+     * @since 1.0.0
      */
     public function getTotalCount()
     {
@@ -132,6 +137,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      *
      * @param int $totalCount
      * @return $this
+     * @since 1.0.0
      */
     public function setTotalCount($totalCount)
     {
@@ -144,6 +150,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      *
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
+     * @since 1.0.0
      */
     public function setItems(array $items = null)
     {

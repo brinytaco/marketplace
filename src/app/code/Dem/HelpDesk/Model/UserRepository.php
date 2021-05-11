@@ -7,8 +7,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Dem\HelpDesk\Api\Data\UserInterface;
-use Dem\HelpDesk\Api\Data\UserSearchResultInterfaceFactory;
 use Dem\HelpDesk\Api\UserRepositoryInterface;
 use Dem\HelpDesk\Model\ResourceModel\User as Resource;
 use Dem\HelpDesk\Model\ResourceModel\User\CollectionFactory;
@@ -43,9 +43,9 @@ class UserRepository implements UserRepositoryInterface
     private $collectionFactory;
 
     /**
-     * @var UserSearchResultInterfaceFactory
+     * @var SearchResultsInterfaceFactory
      */
-    private $searchResultFactory;
+    private $searchResultsFactory;
 
     /**
      * @var CollectionProcessorInterface
@@ -56,13 +56,13 @@ class UserRepository implements UserRepositoryInterface
         UserFactory $factory,
         Resource $resource,
         CollectionFactory $collectionFactory,
-        UserSearchResultInterfaceFactory $searchResultFactory,
+        SearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->factory = $factory;
         $this->resource = $resource;
         $this->collectionFactory = $collectionFactory;
-        $this->searchResultFactory = $searchResultFactory;
+        $this->searchResultsFactory = $searchResultsFactory;
         $this->collectionProcessor = $collectionProcessor;
     }
 
@@ -83,14 +83,14 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\UserSearchResultInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
-        $searchResults = $this->searchResultFactory->create();
+        $searchResults = $this->searchResultsFactory->create();
 
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());

@@ -56,10 +56,11 @@ class Collection extends AbstractCollection
      * department_name
      * case_manager_name
      *
+     * @return $this
+     * @since 1.0.0
      */
     protected function _initSelect()
     {
-
         parent::_initSelect();
 
         // Add department name to select
