@@ -189,11 +189,11 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
      */
     protected function validateDepartmentByWebsiteId($websiteId, $departmentId)
     {
-        $department = $this->loadDepartmentById($departmentId);
+        $this->loadDepartmentById($departmentId);
 
         // Default department selection is always valid
         if (! \Dem\HelpDesk\Helper\Config::isDefaultDepartment($departmentId)) {
-            if ($department->getWebsiteId() != $websiteId) {
+            if ($this->department->getWebsiteId() != $websiteId) {
                 throw new HelpDeskException(__('Invalid department selected'));
             }
         }
@@ -202,7 +202,6 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
     /**
      * Get loaded department model
      *
-     * @param type $departmentId
      * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
      */
     public function getDepartment()
@@ -225,6 +224,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
             throw new HelpDeskException(__('Invalid department selected'));
         }
     }
+
 
 
 

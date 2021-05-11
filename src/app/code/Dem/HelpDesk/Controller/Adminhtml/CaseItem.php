@@ -104,6 +104,16 @@ abstract class CaseItem extends Action
     protected $replyFactory;
 
     /**
+     * @var \Dem\HelpDesk\Model\FollowerManagement
+     */
+    protected $followerManager;
+
+    /**
+     * @var \Dem\HelpDesk\Model\FollowerFactory
+     */
+    protected $followerFactory;
+
+    /**
      * Data constructor.
      *
      * @param Action\Context $context
@@ -117,6 +127,9 @@ abstract class CaseItem extends Action
      * @param \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory
      * @param \Dem\HelpDesk\Model\CaseItemManagement $caseItemManager
      * @param \Dem\HelpDesk\Model\ReplyManagement $replyManager
+     * @param \Dem\HelpDesk\Model\ReplyFactory $replyFactory
+     * @param \Dem\HelpDesk\Model\FollowerManagement $followerManager
+     * @param \Dem\HelpDesk\Model\FollowerFactory $followerFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Dem\HelpDesk\Helper\Data $helper
      */
@@ -133,6 +146,8 @@ abstract class CaseItem extends Action
         \Dem\HelpDesk\Model\CaseItemManagement $caseItemManager,
         \Dem\HelpDesk\Model\ReplyManagement $replyManager,
         \Dem\HelpDesk\Model\ReplyFactory $replyFactory,
+        \Dem\HelpDesk\Model\FollowerManagement $followerManager,
+        \Dem\HelpDesk\Model\FollowerFactory $followerFactory,
         \Psr\Log\LoggerInterface $logger,
         \Dem\HelpDesk\Helper\Data $helper
     ) {
@@ -148,6 +163,8 @@ abstract class CaseItem extends Action
         $this->caseItemManager = $caseItemManager;
         $this->replyManager = $replyManager;
         $this->replyFactory = $replyFactory;
+        $this->followerManager = $followerManager;
+        $this->followerFactory = $followerFactory;
         $this->logger = $logger;
         $this->helper = $helper;
         parent::__construct($context);

@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Api\Data;
 
+use Dem\HelpDesk\Api\Data\ReplyInterface;
+use Dem\HelpDesk\Api\Data\FollowerInterface;
+
 /**
  * HelpDesk Api Interface - CaseItem
  *
@@ -18,6 +21,7 @@ interface CaseItemInterface
     const CASE_ID               = 'case_id';
     const WEBSITE_ID            = 'website_id';
     const DEPARTMENT_ID         = 'department_id';
+    const CASE_NUMBER           = 'case_number';
     const PROTECT_CODE          = 'protect_code';
     const CREATOR_CUSTOMER_ID   = 'creator_customer_id';
     const CREATOR_ADMIN_ID      = 'creator_admin_id';
@@ -293,4 +297,49 @@ interface CaseItemInterface
      * @return CaseItemInterface
      */
     public function setUpdatedAt($updatedAt);
+
+    /**
+     * Get repliesToSave array
+     *
+     * @return array
+     */
+    public function getRepliesToSave();
+
+    /**
+     * Add data to repliesToSave array
+     *
+     * @param ReplyInterface $reply
+     * @return CaseItemInterface
+     */
+    public function addReplyToSave(ReplyInterface $reply);
+
+    /**
+     * Reset replies
+     *
+     * @return CaseItemInterface
+     */
+    public function clearRepliesToSave();
+
+    /**
+     * Get followers array
+     *
+     * @return array
+     */
+    public function getFollowersToSave();
+
+    /**
+     * Add new follower or flag existing isDeleted
+     *
+     * @param FollowerInterface $follower
+     * @param bool $delete Flag existing for removal
+     * @return CaseItemInterface
+     */
+    public function addFollowerToSave(FollowerInterface $follower, $delete = false);
+
+    /**
+     * Reset followers
+     *
+     * @return CaseItemInterface
+     */
+    public function clearFollowersToSave();
 }

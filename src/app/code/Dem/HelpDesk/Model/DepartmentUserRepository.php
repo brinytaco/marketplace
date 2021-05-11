@@ -12,6 +12,7 @@ use Dem\HelpDesk\Api\Data\DepartmentUserSearchResultInterfaceFactory;
 use Dem\HelpDesk\Api\DepartmentUserRepositoryInterface;
 use Dem\HelpDesk\Model\ResourceModel\DepartmentUser as Resource;
 use Dem\HelpDesk\Model\ResourceModel\DepartmentUser\CollectionFactory;
+use Dem\HelpDesk\Model\DepartmentUserFactory;
 
 /**
  * HelpDesk Model Repository - DepartmentUser

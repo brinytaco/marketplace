@@ -27,7 +27,6 @@ class Save extends CaseItem
     {
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
-        $returnToEdit = false;
 
         if (!$this->isValidPostRequest()) {
             $resultRedirect->setPath('*/*/');
@@ -39,8 +38,8 @@ class Save extends CaseItem
         if ($data) {
             try {
 
-                /* @var $caseItemManager \Dem\HelpDesk\Api\Data\CaseItemManagementInterface */
-                /* @var $case \Dem\HelpDesk\Api\Data\CaseItemInterface */
+                /* @var $caseItemManager \Dem\HelpDesk\Model\CaseItemManagement */
+                /* @var $case \Dem\HelpDesk\Model\CaseItem */
                 $case = $this->caseItemManager->createCase(
                     $this->caseItemFactory->create(),
                     $data
@@ -49,8 +48,8 @@ class Save extends CaseItem
                 /* @var $creator \Magento\User\Model\User */
                 $creator = $this->helper->getBackendSession()->getUser();
 
-                /* @var $replyManager \Dem\HelpDesk\Api\Data\ReplyManagementInterface */
-                /* @var $initialReply \Dem\HelpDesk\Api\Data\ReplyInterface */
+                /* @var $replyManager \Dem\HelpDesk\Model\ReplyManagement */
+                /* @var $initialReply \Dem\HelpDesk\Model\Reply */
                 $initialReply = $this->replyManager->createInitialReply(
                     $this->replyFactory->create(),
                     $case,
@@ -60,17 +59,16 @@ class Save extends CaseItem
 
                 $case->addReplyToSave($initialReply);
 
-                /* @var $department \Dem\HelpDesk\Api\Data\DepartmentInterface */
+                /* @var $department \Dem\HelpDesk\Model\Department */
                 $department = $this->caseItemManager->getDepartment();
 
-                // Get Case Manager Name
+                /* @var $caseManagerName string */
                 $caseManagerName = $department->getCaseManagerName();
 
                 // Translate immediately for saving
                 $systemMessage = __('New case created and assigned to `%1`', $caseManagerName)->render();
 
-
-                /* @var $initialReply \Dem\HelpDesk\Api\Data\ReplyInterface */
+                /* @var $systemReply \Dem\HelpDesk\Model\Reply */
                 $systemReply = $this->replyManager->createSystemReply(
                     $this->replyFactory->create(),
                     $case,
@@ -79,10 +77,9 @@ class Save extends CaseItem
 
                 $case->addReplyToSave($systemReply);
 
-                // Get department users who are followers
-                $case->addDefaultFollowers();
+                $this->prepareDefaultFollowers($case, $department);
 
-                /* @var $caseItemRepository \Dem\HelpDesk\Api\Data\CaseItemRepositoryInterface */
+                /* @var $caseItemRepository \Dem\HelpDesk\Model\CaseItemRepository */
                 $this->caseItemRepository->save($case);
 
                 // Send emails
@@ -106,12 +103,35 @@ class Save extends CaseItem
             } catch (\Exception $exception) {
                 $this->messageManager->addExceptionMessage(
                     $exception,
-                    __('Something went wrong while saving the case')
+                    $exception->getMessage()//__('Something went wrong while saving the case')
                 );
                 $resultRedirect->setPath('*/*/');
             }
         }
 
         return $resultRedirect;
+    }
+
+    /**
+     * Prepare default followers (if any) for saving
+     *
+     * @param \Dem\HelpDesk\Model\CaseItem $case
+     * @param \Dem\HelpDesk\Model\Department $department
+     * @return void
+     */
+    protected function prepareDefaultFollowers($case, $department)
+    {
+        $defaultFollowers = $department->getDefaultFollowers();
+
+        /* @var $followerManager \Dem\HelpDesk\Model\FollowerManagement */
+        /* @var $follower \Dem\HelpDesk\Model\Follower */
+        foreach ($defaultFollowers as $userId) {
+            $follower = $this->followerManager->createFollower(
+                $this->followerFactory->create(),
+                $case,
+                $userId
+            );
+            $case->addFollowerToSave($follower);
+        }
     }
 }

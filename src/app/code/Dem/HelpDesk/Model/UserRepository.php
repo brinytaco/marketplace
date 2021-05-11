@@ -12,6 +12,7 @@ use Dem\HelpDesk\Api\Data\UserSearchResultInterfaceFactory;
 use Dem\HelpDesk\Api\UserRepositoryInterface;
 use Dem\HelpDesk\Model\ResourceModel\User as Resource;
 use Dem\HelpDesk\Model\ResourceModel\User\CollectionFactory;
+use Dem\HelpDesk\Model\UserFactory;
 
 /**
  * HelpDesk Model Repository - User

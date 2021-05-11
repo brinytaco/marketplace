@@ -7,15 +7,15 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\CaseItemSearchResultInterfaceFactory;
-use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem as CaseItemResource;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
-use Dem\HelpDesk\Model\CaseItemFactory;
+use Dem\HelpDesk\Api\Data\FollowerInterface;
+use Dem\HelpDesk\Api\Data\FollowerSearchResultInterfaceFactory;
+use Dem\HelpDesk\Api\FollowerRepositoryInterface;
+use Dem\HelpDesk\Model\ResourceModel\Follower as Resource;
+use Dem\HelpDesk\Model\ResourceModel\Follower\CollectionFactory;
+use Dem\HelpDesk\Model\FollowerFactory;
 
 /**
- * HelpDesk Model Repository - CaseItem
+ * HelpDesk Model Repository - Follower
  *
  * =============================================================================
  *
@@ -25,37 +25,38 @@ use Dem\HelpDesk\Model\CaseItemFactory;
  * @since      1.0.0
  *
  */
-class CaseItemRepository implements CaseItemRepositoryInterface
+class FollowerRepository implements FollowerRepositoryInterface
 {
     /**
-     * @var CaseItemFactory
+     * @var FollowerFactory
      */
     private $factory;
 
     /**
-     * @var CaseItemResource
+     * @var Resource
      */
     private $resource;
 
     /**
-     * @var CaseItemCollectionFactory
+     * @var FollowerCollectionFactory
      */
     private $collectionFactory;
 
     /**
-     * @var CaseItemSearchResultInterfaceFactory
+     * @var FollowerSearchResultInterfaceFactory
      */
     private $searchResultFactory;
+
     /**
      * @var CollectionProcessorInterface
      */
     private $collectionProcessor;
 
     public function __construct(
-        CaseItemFactory $factory,
-        CaseItemResource $resource,
+        FollowerFactory $factory,
+        Resource $resource,
         CollectionFactory $collectionFactory,
-        CaseItemSearchResultInterfaceFactory $searchResultFactory,
+        FollowerSearchResultInterfaceFactory $searchResultFactory,
         CollectionProcessorInterface $collectionProcessor
     ) {
         $this->factory = $factory;
@@ -67,22 +68,22 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
+     * @return \Dem\HelpDesk\Api\Data\FollowerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($id)
     {
-        $caseItem = $this->factory->create();
-        $this->resource->load($caseItem, $id);
-        if (!$caseItem->getId()) {
-            throw new NoSuchEntityException(__('Unable to find case with ID `%1`', $id));
+        $follower = $this->factory->create();
+        $this->resource->load($follower, $id);
+        if (!$follower->getId()) {
+            throw new NoSuchEntityException(__('Unable to find follower with ID `%1`', $id));
         }
-        return $caseItem;
+        return $follower;
     }
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\CaseItemSearchResultInterface
+     * @return \Dem\HelpDesk\Api\Data\FollowerSearchResultInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
@@ -98,28 +99,28 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\CaseItemInterface $caseItem
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
+     * @param \Dem\HelpDesk\Api\Data\FollowerInterface $follower
+     * @return \Dem\HelpDesk\Api\Data\FollowerInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function save(CaseItemInterface $caseItem)
+    public function save(FollowerInterface $follower)
     {
-        $this->resource->save($caseItem);
-        return $caseItem;
+        $this->resource->save($follower);
+        return $follower;
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\CaseItemInterface $caseItem
+     * @param \Dem\HelpDesk\Api\Data\FollowerInterface $follower
      * @return bool true on success
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function delete(CaseItemInterface $caseItem)
+    public function delete(FollowerInterface $follower)
     {
         try {
-            $this->resource->delete($caseItem);
+            $this->resource->delete($follower);
         } catch (\Exception $exception) {
             throw new CouldNotDeleteException(
-                __('Could not delete the entry: %1', $exception->getMessage())
+                __('Could not delete the follower: %1', $exception->getMessage())
             );
         }
 
@@ -129,16 +130,16 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
+     * @return \Dem\HelpDesk\Api\Data\FollowerInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function deleteById($id)
     {
-        $caseItem = $this->factory->create();
-        $this->resource->load($caseItem, $id);
-        if (!$caseItem->getId()) {
-            throw new NoSuchEntityException(__('Unable to find case with ID `%1`', $id));
+        $follower = $this->factory->create();
+        $this->resource->load($follower, $id);
+        if (!$follower->getId()) {
+            throw new NoSuchEntityException(__('Unable to find follower with ID `%1`', $id));
         }
-        return $this->delete($caseItem);
+        return $this->delete($follower);
     }
 }

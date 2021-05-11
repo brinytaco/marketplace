@@ -6,6 +6,7 @@ namespace Dem\HelpDesk\Model;
 use Magento\Framework\Model\AbstractModel;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 use Dem\HelpDesk\Api\Data\ReplyInterface;
+use Dem\HelpDesk\Api\Data\FollowerInterface;
 
 /**
  * HelpDesk Model - Case
@@ -30,7 +31,11 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     protected $_eventPrefix = self::EVENT_PREFIX;
     protected $_eventObject = self::EVENT_PREFIX;
 
+    /**
+     * @var array
+     */
     protected $repliesToSave = [];
+    protected $followersToSave = [];
 
     /**
      * @return void
@@ -39,7 +44,6 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     {
         $this->_init(\Dem\HelpDesk\Model\ResourceModel\CaseItem::class);
     }
-
 
     /**
      * Get ID
@@ -58,14 +62,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCaseNumber()
     {
-//        if (!$this->hasData('case_number')) {
-//            $websiteId = str_pad($this->getWebsiteId(), 3, '0', STR_PAD_LEFT);
-//            $caseId = str_pad($this->getCaseId(), 6, '0', STR_PAD_LEFT);
-//            $caseNumber = $websiteId . '-' . $caseId;
-//            $this->setData('case_number', $caseNumber);
-//        }
-//        return $this->getData('case_number');
-        return '';
+        return $this->getData(CaseItemInterface::CASE_NUMBER);
     }
 
     /**
@@ -436,9 +433,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     public function addReplyToSave(ReplyInterface $reply)
     {
         $this->repliesToSave[] = $reply;
+
+        // Always set this flag to force triggering before/afterSave()
+        $this->_hasDataChanges = true;
+
         return $this;
     }
 
+    /**
+     * Reset replies
+     *
+     * @return CaseItemInterface
+     */
     public function clearRepliesToSave()
     {
         $this->repliesToSave = [];
@@ -449,12 +455,41 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**************************************************************************/
 
     /**
-     * Set followers to specified user_id list
+     * Get followers array
+     *
+     * @return array
      */
-    public function setFollowers()
+    public function getFollowersToSave()
     {
-        // Retrieve default followers by department
-        // Maybe this list of user_ids is already included in department data
+        return $this->followersToSave;
+    }
 
+    /**
+     * Add new follower or flag existing isDeleted
+     *
+     * @param FollowerInterface $follower
+     * @param bool $delete Flag existing for removal
+     * @return CaseItemInterface
+     */
+    public function addFollowerToSave(FollowerInterface $follower, $delete = false)
+    {
+        $follower->isDeleted($delete);
+        $this->followersToSave[] = $follower;
+
+        // Always set this flag to force triggering before/afterSave()
+        $this->_hasDataChanges = true;
+
+        return $this;
+    }
+
+    /**
+     * Reset followers
+     *
+     * @return CaseItemInterface
+     */
+    public function clearFollowersToSave()
+    {
+        $this->followersToSave = [];
+        return $this;
     }
 }

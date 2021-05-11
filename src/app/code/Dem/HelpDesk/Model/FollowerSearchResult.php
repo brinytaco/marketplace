@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model;
 
 use Magento\Framework\Api\SearchResults;
-use Dem\HelpDesk\Api\Data\DepartmentUserSearchResultInterface;
+use Dem\HelpDesk\Api\Data\FollowerSearchResultInterface;
 
 /**
- * HelpDesk Model - DepartmentUser SearchResults
+ * HelpDesk Model - Follower SearchResults
  *
  * =============================================================================
  *
@@ -17,7 +17,7 @@ use Dem\HelpDesk\Api\Data\DepartmentUserSearchResultInterface;
  * @since      1.0.0
  *
  */
-class DepartmentUserSearchResult extends SearchResults implements DepartmentUserSearchResultInterface
+class FollowerSearchResult extends SearchResults implements FollowerSearchResultInterface
 {
 
 }

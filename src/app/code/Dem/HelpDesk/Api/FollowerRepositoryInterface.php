@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Api;
 
-use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
+use Dem\HelpDesk\Api\Data\FollowerInterface;
 
 /**
- * HelpDesk Api Interface - DepartmentUser Repository
+ * HelpDesk Api Interface - Follower Repository
  *
  * =============================================================================
  *
@@ -15,40 +15,39 @@ use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-interface DepartmentUserRepositoryInterface
+interface FollowerRepositoryInterface
 {
     /**
-     * @param DepartmentUserInterface $entity
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserRepositoryInterface
+     * @param FollowerInterface $entity
+     * @return \Dem\HelpDesk\Api\Data\StudentInterface
      * @throws \Magento\Framework\Exception\CouldNotSaveException
      */
-    public function save(DepartmentUserInterface $entity);
+    public function save(FollowerInterface $entity);
 
     /**
      * @param $entityId
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserRepositoryInterface
+     * @return \Dem\HelpDesk\Api\Data\StudentInterface
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function getById($entityId);
 
     /**
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserSearchResultsInterface
+     * @return \Dem\HelpDesk\Api\Data\FollowerSearchResultsInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
 
     /**
-     * @param DepartmentUserInterface $entity
+     * @param FollowerInterface $entity
      * @return bool true on success
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
      */
-    public function delete(DepartmentUserInterface $entity);
+    public function delete(FollowerInterface $entity);
 
     /**
      * @param $entityId
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return mixed
      */
     public function deleteById($entityId);
 }

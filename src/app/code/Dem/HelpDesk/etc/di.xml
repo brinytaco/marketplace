@@ -22,7 +22,22 @@
     <preference for="Dem\HelpDesk\Api\Data\DepartmentInterface" type="Dem\HelpDesk\Model\Department" />
     <preference for="Dem\HelpDesk\Api\DepartmentRepositoryInterface" type="Dem\HelpDesk\Model\DepartmentRepository" />
     <preference for="Dem\HelpDesk\Api\Data\DepartmentSearchResultInterface" type="Dem\HelpDesk\Model\DepartmentSearchResult" />
-
+    <!-- Reply -->
+    <preference for="Dem\HelpDesk\Api\Data\ReplyInterface" type="Dem\HelpDesk\Model\Reply" />
+    <preference for="Dem\HelpDesk\Api\ReplyRepositoryInterface" type="Dem\HelpDesk\Model\ReplyRepository" />
+    <preference for="Dem\HelpDesk\Api\Data\ReplySearchResultInterface" type="Dem\HelpDesk\Model\ReplySearchResult" />
+    <!-- Follower -->
+    <preference for="Dem\HelpDesk\Api\Data\FollowerInterface" type="Dem\HelpDesk\Model\Follower" />
+    <preference for="Dem\HelpDesk\Api\FollowerRepositoryInterface" type="Dem\HelpDesk\Model\FollowerRepository" />
+    <preference for="Dem\HelpDesk\Api\Data\FollowerSearchResultInterface" type="Dem\HelpDesk\Model\FollowerSearchResult" />
+    <!-- User -->
+    <preference for="Dem\HelpDesk\Api\Data\UserInterface" type="Dem\HelpDesk\Model\User" />
+    <preference for="Dem\HelpDesk\Api\UserRepositoryInterface" type="Dem\HelpDesk\Model\UserRepository" />
+    <preference for="Dem\HelpDesk\Api\Data\UserSearchResultInterface" type="Dem\HelpDesk\Model\UserSearchResult" />
+    <!-- DepartmentUser -->
+    <preference for="Dem\HelpDesk\Api\Data\DepartmentUserInterface" type="Dem\HelpDesk\Model\DepartmentUser" />
+    <preference for="Dem\HelpDesk\Api\DepartmentUserRepositoryInterface" type="Dem\HelpDesk\Model\DepartmentUserRepository" />
+    <preference for="Dem\HelpDesk\Api\Data\DepartmentUserSearchResultInterface" type="Dem\HelpDesk\Model\DepartmentUserSearchResult" />
 
 
     <virtualType name="DemHelpDeskCaseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">

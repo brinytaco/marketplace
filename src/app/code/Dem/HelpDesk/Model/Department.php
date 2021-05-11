@@ -65,7 +65,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setWebsiteId($websiteId)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::WEBSITE_ID, $websiteId);
     }
 
     /**
@@ -86,7 +86,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setCaseManagerId($caseManagerId)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::CASE_MANAGER_ID, $caseManagerId);
     }
 
     /**
@@ -107,7 +107,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setName($name)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::NAME, $name);
     }
 
     /**
@@ -128,7 +128,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setDescription($description)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::DESCRIPTION, $description);
     }
 
     /**
@@ -149,7 +149,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setIsInternal($isInternal)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::IS_INTERNAL, $isInternal);
     }
 
     /**
@@ -170,7 +170,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setIsActive($isActive)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::IS_ACTIVE, $isActive);
     }
 
     /**
@@ -191,7 +191,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setSortOrder($sortOrder)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::SORT_ORDER, $sortOrder);
     }
 
     /**
@@ -212,7 +212,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setCreatedAt($createdAt)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::CREATED_AT, $createdAt);
     }
 
     /**
@@ -233,7 +233,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setUpdatedAt($updatedAt)
     {
-        return $this;
+        return $this->setData(DepartmentInterface::UPDATED_AT, $updatedAt);
     }
 
 

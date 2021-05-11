@@ -12,6 +12,7 @@ use Dem\HelpDesk\Api\Data\ReplySearchResultInterfaceFactory;
 use Dem\HelpDesk\Api\ReplyRepositoryInterface;
 use Dem\HelpDesk\Model\ResourceModel\Reply as Resource;
 use Dem\HelpDesk\Model\ResourceModel\Reply\CollectionFactory;
+use Dem\HelpDesk\Model\ReplyFactory;
 
 /**
  * HelpDesk Model Repository - Reply
