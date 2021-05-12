@@ -30,17 +30,17 @@ class View extends CaseItem
         if ($case) {
             try {
                 $resultPage = $this->_initAction();
-                $resultPage->getConfig()->getTitle()->prepend(__('Case'));
+                $resultPage->getConfig()->getTitle()->prepend(sprintf('%s #%s',
+                    __('Case'),
+                    $case->getCaseNumber(),
+                ));
+                return $resultPage;
             } catch (\Exception $e) {
                 $this->logger->critical($e);
                 $this->messageManager->addErrorMessage(__('Exception occurred during case load'));
-                $resultRedirect->setPath('helpdesk/caseitem/index');
-                return $resultRedirect;
             }
-            $resultPage->getConfig()->getTitle()->prepend(sprintf("#%s", $case->getCaseNumber()));
-            return $resultPage;
         }
-        $resultRedirect->setPath('helpdesk/*/');
+        $resultRedirect->setPath('helpdesk/caseitem/');
         return $resultRedirect;
     }
 }

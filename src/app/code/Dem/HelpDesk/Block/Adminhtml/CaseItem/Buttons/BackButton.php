@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Dem\HelpDesk\Block\Adminhtml\Create\CaseItem;
+namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 

@@ -1,3 +1,13 @@
+/**
+ * Dem/HelpDesk/view/adminhtml/web/js/create/element/department.js
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
 define([
     'underscore',
     'jquery',

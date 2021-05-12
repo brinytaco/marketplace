@@ -17,15 +17,15 @@
             <item name="provider" xsi:type="string">dem_helpdesk_caseitem_create.dem_helpdesk_caseitem_create_data_source</item>
             <item name="deps" xsi:type="string">dem_helpdesk_caseitem_create.dem_helpdesk_caseitem_create_data_source</item>
         </item>
-        <item name="label" xsi:type="string" translate="true">Open New Case</item>
+        <!--<item name="label" xsi:type="string" translate="true">Open New Case</item>-->
         <!-- ?? -->
         <item name="layout" xsi:type="array">
             <item name="type" xsi:type="string">tabs</item>
         </item>
         <!-- Button set -->
         <item name="buttons" xsi:type="array">
-            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\Create\CaseItem\BackButton</item>
-            <item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\Create\CaseItem\SaveButton</item>
+            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\BackButton</item>
+            <item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\SaveButton</item>
         </item>
         <item name="ajaxSave" xsi:type="boolean">false</item>
     </argument>
@@ -62,7 +62,7 @@
         <!-- Add fieldset header/label if desired -->
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
-                <item name="label" xsi:type="string" translate="true">How Can We Help You?</item>
+                <item name="label" xsi:type="string" translate="true">Open a New Case</item>
             </item>
         </argument>
 

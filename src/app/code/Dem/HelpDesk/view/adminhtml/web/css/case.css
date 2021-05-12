@@ -1,0 +1,15 @@
+/**
+ * Dem/HelpDesk/view/adminhtml/web/css/case.css
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+.case-information .admin__table-secondary {
+    width: calc(50% - 20px);
+    float: left;
+    margin: 10px;
+}

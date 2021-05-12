@@ -16,6 +16,13 @@ namespace Dem\HelpDesk\Block\Adminhtml\CaseItem;
 class View extends \Magento\Backend\Block\Widget\Container
 {
     /**
+     * Unset the header text
+     *
+     * @var string
+     */
+    protected $_headerText = '';
+
+    /**
      * Block group
      *
      * @var string
@@ -55,10 +62,36 @@ class View extends \Magento\Backend\Block\Widget\Container
 
         parent::_construct();
 
-        $this->removeButton('delete');
-        $this->removeButton('reset');
-        $this->removeButton('save');
         $this->setId('helpdesk_case_view');
+    }
+
+    /**
+     * Prepare URL rewrite editing layout
+     *
+     * @return $this
+     */
+    protected function _prepareLayout()
+    {
+        $this->_addBackButton();
+        return parent::_prepareLayout();
+    }
+
+    /**
+     * @return void
+     */
+    protected function _addBackButton()
+    {
+        $this->addButton(
+            'back',
+            [
+                'label' => __('Back'),
+                'onclick' => 'setLocation(\'' . $this->getBackUrl() . '\')',
+                'class' => 'back'
+            ],
+            $level = 0,
+            $sortOrder = 0,
+            $region = 'toolbar'
+        );
     }
 
     /**
@@ -73,43 +106,6 @@ class View extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
-     * Retrieve Case Identifier
-     *
-     * @return int
-     * @since 1.0.0
-     */
-    public function getCaseId()
-    {
-        return $this->getCase() ? $this->getCase()->getId() : null;
-    }
-
-    /**
-     * Get header text
-     *
-     * @return \Magento\Framework\Phrase
-     * @since 1.0.0
-     */
-    public function getHeaderText()
-    {
-        return sprintf('%s # %s',
-            __('Case'),
-            $this->getCase()->getCaseNumber(),
-        );
-    }
-
-    /**
-     * Check permission for passed action
-     *
-     * @param string $resourceId
-     * @return bool
-     * @since 1.0.0
-     */
-    protected function _isAllowedAction($resourceId)
-    {
-        return $this->_authorization->isAllowed($resourceId);
-    }
-
-    /**
      * Return back url for view grid
      *
      * @return string
@@ -118,5 +114,93 @@ class View extends \Magento\Backend\Block\Widget\Container
     public function getBackUrl()
     {
         return $this->getUrl('helpdesk/caseitem/');
+    }
+
+    public function getCaseNumber()
+    {
+        return $this->getCase()->getCaseNumber();
+    }
+
+    public function getCreatedDate()
+    {
+        return $this->formatDate(
+            $this->getCase()->getCreatedAt(),
+            \IntlDateFormatter::MEDIUM,
+            true
+        );
+    }
+
+    public function isCustomerCreator()
+    {
+        return (!empty($this->getCase()->getCreatorCustomerId()));
+    }
+
+    public function getCreatorName()
+    {
+        return $this->getCase()->getCreatorName();
+    }
+
+    public function getCustomerCreatorUrl()
+    {
+        return $this->getUrl('customer/index/edit', ['id' => $this->getCase()->getCreatorCustomerId()]);
+    }
+
+    public function getWebsiteName()
+    {
+        return $this->getCase()->getWebsiteName();
+    }
+
+    public function getDepartmentName()
+    {
+        return $this->getCase()->getDepartmentName();
+    }
+
+    public function getPriority()
+    {
+        return $this->getCase()->getPriority();
+    }
+
+    public function getRemoteIp()
+    {
+        return $this->getCase()->getRemoteIp();
+    }
+
+    public function getHttpUserAgent()
+    {
+        return $this->getCase()->getHttpUserAgent();
+    }
+
+    public function getSubject()
+    {
+        return $this->getCase()->getSubject();
+    }
+
+    public function getUpdatedByName()
+    {
+        return $this->getCase()->getUpdatedBy();
+    }
+
+    public function getUpdatedDate()
+    {
+        return $this->formatDate(
+            $this->getCase()->getUpdatedAt(),
+            \IntlDateFormatter::MEDIUM,
+            true
+        );
+    }
+
+    public function getCaseManagerName()
+    {
+        return $this->getCase()->getCaseManagerName();
+    }
+
+    public function getStatus()
+    {
+        return $this->getCase()->getStatus();
+    }
+
+    public function getTotalReplies()
+    {
+        return $this->getCase()->getTotalReplies();
     }
 }

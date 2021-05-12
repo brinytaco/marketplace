@@ -31,9 +31,19 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $departmentRepository;
 
     /**
+     * @var \Dem\HelpDesk\Api\UserRepositoryInterface
+     */
+    protected $userRepository;
+
+    /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
+
+    /**
+     * @var \Dem\HelpDesk\Helper\Data
+     */
+    protected $helper;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -41,6 +51,8 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @param \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository
      * @param \Dem\HelpDesk\Api\FollowerRepositoryInterface $followerRepository
      * @param \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
+     * @param \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository
+     * @param \Dem\HelpDesk\Helper\Data $helper
      * @return void
      */
     public function __construct(
@@ -48,12 +60,16 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
         \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository,
         \Dem\HelpDesk\Api\FollowerRepositoryInterface $followerRepository,
-        \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
+        \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository,
+        \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository,
+        \Dem\HelpDesk\Helper\Data $helper
     ) {
         $this->date = $date;
         $this->replyRepository = $replyRepository;
         $this->followerRepository = $followerRepository;
         $this->departmentRepository = $departmentRepository;
+        $this->userRepository = $userRepository;
+        $this->helper = $helper;
         parent::__construct($context);
     }
 
@@ -75,6 +91,8 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
     {
         $this->setCaseNumber($object);
+        $this->setDepartmentName($object);
+        $this->setWebsiteName($object);
 
         return parent::_afterLoad($object);
     }
@@ -184,6 +202,21 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         /* @var $department \Dem\HelpDesk\Api\Data\DepartmentInterface */
         $department = $this->departmentRepository->getById($object->getDepartmentId());
         $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::DEPARTMENT_NAME, $department->getName());
+        return $this;
+    }
+
+    /**
+     * Retrieve and set website name value
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setWebsiteName(\Magento\Framework\Model\AbstractModel $object)
+    {
+        /* @var $website \Magento\Store\Api\Data\WebsiteInterface */
+        $website = $this->helper->getWebsite($object->getWebsiteId());
+        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::WEBSITE_NAME, $website->getName());
         return $this;
     }
 }
