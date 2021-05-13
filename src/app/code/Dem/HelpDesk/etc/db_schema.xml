@@ -144,7 +144,7 @@
                 default="0.0.0.0" comment="Remote IP Address"/>
         <column xsi:type="varchar" name="http_user_agent" nullable="true" length="255"
                 comment="Client browser information"/>
-        <column xsi:type="varchar" name="updated_by" nullable="true" length="50"
+        <column xsi:type="varchar" name="updater_name" nullable="true" length="50"
                 comment="Full name of last user edit reply"/>
         <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>

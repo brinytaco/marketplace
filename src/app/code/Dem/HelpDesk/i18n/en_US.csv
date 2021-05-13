@@ -68,3 +68,8 @@
 "Resolved","Resolved"
 "Archived","Archived"
 
+# Priority
+"Normal","Normal"
+"Urgent","Urgent"
+"Critical","Critical"
+

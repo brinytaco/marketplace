@@ -349,24 +349,24 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     }
 
     /**
-     * Get name of last updated user
+     * Get name of last updater
      *
      * @return string
      */
-    public function getUpdatedBy()
+    public function getUpdaterName()
     {
-        return $this->getData(CaseItemInterface::UPDATED_BY);
+        return $this->getData(CaseItemInterface::UPDATER_NAME);
     }
 
     /**
-     * Set name of last updated user
+     * Set name of last updater
      *
      * @param string $userName
      * @return CaseItemInterface
      */
-    public function setUpdatedBy($userName)
+    public function setUpdaterName($userName)
     {
-        return $this->setData(CaseItemInterface::UPDATED_BY, $userName);
+        return $this->setData(CaseItemInterface::UPDATER_NAME, $userName);
     }
 
     /**

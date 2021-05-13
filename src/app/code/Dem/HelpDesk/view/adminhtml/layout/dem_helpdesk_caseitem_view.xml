@@ -18,12 +18,12 @@
    </head>
     <body>
         <referenceContainer name="content">
+            <!--<uiComponent name="dem_helpdesk_caseitem_view"/>-->
             <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View" name="helpdesk_case_view" template="Dem_HelpDesk::case/view.phtml">
                 <arguments>
                     <!-- This is the resulting $data array in the Block's __construct() -->
                     <argument name="argument1" xsi:type="number">10</argument>
                 </arguments>
-                <!--<block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Replies" name="case_replies" template="Dem_HelpDesk::case/view/replies.phtml"/>-->
             </block>
         </referenceContainer>
     </body>

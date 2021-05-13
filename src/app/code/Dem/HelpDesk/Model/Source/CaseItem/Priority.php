@@ -59,16 +59,19 @@ class Priority extends SourceOptions
             self::CASE_PRIORITY_NORMAL => new DataObject(array(
                 'id' => self::CASE_PRIORITY_NORMAL,
                 'label' => __('Normal'),
+                'css_class' => 'normal',
                 'automatic' => 0
             )),
             self::CASE_PRIORITY_URGENT => new DataObject(array(
                 'id' => self::CASE_PRIORITY_URGENT,
                 'label' => __('Urgent'),
+                'css_class' => 'urgent',
                 'automatic' => 0
             )),
             self::CASE_PRIORITY_CRITICAL => new DataObject(array(
                 'id' => self::CASE_PRIORITY_CRITICAL,
                 'label' => __('Critical'),
+                'css_class' => 'critical',
                 'automatic' => 0
             )),
         );

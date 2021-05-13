@@ -24,6 +24,7 @@ interface CaseItemInterface
     const DEPARTMENT_ID         = 'department_id';
     const DEPARTMENT_NAME       = 'department_name';
     const CASE_NUMBER           = 'case_number';
+    const CASE_MANAGER_NAME     = 'case_manager_name';
     const PROTECT_CODE          = 'protect_code';
     const CREATOR_CUSTOMER_ID   = 'creator_customer_id';
     const CREATOR_ADMIN_ID      = 'creator_admin_id';
@@ -35,7 +36,7 @@ interface CaseItemInterface
     const PRIORITY              = 'priority';
     const REMOTE_IP             = 'remote_ip';
     const HTTP_USER_AGENT       = 'http_user_agent';
-    const UPDATED_BY            = 'updated_by';
+    const UPDATER_NAME          = 'updater_name';
     const CREATED_AT            = 'created_at';
     const UPDATED_AT            = 'updated_at';
 
@@ -256,19 +257,19 @@ interface CaseItemInterface
     public function setHttpUserAgent($userAgent);
 
     /**
-     * Get name of last updated user
+     * Get name of last updater
      *
      * @return string
      */
-    public function getUpdatedBy();
+    public function getUpdaterName();
 
     /**
-     * Set name of last updated user
+     * Set name of last updater
      *
      * @param string $userName
      * @return CaseItemInterface
      */
-    public function setUpdatedBy($userName);
+    public function setUpdaterName($userName);
 
     /**
      * Get created at

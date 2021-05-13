@@ -221,7 +221,7 @@
             </argument>
         </column>
 
-        <column name="updated_by">
+        <column name="updater_name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">80</item>

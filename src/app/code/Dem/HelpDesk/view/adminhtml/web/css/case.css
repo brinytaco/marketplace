@@ -13,3 +13,8 @@
     float: left;
     margin: 10px;
 }
+
+.case-information .admin__table-secondary th {
+    width: 30%;
+}
+

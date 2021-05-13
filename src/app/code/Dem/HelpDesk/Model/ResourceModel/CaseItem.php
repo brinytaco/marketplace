@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
+use Dem\HelpDesk\Model\DepartmentFactory;
 
 /**
  * HelpDesk Resource Model - Case
@@ -44,6 +45,11 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @var \Dem\HelpDesk\Helper\Data
      */
     protected $helper;
+
+    /**
+     * @var \Dem\HelpDesk\Api\Data\DepartmentInterface
+     */
+    private $department;
 
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
@@ -93,6 +99,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->setCaseNumber($object);
         $this->setDepartmentName($object);
         $this->setWebsiteName($object);
+        $this->setCaseManagerName($object);
 
         return parent::_afterLoad($object);
     }
@@ -199,10 +206,23 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function setDepartmentName(\Magento\Framework\Model\AbstractModel $object)
     {
-        /* @var $department \Dem\HelpDesk\Api\Data\DepartmentInterface */
-        $department = $this->departmentRepository->getById($object->getDepartmentId());
-        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::DEPARTMENT_NAME, $department->getName());
+        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::DEPARTMENT_NAME, $this->getDepartment($object)->getName());
         return $this;
+    }
+
+    /**
+     * Fetch department instance for this object
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @since 1.0.0
+     */
+    public function getDepartment(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if (!isset($this->department)) {
+            $this->department = $this->departmentRepository->getById($object->getDepartmentId());
+        }
+        return $this->department;
     }
 
     /**
@@ -217,6 +237,21 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         /* @var $website \Magento\Store\Api\Data\WebsiteInterface */
         $website = $this->helper->getWebsite($object->getWebsiteId());
         $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::WEBSITE_NAME, $website->getName());
+        return $this;
+    }
+
+    /**
+     * Retrieve and set case manager name value
+     *
+     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setCaseManagerName(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $caseManagerId = $this->getDepartment($object)->getCaseManagerId();
+        $user = $this->userRepository->getById($caseManagerId);
+        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_MANAGER_NAME, $user->getName());
         return $this;
     }
 }
