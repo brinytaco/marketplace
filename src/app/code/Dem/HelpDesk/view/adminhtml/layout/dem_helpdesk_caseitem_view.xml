@@ -11,19 +11,30 @@
  * @since      1.0.0
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
+        <css src="Dem_HelpDesk::css/default.css" />
         <css src="Dem_HelpDesk::css/case.css" />
         <!--<script src="Dem_HelpDesk::js/case.js" />-->
    </head>
     <body>
         <referenceContainer name="content">
             <!--<uiComponent name="dem_helpdesk_caseitem_view"/>-->
-            <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View" name="helpdesk_case_view" template="Dem_HelpDesk::case/view.phtml">
-                <arguments>
-                    <!-- This is the resulting $data array in the Block's __construct() -->
-                    <argument name="argument1" xsi:type="number">10</argument>
-                </arguments>
+            <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View" name="case_view" />
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs" name="case_view_tabs">
+                <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Info" name="case_view_tab_info" template="Dem_HelpDesk::case/view/info.phtml"/>
+                <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Replies" name="case_view_tab_replies" template="Dem_HelpDesk::case/view/replies.phtml"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">case_info</argument>
+                    <argument name="block" xsi:type="string">case_view_tab_info</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">case_replies</argument>
+                    <argument name="block" xsi:type="string">case_view_tab_replies</argument>
+                </action>
             </block>
         </referenceContainer>
     </body>

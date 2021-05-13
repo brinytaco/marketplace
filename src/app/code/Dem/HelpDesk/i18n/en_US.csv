@@ -55,6 +55,7 @@
 "Unable to find case with ID `%1`","Unable to find case with ID `%1`"
 "The reply `%1` cannot be empty","The reply `%1` cannot be empty"
 "n/a","n/a"
+"Case Information","Case Information"
 
 # Department Create/Edit
 "Unable to find department with ID `%1`","Unable to find department with ID `%1`"

@@ -15,6 +15,10 @@
     <update handle="styles"/>
     <update handle="editor"/>
     <head>
+        <css src="Dem_HelpDesk::css/default.css" />
+        <css src="Dem_HelpDesk::css/case.css" />
+        <!--<script src="Dem_HelpDesk::js/case.js" />-->
+
         <!-- Translated automatically -->
         <title>Open New Case</title>
    </head>

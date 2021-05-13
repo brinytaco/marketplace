@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Block\Adminhtml\CaseItem;
+namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
-use \Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * HelpDesk Block - Adminhtml CaseItem View
+ * HelpDesk Block - Adminhtml CaseItem View Tab Info
  *
  * =============================================================================
  *
@@ -15,22 +15,9 @@ use \Magento\Framework\App\ObjectManager;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class View extends \Magento\Backend\Block\Widget\Container
+class Info extends \Magento\Backend\Block\Widget implements
+    \Magento\Backend\Block\Widget\Tab\TabInterface
 {
-    /**
-     * Unset the header text
-     *
-     * @var string
-     */
-    protected $_headerText = '';
-
-    /**
-     * Block group
-     *
-     * @var string
-     */
-    protected $_blockGroup = 'Dem_HelpDesk';
-
     /**
      * Core registry
      *
@@ -39,15 +26,14 @@ class View extends \Magento\Backend\Block\Widget\Container
     protected $_coreRegistry = null;
 
     /**
-     * @param \Magento\Backend\Block\Widget\Context $context
+     * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param array $data
-     * @return void
      */
     public function __construct(
-            \Magento\Backend\Block\Widget\Context $context,
-            \Magento\Framework\Registry $registry,
-            array $data = []
+        \Magento\Backend\Block\Template\Context $context,
+        \Magento\Framework\Registry $registry,
+        array $data = []
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
@@ -62,17 +48,6 @@ class View extends \Magento\Backend\Block\Widget\Container
     public function getCase()
     {
         return $this->_coreRegistry->registry(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY);
-    }
-
-    /**
-     * Return back url for view grid
-     *
-     * @return string
-     * @since 1.0.0
-     */
-    public function getBackUrl()
-    {
-        return $this->getUrl('helpdesk/caseitem/');
     }
 
     /**
@@ -268,5 +243,41 @@ class View extends \Magento\Backend\Block\Widget\Container
     public function getTotalReplies()
     {
         return (int) $this->getCase()->getTotalReplies();
+    }
+
+    /**
+     * ######################## TAB settings #################################
+     */
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTabLabel()
+    {
+        return __('Information');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getTabTitle()
+    {
+        return __('Case Information');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canShowTab()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isHidden()
+    {
+        return false;
     }
 }

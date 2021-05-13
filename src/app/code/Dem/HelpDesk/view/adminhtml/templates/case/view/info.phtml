@@ -1,0 +1,146 @@
+<?php
+/**
+ * HelpDesk Block - Adminhtml CaseItem View Tab Info
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+
+/* @var $block \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Info */
+
+?>
+
+<div class="fieldset-wrapper case-information">
+    <div class="fieldset-wrapper-title">
+        <span class="title"><?= $block->escapeHtml(__('Case Information')) ?></span>
+    </div>
+    <table class="admin__table-secondary">
+        <tbody>
+            <tr>
+                <th><?= $block->escapeHtml(__('Case #')) ?>:</th>
+                <td>
+                    <span class="case-number">
+                        <?= $block->escapeHtml($block->getCaseNumber()); ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Created At')) ?>:</th>
+                <td>
+                    <span class="created-at">
+                        <?= $block->escapeHtml($block->getCreatedDate()) ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Created By')) ?>:</th>
+                <td>
+                    <span class="creator-name">
+                    <?php if ($block->isCustomerCreator()): ?>
+                        <?= sprintf(
+                            '<a href="%s">%s</a>',
+                            $block->getCustomerCreatorUrl(),
+                            $block->escapeHtml($block->getCreatorName())
+                        ) ?>
+                    <?php else: ?>
+                        <?= $block->escapeHtml($block->getCreatorName()) ?>
+                    <?php endif ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Created from IP')) ?>:</th>
+                <td>
+                    <span class="remote-ip">
+                        <?= ($block->getRemoteIp()) ? $block->escapeHtml($block->getRemoteIp()) : __('n/a'); ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Website')) ?>:</th>
+                <td>
+                    <span class="website-name">
+                        <?= $block->escapeHtml($block->getWebsiteName()); ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Department')) ?>:</th>
+                <td>
+                    <span class="department-name">
+                        <?= $block->escapeHtml($block->getDepartmentName()); ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Case Manager')) ?>:</th>
+                <td>
+                    <span class="case-manager-name">
+                        <?= $block->escapeHtml($block->getCaseManagerName()); ?>
+                    </span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="admin__table-secondary">
+        <tbody>
+            <tr>
+                <th><?= $block->escapeHtml(__('Case Status')) ?>:</th>
+                <td>
+                    <span class="<?= $block->getStatusItem()->getCssClass() ?>">
+                        <?= $block->escapeHtml($block->getStatusItem()->getLabel()) ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Priority')) ?>:</th>
+                <td>
+                    <span class="<?= $block->getPriorityItem()->getCssClass() ?>">
+                        <?= $block->escapeHtml($block->getPriorityItem()->getLabel()) ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Updated At')) ?>:</th>
+                <td>
+                    <span class="updated-at">
+                        <?= ($block->getUpdatedDate()) ? $block->escapeHtml($block->getUpdatedDate()) : __('n/a'); ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Updated By')) ?>:</th>
+                <td>
+                    <span class="updater-name">
+                        <?= ($block->getUpdaterName()) ? $block->escapeHtml($block->getUpdaterName()) : __('n/a'); ?>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <th><?= $block->escapeHtml(__('Total Replies')) ?>:</th>
+                <td>
+                    <span class="total-replies">
+                        <?= $block->escapeHtml($block->getTotalReplies()); ?>
+                    </span>
+                </td>
+            </tr>
+
+            <?php /* This row would show n/a if the current user is the creator or case manager */ ?>
+            <tr>
+                <th><?= $block->escapeHtml(__('Follow this Case')) ?>:</th>
+                <td>
+                    <?php /** @todo: Add follower toggle switch */ ?>
+                    <div><input type="checkbox">&nbsp;Currently Following</div>
+                    <small>You ARE NOT currently receiving notifications of case replies and changes.</small>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+
+</div>
