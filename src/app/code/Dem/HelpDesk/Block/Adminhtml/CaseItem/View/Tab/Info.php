@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Info
@@ -15,15 +16,14 @@ use Magento\Framework\App\ObjectManager;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Info extends \Magento\Backend\Block\Widget implements
-    \Magento\Backend\Block\Widget\Tab\TabInterface
+class Info extends \Magento\Backend\Block\Template implements TabInterface
 {
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
-    protected $_coreRegistry = null;
+    protected $_coreRegistry;
 
     /**
      * @param \Magento\Backend\Block\Template\Context $context
@@ -37,6 +37,69 @@ class Info extends \Magento\Backend\Block\Widget implements
     ) {
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+    }
+
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getTabLabel()
+    {
+        return __('Information');
+    }
+
+    /**
+     * @return \Magento\Framework\Phrase
+     */
+    public function getTabTitle()
+    {
+        return __('Case Information');
+    }
+
+    /**
+     * @return bool
+     */
+    public function canShowTab()
+    {
+        return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHidden()
+    {
+        return false;
+    }
+
+    /**
+     * Tab class getter
+     *
+     * @return string
+     */
+    public function getTabClass()
+    {
+        return '';
+    }
+
+    /**
+     * Return URL link to Tab content
+     *
+     * @return string
+     */
+    public function getTabUrl()
+    {
+        return '';
+    }
+
+    /**
+     * Tab should be loaded trough Ajax call
+     *
+     * @return bool
+     */
+    public function isAjaxLoaded()
+    {
+        return false;
     }
 
     /**
@@ -245,39 +308,4 @@ class Info extends \Magento\Backend\Block\Widget implements
         return (int) $this->getCase()->getTotalReplies();
     }
 
-    /**
-     * ######################## TAB settings #################################
-     */
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTabLabel()
-    {
-        return __('Information');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getTabTitle()
-    {
-        return __('Case Information');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function canShowTab()
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isHidden()
-    {
-        return false;
-    }
 }

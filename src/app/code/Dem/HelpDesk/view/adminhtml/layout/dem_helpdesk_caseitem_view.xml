@@ -20,22 +20,7 @@
    </head>
     <body>
         <referenceContainer name="content">
-            <!--<uiComponent name="dem_helpdesk_caseitem_view"/>-->
-            <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View" name="case_view" />
-        </referenceContainer>
-        <referenceContainer name="left">
-            <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs" name="case_view_tabs">
-                <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Info" name="case_view_tab_info" template="Dem_HelpDesk::case/view/info.phtml"/>
-                <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Replies" name="case_view_tab_replies" template="Dem_HelpDesk::case/view/replies.phtml"/>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">case_info</argument>
-                    <argument name="block" xsi:type="string">case_view_tab_info</argument>
-                </action>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">case_replies</argument>
-                    <argument name="block" xsi:type="string">case_view_tab_replies</argument>
-                </action>
-            </block>
+            <uiComponent name="dem_helpdesk_caseitem_view"/>
         </referenceContainer>
     </body>
 </page>

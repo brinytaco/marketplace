@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * HelpDesk Case UI Component - View
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">dem_helpdesk_caseitem_view.dem_helpdesk_caseitem_view_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Case View</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="back" class="Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\BackButton"/>
+        </buttons>
+        <layout>
+            <navContainerName>left</navContainerName>
+            <type>tabs</type>
+        </layout>
+        <deps>
+            <dep>dem_helpdesk_caseitem_view.dem_helpdesk_caseitem_view_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="dem_helpdesk_caseitem_view_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">Dem\HelpDesk\Model\DataProvider\CaseItem</argument>
+            <argument name="name" xsi:type="string">dem_helpdesk_caseitem_view_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">case_id</argument>
+            <argument name="requestFieldName" xsi:type="string">id</argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+
+<!-- Use <page layout="admin-2columns-left"> in layout file -->
+    <!-- Tab Content: See block class for label/settings -->
+    <htmlContent name="dem_helpdesk_caseitem_tab_info_content">
+        <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Info" name="case_tab_info" template="Dem_HelpDesk::case/view/tab/info.phtml"/>
+    </htmlContent>
+
+    <!-- Tab Content: See block class for label/settings -->
+    <htmlContent name="dem_helpdesk_caseitem_tab_replies_content">
+        <block class="Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Replies" name="case_tab_replies" template="Dem_HelpDesk::case/view/tab/replies.phtml"/>
+    </htmlContent>
+</form>
