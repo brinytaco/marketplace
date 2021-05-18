@@ -51,26 +51,4 @@ class Collection extends AbstractCollection
         );
     }
 
-    /**
-     * Add extra fields as output columns
-     * department_name
-     * case_manager_name
-     *
-     * @return $this
-     * @since 1.0.0
-     */
-    protected function _initSelect()
-    {
-        parent::_initSelect();
-
-        // Add department name to select
-        $this->getSelect()->join(
-            ['d' => $this->getTable('dem_helpdesk_department')],
-            'd.department_id = main_table.department_id',
-            ['department_name' => 'name']
-        );
-
-        return $this;
-    }
-
 }

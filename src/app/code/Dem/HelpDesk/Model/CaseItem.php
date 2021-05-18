@@ -7,6 +7,7 @@ use Magento\Framework\Model\AbstractModel;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 use Dem\HelpDesk\Api\Data\ReplyInterface;
 use Dem\HelpDesk\Api\Data\FollowerInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * HelpDesk Model - Case
@@ -32,9 +33,19 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     protected $_eventObject = self::EVENT_PREFIX;
 
     /**
-     * @var array
+     * @var ReplyInterface []
      */
     protected $repliesToSave = [];
+
+    /**
+     * @var SearchResultsInterface
+     */
+    protected $replies;
+
+    /**
+     *
+     * @var FollowerInterface []
+     */
     protected $followersToSave = [];
 
     /**
@@ -409,6 +420,38 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     public function setUpdatedAt($updatedAt)
     {
         return $this->setData(CaseItemInterface::UPDATED_AT, $updatedAt);
+    }
+
+    /**
+     * Get case replies
+     *
+     * @return SearchResultsInterface
+     * @since 1.0.0
+     */
+    public function getReplies()
+    {
+        if (!isset($this->replies)) {
+            $this->replies = $this->getResource()->getReplies($this);
+        }
+        return $this->replies;
+    }
+
+    /**
+     * Get initial case reply
+     *
+     * @return ReplyInterface|bool
+     * @since 1.0.0
+     */
+    public function getInitialReply()
+    {
+        $replies = $this->getReplies();
+        foreach ($replies->getItems() as $reply) {
+            if ($reply->getIsInitial()) {
+                return $reply;
+            }
+        }
+
+        return false;
     }
 
     /**************************************************************************/

@@ -12,6 +12,56 @@
 
 /* @var $block \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Replies */
 
+$replyItems = $block->getVisibleReplies()->getItems();
 ?>
 
-These are all the replies.
+<div class="fieldset-wrapper case-information">
+    <div class="fieldset-wrapper-title">
+        <span class="title"><?= $block->escapeHtml(__('All Replies')) ?></span>
+    </div>
+
+<?php if (!count($replyItems)): ?>
+
+    <h2>There should be a minimum of two (2) replies for this case.</h2>
+
+<?php else: ?>
+
+    <?php foreach ($replyItems as $reply): ?>
+
+    <?php if ($reply->getIsAuthorTypeSystem()): // System Message ?>
+
+        <table class="admin__table-secondary <?= $block->escapeHtml($block->getReplyClass($reply)) ?>">
+            <tbody>
+                <tr>
+                    <td class="reply-date"><?= $block->escapeHtml($block->getCreatedDate($reply)) ?></td>
+                    <td class="reply-text"><?= $block->escapeHtml($reply->getReplyText()) ?></td>
+                </tr>
+            </tbody>
+        </table>
+
+    <?php else: // User Reply ?>
+
+        <table class="admin__table-secondary <?= $block->escapeHtml($block->getReplyClass($reply)) ?>">
+            <thead>
+                <th class="reply-date"><?= $block->escapeHtml($block->getCreatedDate($reply)) ?></th>
+                <th class="reply-author"><?= $block->escapeHtml($reply->getAuthorName()) ?></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td colspan="2" class="reply-text"><?= nl2br($block->escapeHtml($reply->getReplyText())); ?></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="2"><?= $block->escapeHtml($block->getStatusItem($reply)->getLabel()) ?></td>
+                </tr>
+            </tfoot>
+        </table>
+
+    <?php endif; ?>
+
+    <?php endforeach; ?>
+
+<?php endif; ?>
+
+</div>

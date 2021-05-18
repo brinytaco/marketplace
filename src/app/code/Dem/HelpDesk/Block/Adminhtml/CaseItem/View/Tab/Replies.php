@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
-use Magento\Framework\App\ObjectManager;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
-
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Replies
  *
@@ -16,30 +13,8 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Replies extends \Magento\Backend\Block\Template implements TabInterface
+class Replies extends Tabs
 {
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        array $data = []
-    ) {
-        $this->_coreRegistry = $registry;
-        parent::__construct($context, $data);
-    }
-
-
     /**
      * @return \Magento\Framework\Phrase
      */
@@ -57,60 +32,49 @@ class Replies extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * @return bool
-     */
-    public function canShowTab()
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isHidden()
-    {
-        return false;
-    }
-
-    /**
-     * Tab class getter
+     * Get lowercase author_type for use as class name
      *
+     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
      * @return string
-     */
-    public function getTabClass()
-    {
-        return '';
-    }
-
-    /**
-     * Return URL link to Tab content
-     *
-     * @return string
-     */
-    public function getTabUrl()
-    {
-        return '';
-    }
-
-    /**
-     * Tab should be loaded trough Ajax call
-     *
-     * @return bool
-     */
-    public function isAjaxLoaded()
-    {
-        return false;
-    }
-
-    /**
-     * Retrieve registered Case model
-     *
-     * @return \Dem\HelpDesk\Model\CaseItem
      * @since 1.0.0
      */
-    public function getCase()
+    public function getReplyClass($reply)
     {
-        return $this->_coreRegistry->registry(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY);
+        return strtolower($reply->getAuthorType());
+    }
+
+    /**
+     * Get created at as formatted string
+     *
+     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
+     * @return string
+     * @since 1.0.0
+     */
+    public function getCreatedDate($reply)
+    {
+        return $this->formatDate(
+            $reply->getCreatedAt(),
+            \IntlDateFormatter::MEDIUM,
+            true
+        );
+    }
+
+    /**
+     * Get case status as object
+     *
+     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
+     * @return DataObject
+     */
+    public function getStatusItem($reply)
+    {
+        $objectManager = ObjectManager::getInstance();
+        $source = $objectManager->get('Dem\HelpDesk\Model\Source\CaseItem\Status');
+
+        /* @var $statusOptions \Magento\Framework\Data\Collection */
+        $statusOptions = $source->getOptions();
+
+        return $statusOptions
+            ->getItemByColumnValue('id', $reply->getStatusId());
     }
 
 }

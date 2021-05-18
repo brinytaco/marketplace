@@ -99,7 +99,6 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $object->setCaseManagerEmail($user->getEmail());
 
         // Get default follower user ids
-
         $searchCriteria = $this->searchCriteriaBuilder
             ->addFilter('department_id', $object->getId())
             ->addFilter('is_follower', 1)

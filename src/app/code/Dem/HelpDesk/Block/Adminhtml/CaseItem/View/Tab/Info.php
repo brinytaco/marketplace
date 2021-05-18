@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Info
@@ -16,30 +15,8 @@ use Magento\Ui\Component\Layout\Tabs\TabInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Info extends \Magento\Backend\Block\Template implements TabInterface
+class Info extends Tabs
 {
-    /**
-     * Core registry
-     *
-     * @var \Magento\Framework\Registry
-     */
-    protected $_coreRegistry;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param array $data
-     */
-    public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        array $data = []
-    ) {
-        $this->_coreRegistry = $registry;
-        parent::__construct($context, $data);
-    }
-
-
     /**
      * @return \Magento\Framework\Phrase
      */
@@ -54,63 +31,6 @@ class Info extends \Magento\Backend\Block\Template implements TabInterface
     public function getTabTitle()
     {
         return __('Case Information');
-    }
-
-    /**
-     * @return bool
-     */
-    public function canShowTab()
-    {
-        return true;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isHidden()
-    {
-        return false;
-    }
-
-    /**
-     * Tab class getter
-     *
-     * @return string
-     */
-    public function getTabClass()
-    {
-        return '';
-    }
-
-    /**
-     * Return URL link to Tab content
-     *
-     * @return string
-     */
-    public function getTabUrl()
-    {
-        return '';
-    }
-
-    /**
-     * Tab should be loaded trough Ajax call
-     *
-     * @return bool
-     */
-    public function isAjaxLoaded()
-    {
-        return false;
-    }
-
-    /**
-     * Retrieve registered Case model
-     *
-     * @return \Dem\HelpDesk\Model\CaseItem
-     * @since 1.0.0
-     */
-    public function getCase()
-    {
-        return $this->_coreRegistry->registry(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY);
     }
 
     /**
@@ -245,6 +165,11 @@ class Info extends \Magento\Backend\Block\Template implements TabInterface
         return $this->getCase()->getCaseManagerName();
     }
 
+    /**
+     * Get case status as object
+     *
+     * @return DataObject
+     */
     public function getStatusItem()
     {
         $objectManager = ObjectManager::getInstance();
@@ -298,14 +223,29 @@ class Info extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * Get total user replies count (excluding initial and system)
+     * Get user replies count (excluding initial and system)
      *
      * @return int
      * @since 1.0.0
      */
-    public function getTotalReplies()
+    public function getOtherUserReplies()
     {
-        return (int) $this->getCase()->getTotalReplies();
+        return count($this->getVisibleReplies(false, false));
+    }
+
+    /**
+     * Get initial reply message
+     *
+     * @return string
+     * @since 1.0.0
+     */
+    public function getInitialReplyMessage()
+    {
+        $initialReply = $this->getCase()->getInitialReply();
+        if ($initialReply) {
+            return $initialReply->getReplyText();
+        }
+        return '';
     }
 
 }

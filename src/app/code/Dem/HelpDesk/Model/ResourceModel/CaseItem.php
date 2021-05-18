@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
-use Dem\HelpDesk\Model\DepartmentFactory;
 
 /**
  * HelpDesk Resource Model - Case
@@ -52,12 +51,18 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $department;
 
     /**
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     */
+    protected $searchCriteriaBuilder;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @param \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository
      * @param \Dem\HelpDesk\Api\FollowerRepositoryInterface $followerRepository
      * @param \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
      * @param \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository
+     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
      * @param \Dem\HelpDesk\Helper\Data $helper
      * @return void
      */
@@ -68,6 +73,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         \Dem\HelpDesk\Api\FollowerRepositoryInterface $followerRepository,
         \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository,
         \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository,
+        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
         \Dem\HelpDesk\Helper\Data $helper
     ) {
         $this->date = $date;
@@ -75,6 +81,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->followerRepository = $followerRepository;
         $this->departmentRepository = $departmentRepository;
         $this->userRepository = $userRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->helper = $helper;
         parent::__construct($context);
     }
@@ -253,5 +260,27 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $user = $this->userRepository->getById($caseManagerId);
         $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_MANAGER_NAME, $user->getName());
         return $this;
+    }
+
+    /**
+     * Get case replies
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Api\SearchResultsInterface
+     */
+    public function getReplies(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->searchCriteriaBuilder
+            ->addFilter(\Dem\HelpDesk\Api\Data\ReplyInterface::CASE_ID, $object->getId());
+
+        $sortOrders = [
+            new \Magento\Framework\Api\SortOrder(['field' => 'created_at', 'direction' => 'desc'])
+        ];
+
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->setSortOrders($sortOrders)
+            ->create();
+
+        return $this->replyRepository->getList($searchCriteria);
     }
 }

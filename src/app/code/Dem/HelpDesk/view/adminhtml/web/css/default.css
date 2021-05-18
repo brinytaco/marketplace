@@ -12,3 +12,12 @@
     cursor: pointer;
 }
 
+.admin__table-secondary th, .admin__table-secondary td {
+    vertical-align: top;
+}
+
+.a-link {
+    color: #007bdb;
+    font-size: 90%;
+    cursor: pointer;
+}

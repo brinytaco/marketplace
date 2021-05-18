@@ -16,7 +16,7 @@
     <head>
         <css src="Dem_HelpDesk::css/default.css" />
         <css src="Dem_HelpDesk::css/case.css" />
-        <!--<script src="Dem_HelpDesk::js/case.js" />-->
+        <script src="Dem_HelpDesk::js/case.js" />
    </head>
     <body>
         <referenceContainer name="content">

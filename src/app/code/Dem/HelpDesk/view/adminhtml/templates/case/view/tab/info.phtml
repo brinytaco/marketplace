@@ -16,9 +16,11 @@
 
 <div class="fieldset-wrapper case-information">
     <div class="fieldset-wrapper-title">
-        <span class="title"><?= $block->escapeHtml(__('Case Information')) ?></span>
+        <span class="title"><?= $block->escapeHtml(__('Subject')) ?>:
+            <span class="case-subject"><?= $block->escapeHtml($block->getSubject()) ?></span>
+        </span>
     </div>
-    <table class="admin__table-secondary">
+    <table class="admin__table-secondary half-width">
         <tbody>
             <tr>
                 <th><?= $block->escapeHtml(__('Case #')) ?>:</th>
@@ -87,7 +89,7 @@
         </tbody>
     </table>
 
-    <table class="admin__table-secondary">
+    <table class="admin__table-secondary half-width">
         <tbody>
             <tr>
                 <th><?= $block->escapeHtml(__('Case Status')) ?>:</th>
@@ -125,7 +127,7 @@
                 <th><?= $block->escapeHtml(__('Total Replies')) ?>:</th>
                 <td>
                     <span class="total-replies">
-                        <?= $block->escapeHtml($block->getTotalReplies()); ?>
+                        <?= $block->escapeHtml($block->getOtherUserReplies()); ?>
                     </span>
                 </td>
             </tr>
@@ -138,6 +140,18 @@
                     <div><input type="checkbox">&nbsp;Currently Following</div>
                     <small>You ARE NOT currently receiving notifications of case replies and changes.</small>
                 </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <table class="admin__table-secondary initial-request">
+        <tbody>
+            <tr>
+                <th>
+                    <?= $block->escapeHtml(__('Initial Request')) ?>:<br>
+                    <span class="a-link" id="view-all-replies">View All Replies</span>
+                </th>
+                <td class="reply-text"><?= nl2br($block->escapeHtml($block->getInitialReplyMessage())) ?></td>
             </tr>
         </tbody>
     </table>

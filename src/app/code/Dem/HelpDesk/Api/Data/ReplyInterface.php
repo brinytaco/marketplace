@@ -112,6 +112,21 @@ interface ReplyInterface
     public function setStatusId($statusId);
 
     /**
+     * Get is_initial
+     *
+     * @return int
+     */
+    public function getIsInitial();
+
+    /**
+     * Set is_initial
+     *
+     * @param int $isInitial
+     * @return ReplyInterface
+     */
+    public function setIsInitial($isInitial);
+
+    /**
      * Get created at
      *
      * @return string

@@ -44,7 +44,7 @@ abstract class SourceOptions implements OptionSourceInterface
     protected $optionArray = [];
 
     /**
-     * @var \Dem\HelpDesk\Model\DepartmentRepository
+     * @var \Dem\HelpDesk\Api\DepartmentRepositoryInterface
      */
     protected $departmentRepository;
 
@@ -78,7 +78,7 @@ abstract class SourceOptions implements OptionSourceInterface
      * @param \Magento\Store\Model\System\Store $store
      * @param \Magento\Framework\App\RequestInterface $request
      * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Dem\HelpDesk\Model\DepartmentRepository $departmentRepository
+     * @param \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
      * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
      * @param \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder
      * @param \Magento\Framework\Registry $coreRegistry
@@ -90,7 +90,7 @@ abstract class SourceOptions implements OptionSourceInterface
         \Magento\Store\Model\System\Store $store,
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Dem\HelpDesk\Model\DepartmentRepository $departmentRepository,
+        \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository,
         \Magento\Framework\Api\FilterBuilder $filterBuilder,
         \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder,
         \Magento\Framework\Registry $coreRegistry,

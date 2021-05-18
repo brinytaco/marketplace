@@ -151,6 +151,27 @@ class Reply extends AbstractModel implements ReplyInterface
     }
 
     /**
+     * Get status id
+     *
+     * @return int
+     */
+    public function getIsInitial()
+    {
+        return (bool) $this->getData(ReplyInterface::IS_INITIAL);
+    }
+
+    /**
+     * Set status id
+     *
+     * @param int $isInitial
+     * @return ReplyInterface
+     */
+    public function setIsInitial($isInitial)
+    {
+        return $this;
+    }
+
+    /**
      * Get created at
      *
      * @return string
@@ -169,6 +190,39 @@ class Reply extends AbstractModel implements ReplyInterface
     public function setCreatedAt($createdAt)
     {
         return $this->setData(ReplyInterface::CREATED_AT, $createdAt);
+    }
+
+    /**************************************************************************/
+    /**************************************************************************/
+
+    /**
+     * Check if reply author is type AUTHOR_TYPE_SYSTEM
+     *
+     * @return bool
+     */
+    public function getIsAuthorTypeSystem()
+    {
+        return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_SYSTEM);
+    }
+
+    /**
+     * Check if reply author is type AUTHOR_TYPE_CREATOR
+     *
+     * @return bool
+     */
+    public function getIsAuthorTypeCreator()
+    {
+        return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_CREATOR);
+    }
+
+    /**
+     * Check if reply author is type AUTHOR_TYPE_HELPDESK_USER
+     *
+     * @return bool
+     */
+    public function getIsAuthorTypeUser()
+    {
+        return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_HELPDESK_USER);
     }
 
 }

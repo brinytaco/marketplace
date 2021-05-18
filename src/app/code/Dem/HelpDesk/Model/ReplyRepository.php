@@ -93,6 +93,7 @@ class ReplyRepository implements ReplyRepositoryInterface
         $searchResults = $this->searchResultsFactory->create();
 
         $searchResults->setSearchCriteria($searchCriteria);
+
         $searchResults->setItems($collection->getItems());
 
         return $searchResults;

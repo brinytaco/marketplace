@@ -85,14 +85,14 @@ class Department extends SourceOptions
     {
         // Apply current website condition
         $filter1 = $this->filterBuilder
-            ->setField("website_id")
+            ->setField(\Dem\HelpDesk\Api\Data\DepartmentInterface::WEBSITE_ID)
             ->setConditionType("eq")
             ->setValue($websiteId)
             ->create();
 
         // Apply default department condition
         $filter2 = $this->filterBuilder
-            ->setField("department_id")
+            ->setField(\Dem\HelpDesk\Api\Data\DepartmentInterface::DEPARTMENT_ID)
             ->setConditionType("eq")
             ->setValue(\Dem\HelpDesk\Helper\Config::HELPDESK_DEPARTMENT_DEFAULT_ID)
             ->create();
