@@ -10,8 +10,10 @@
  * @since      1.0.0
  */
 
-/* @var $block \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Info */
-
+/* @var $block \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Info */
+/* @var $replyItems \Dem\HelpDesk\Api\Data\ReplyInterface [] */
+$replyItems = $block->getVisibleReplies(3);
+$case = $block->getCase();
 ?>
 
 <div class="fieldset-wrapper case-information">
@@ -23,7 +25,7 @@
     <table class="admin__table-secondary half-width">
         <tbody>
             <tr>
-                <th><?= $block->escapeHtml(__('Case #')) ?>:</th>
+                <th><?= $block->escapeHtml(__('Case')) ?> #:</th>
                 <td>
                     <span class="case-number">
                         <?= $block->escapeHtml($block->getCaseNumber()); ?>
@@ -34,7 +36,7 @@
                 <th><?= $block->escapeHtml(__('Created At')) ?>:</th>
                 <td>
                     <span class="created-at">
-                        <?= $block->escapeHtml($block->getCreatedDate()) ?>
+                        <?= $block->escapeHtml($block->getCreatedDate($case)) ?>
                     </span>
                 </td>
             </tr>
@@ -94,8 +96,8 @@
             <tr>
                 <th><?= $block->escapeHtml(__('Case Status')) ?>:</th>
                 <td>
-                    <span class="<?= $block->getStatusItem()->getCssClass() ?>">
-                        <?= $block->escapeHtml($block->getStatusItem()->getLabel()) ?>
+                    <span class="<?= $block->getStatusItem($case)->getCssClass() ?>">
+                        <?= $block->escapeHtml($block->getStatusItem($case)->getLabel()) ?>
                     </span>
                 </td>
             </tr>
@@ -111,7 +113,7 @@
                 <th><?= $block->escapeHtml(__('Updated At')) ?>:</th>
                 <td>
                     <span class="updated-at">
-                        <?= ($block->getUpdatedDate()) ? $block->escapeHtml($block->getUpdatedDate()) : __('n/a'); ?>
+                        <?= ($block->getUpdatedDate($case)) ? $block->escapeHtml($block->getUpdatedDate($case)) : __('n/a'); ?>
                     </span>
                 </td>
             </tr>
@@ -131,30 +133,37 @@
                     </span>
                 </td>
             </tr>
-
-            <?php /* This row would show n/a if the current user is the creator or case manager */ ?>
             <tr>
                 <th><?= $block->escapeHtml(__('Follow this Case')) ?>:</th>
                 <td>
-                    <?php /** @todo: Add follower toggle switch */ ?>
-                    <div><input type="checkbox">&nbsp;Currently Following</div>
-                    <small>You ARE NOT currently receiving notifications of case replies and changes.</small>
+                    <?php /* This row would show n/a if the current user is the creator or case manager */ ?>
+                    <?php if ($block->getCanRenderFollowerBlock()): ?>
+                        <?= $block->getFollowerToggleBlock() ?>
+                        <p class="note">
+                        <?= $block->escapeHtml(
+                                __('You %1%2 currently receiving notifications of case replies and changes.',
+                                    __('ARE'),
+                                    $block->getIsUserFollower() ? '' : sprintf(' %s', __('NOT'))
+                                )
+                        ) ?>
+                        </p>
+                    <?php else: ?>
+                        <?= __('n/a') ?>
+                    <?php endif; ?>
                 </td>
             </tr>
         </tbody>
     </table>
 
-    <table class="admin__table-secondary initial-request">
-        <tbody>
-            <tr>
-                <th>
-                    <?= $block->escapeHtml(__('Initial Request')) ?>:<br>
-                    <span class="a-link" id="view-all-replies">View All Replies</span>
-                </th>
-                <td class="reply-text"><?= nl2br($block->escapeHtml($block->getInitialReplyMessage())) ?></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="fieldset-wrapper-title recent-activity">
+        <span class="title"><?= $block->escapeHtml(__('Recent Activity')) ?></span>
+    </div>
 
+    <?php /* @var $reply \Dem\HelpDesk\Api\Data\ReplyInterface */ ?>
+    <?php foreach ($replyItems as $reply): ?>
+        <?= $block->renderReplyBlock($reply) ?>
+    <?php endforeach; ?>
+
+    <div class="a-link view-all-replies"><?= $block->escapeHtml(__('View All Replies')) ?></div>
 
 </div>

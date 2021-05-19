@@ -38,7 +38,7 @@ class ReplyRepository implements ReplyRepositoryInterface
     private $resource;
 
     /**
-     * @var ReplyCollectionFactory
+     * @var CollectionFactory
      */
     private $collectionFactory;
 
@@ -91,11 +91,8 @@ class ReplyRepository implements ReplyRepositoryInterface
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults = $this->searchResultsFactory->create();
-
         $searchResults->setSearchCriteria($searchCriteria);
-
         $searchResults->setItems($collection->getItems());
-
         return $searchResults;
     }
 

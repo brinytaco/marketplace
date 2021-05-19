@@ -313,4 +313,45 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             $websiteId
         );
     }
+
+    /* ====================================================================== */
+    /** @TODO - This should be a core/root available method
+    /* ====================================================================== */
+
+    /**
+     * Convert search result items to array
+     *
+     * If field provided, retrieve those column values only
+     *
+     * @param mixed $items May be either an instance of
+     *                     \Magento\Framework\Api\SearchResultsInterface
+     *                     \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+     *                     or array of DataObjects
+     * @param string $field
+     * @return array
+     */
+    public static function getItemsAsArray($items, $field = null)
+    {
+        
+
+        $results = [];
+
+        if (
+            $items instanceof \Magento\Framework\Api\SearchResultsInterface ||
+            $items instanceof \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+        ) {
+            $items = $items->getItems();
+        }
+
+        if (is_array($items) && count($items)) {
+            foreach ($items as $item) {
+                if ($item instanceof \Magento\Framework\DataObject) {
+                    $results[] = $item->getData($field);
+                }
+            }
+        }
+
+        return $results;
+    }
+
 }

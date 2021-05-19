@@ -28,6 +28,7 @@ interface ReplyInterface
     const AUTHOR_TYPE_SYSTEM        = 'SYSTEM';
     const AUTHOR_TYPE_HELPDESK_USER = 'HELPDESK_USER';
     const AUTHOR_TYPE_CREATOR       = 'CREATOR';
+    const AUTHOR_TYPE_CASE_MANAGER  = 'CASE_MANAGER';
 
     /**
      * Get ID

@@ -23,14 +23,10 @@
     width: 120px;
 }
 
-.case-information .admin__table-secondary.initial-request {
+.case-information .fieldset-wrapper-title.recent-activity {
+    clear: both;
     position: relative;
-    top: 20px;
-    border: 1px solid black;
-}
-
-.case-information .admin__table-secondary.initial-request td.reply-text {
-    font-style: italic;
+    padding-top: 20px;
 }
 
 .case-subject {
@@ -38,4 +34,9 @@
     font-size: 90%;
     color: #777;
     margin-left: 10px;
+}
+
+.view-all-replies {
+    top: 20px;
+    position: relative;
 }

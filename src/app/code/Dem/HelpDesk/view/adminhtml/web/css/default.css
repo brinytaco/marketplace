@@ -21,3 +21,9 @@
     font-size: 90%;
     cursor: pointer;
 }
+
+.fieldset-wrapper .note {
+    color: #303030;
+    font-size: 12px;
+    margin: 5px 0;
+}

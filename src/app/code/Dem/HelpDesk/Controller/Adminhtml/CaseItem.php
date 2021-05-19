@@ -218,6 +218,7 @@ abstract class CaseItem extends Action
             return false;
         }
         $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY, $case);
+        $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::INITIAL_REPLY_KEY, $case->getInitialReply());
         return $case;
     }
 

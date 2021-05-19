@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Replies
  *
@@ -13,7 +15,7 @@ namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Replies extends Tabs
+class Replies extends \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs
 {
     /**
      * @return \Magento\Framework\Phrase
@@ -29,52 +31,6 @@ class Replies extends Tabs
     public function getTabTitle()
     {
         return __('All Replies');
-    }
-
-    /**
-     * Get lowercase author_type for use as class name
-     *
-     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
-     * @return string
-     * @since 1.0.0
-     */
-    public function getReplyClass($reply)
-    {
-        return strtolower($reply->getAuthorType());
-    }
-
-    /**
-     * Get created at as formatted string
-     *
-     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
-     * @return string
-     * @since 1.0.0
-     */
-    public function getCreatedDate($reply)
-    {
-        return $this->formatDate(
-            $reply->getCreatedAt(),
-            \IntlDateFormatter::MEDIUM,
-            true
-        );
-    }
-
-    /**
-     * Get case status as object
-     *
-     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
-     * @return DataObject
-     */
-    public function getStatusItem($reply)
-    {
-        $objectManager = ObjectManager::getInstance();
-        $source = $objectManager->get('Dem\HelpDesk\Model\Source\CaseItem\Status');
-
-        /* @var $statusOptions \Magento\Framework\Data\Collection */
-        $statusOptions = $source->getOptions();
-
-        return $statusOptions
-            ->getItemByColumnValue('id', $reply->getStatusId());
     }
 
 }

@@ -22,15 +22,23 @@ class Reply extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $date;
 
     /**
+     * @var \Dem\HelpDesk\Api\UserRepositoryInterface
+     */
+    protected $userRepository;
+
+    /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
+     * @param \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
      * @return void
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
+        \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository,
         \Magento\Framework\Stdlib\DateTime\DateTime $date
     ) {
         $this->date = $date;
+        $this->userRepository = $userRepository;
         parent::__construct($context);
     }
 

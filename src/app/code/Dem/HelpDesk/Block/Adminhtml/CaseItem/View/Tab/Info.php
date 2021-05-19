@@ -15,7 +15,7 @@ use Magento\Framework\App\ObjectManager;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Info extends Tabs
+class Info extends \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs
 {
     /**
      * @return \Magento\Framework\Phrase
@@ -78,21 +78,6 @@ class Info extends Tabs
     }
 
     /**
-     * Get created at as formatted string
-     *
-     * @return string
-     * @since 1.0.0
-     */
-    public function getCreatedDate()
-    {
-        return $this->formatDate(
-            $this->getCase()->getCreatedAt(),
-            \IntlDateFormatter::MEDIUM,
-            true
-        );
-    }
-
-    /**
      * Get if creator is customer entity
      *
      * @return bool
@@ -137,24 +122,6 @@ class Info extends Tabs
     }
 
     /**
-     * Get case updated_at as formatted string
-     *
-     * @return string
-     * @since 1.0.0
-     */
-    public function getUpdatedDate()
-    {
-        if ($this->getCase()->getUpdatedAt()) {
-            return $this->formatDate(
-                $this->getCase()->getUpdatedAt(),
-                \IntlDateFormatter::MEDIUM,
-                true
-            );
-        }
-        return null;
-    }
-
-    /**
      * Get case manager name
      *
      * @return string
@@ -163,23 +130,6 @@ class Info extends Tabs
     public function getCaseManagerName()
     {
         return $this->getCase()->getCaseManagerName();
-    }
-
-    /**
-     * Get case status as object
-     *
-     * @return DataObject
-     */
-    public function getStatusItem()
-    {
-        $objectManager = ObjectManager::getInstance();
-        $source = $objectManager->get('Dem\HelpDesk\Model\Source\CaseItem\Status');
-
-        /* @var $statusOptions \Magento\Framework\Data\Collection */
-        $statusOptions = $source->getOptions();
-
-        return $statusOptions
-            ->getItemByColumnValue('id', $this->getCase()->getStatusId());
     }
 
     /**
@@ -230,22 +180,7 @@ class Info extends Tabs
      */
     public function getOtherUserReplies()
     {
-        return count($this->getVisibleReplies(false, false));
-    }
-
-    /**
-     * Get initial reply message
-     *
-     * @return string
-     * @since 1.0.0
-     */
-    public function getInitialReplyMessage()
-    {
-        $initialReply = $this->getCase()->getInitialReply();
-        if ($initialReply) {
-            return $initialReply->getReplyText();
-        }
-        return '';
+        return count($this->getVisibleReplies(0, false, false));
     }
 
 }

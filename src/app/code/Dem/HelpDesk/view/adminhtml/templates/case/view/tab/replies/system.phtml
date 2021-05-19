@@ -1,0 +1,32 @@
+<?php
+/**
+ * HelpDesk Block - Adminhtml CaseItem View System Reply Renderer Template
+ *
+ * view/adminhtml/templates/case/view/tab/replies/system.phtml
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ *
+ * Valid template variable codes
+ * @see \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs::renderReplyBlock()
+ *
+ * {{reply-class}}
+ * {{reply-date}}
+ * {{reply-author}}
+ * {{reply-text}}
+ * {{status-label}}
+ * {{reply-status}}
+ */
+?>
+<table class="admin__table-secondary reply {{reply-class}}">
+    <tbody>
+        <tr>
+            <td class="reply-date">{{reply-date}}</td>
+            <td class="reply-text">{{reply-text}}</td>
+        </tr>
+    </tbody>
+</table>

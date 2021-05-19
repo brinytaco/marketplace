@@ -18,7 +18,7 @@ require(['jquery'], function($){
      * driven pages, most all the content under the #container div
      * is dynamic.
      */
-    $('#container').on("click", '#view-all-replies', function () {
+    $('#container').on("click", '.view-all-replies', function () {
         $('#tab_dem_helpdesk_caseitem_tab_replies_content').click();
     });
 

@@ -25,6 +25,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     const CURRENT_KEY = 'current_case';
     const CACHE_TAG = 'helpdesk_case';
     const EVENT_PREFIX = 'helpdesk_case';
+    const INITIAL_REPLY_KEY = 'initial_reply';
 
     /**
      * @var string
@@ -422,10 +423,13 @@ class CaseItem extends AbstractModel implements CaseItemInterface
         return $this->setData(CaseItemInterface::UPDATED_AT, $updatedAt);
     }
 
+    /**************************************************************************/
+    /**************************************************************************/
+
     /**
      * Get case replies
      *
-     * @return SearchResultsInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
      * @since 1.0.0
      */
     public function getReplies()
@@ -452,6 +456,20 @@ class CaseItem extends AbstractModel implements CaseItemInterface
         }
 
         return false;
+    }
+
+    /**
+     * Get case replies
+     *
+     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @since 1.0.0
+     */
+    public function getFollowers()
+    {
+        if (!isset($this->followers)) {
+            $this->followers = $this->getResource()->getFollowers($this);
+        }
+        return $this->followers;
     }
 
     /**************************************************************************/

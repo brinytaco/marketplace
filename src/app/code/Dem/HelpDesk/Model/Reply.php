@@ -225,4 +225,14 @@ class Reply extends AbstractModel implements ReplyInterface
         return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_HELPDESK_USER);
     }
 
+    /**
+     * Check if reply author is type AUTHOR_TYPE_HELPDESK_USER
+     *
+     * @return bool
+     */
+    public function getIsAuthorTypeCaseManager()
+    {
+        return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_CASE_MANAGER);
+    }
+
 }

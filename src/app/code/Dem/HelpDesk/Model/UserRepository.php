@@ -91,10 +91,8 @@ class UserRepository implements UserRepositoryInterface
         $collection = $this->collectionFactory->create();
         $this->collectionProcessor->process($searchCriteria, $collection);
         $searchResults = $this->searchResultsFactory->create();
-
         $searchResults->setSearchCriteria($searchCriteria);
         $searchResults->setItems($collection->getItems());
-
         return $searchResults;
     }
 

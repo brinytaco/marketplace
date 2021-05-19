@@ -1,0 +1,107 @@
+/**
+ * Dem/HelpDesk/view/adminhtml/web/css/reply.css
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+
+/* Default reply (helpdesk-user) */
+.admin__table-secondary.reply {
+    width: 100%;
+    color: #000;
+    border: 1px solid #999;
+    margin: 20px 0px;
+    background-color: #f8f8ff;
+    border-spacing: 0;
+    border-collapse: separate;
+    text-align: left;
+}
+
+.admin__table-secondary.reply th,
+.admin__table-secondary.reply td {
+    padding: 5px 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.admin__table-secondary.reply tbody td {
+    padding: 15px;
+}
+
+.admin__table-secondary.reply thead {
+    background-color: #efefff;
+    font-weight: bold;
+    text-align: left;
+    font-size: 90%;
+}
+
+.admin__table-secondary.reply tfoot td {
+    text-align: right;
+    padding: 3px 10px;
+    font-style: italic;
+    font-size: 90%;
+}
+
+/* Remove alternating table row decoration */
+.admin__table-secondary.reply tbody tr:nth-child(2n+1) th,
+.admin__table-secondary.reply tbody tr:nth-child(2n+1) td,
+.admin__table-secondary.reply tfoot tr:nth-child(2n+1) th,
+.admin__table-secondary.reply tfoot tr:nth-child(2n+1) td {
+    background-color: inherit;
+}
+
+/* System reply */
+.admin__table-secondary.reply.system {
+    background-color: #fafafa;
+    width: 100%;
+    border-right: 0;
+    border-left: 0;
+    border-top: 2px solid #999;
+    border-bottom: 2px solid #999;
+    font-size: 90%;
+    font-style: italic;
+    color: #999;
+}
+
+/* Creator reply */
+.admin__table-secondary.reply.creator {
+    background-color: #f8fff8;
+}
+
+.admin__table-secondary.reply.creator thead{
+    background-color: #efffef;
+}
+
+/* Case Manager reply */
+.admin__table-secondary.reply.case-manager {
+    background-color: #fbf1e4;
+}
+
+.admin__table-secondary.reply.case-manager thead {
+    background-color: #f7e8d4;
+}
+
+.admin__table-secondary.reply .reply-author {
+    font-style: italic;
+    text-align: right;
+}
+
+.admin__table-secondary.reply .reply-date {
+    text-align: left;
+    width: 180px;
+}
+
+.admin__table-secondary.reply .reply-text {
+
+}
+
+.admin__table-secondary.reply .reply-status {
+    text-align: right;
+    padding: 3px 10px;
+    font-style: italic;
+    font-size: 90%;
+}
+

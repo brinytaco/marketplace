@@ -51,4 +51,24 @@ class Collection extends AbstractCollection
         );
     }
 
+    /**
+     * Add extra fields as output columns
+     * author_name
+     *
+     * @return $this
+     * @since 1.0.0
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+
+        // Add helpdesk user name to select
+        $this->getSelect()->joinLeft(
+            ['u' => $this->getTable('dem_helpdesk_user')],
+            'main_table.author_id = u.user_id',
+            ['author_name' => 'u.name']
+        );
+
+        return $this;
+    }
 }

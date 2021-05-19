@@ -265,6 +265,8 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Get case replies
      *
+     * Sort in reverse order to always place most recent on top
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\Api\SearchResultsInterface
      */
@@ -274,7 +276,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->addFilter(\Dem\HelpDesk\Api\Data\ReplyInterface::CASE_ID, $object->getId());
 
         $sortOrders = [
-            new \Magento\Framework\Api\SortOrder(['field' => 'created_at', 'direction' => 'desc'])
+            new \Magento\Framework\Api\SortOrder(['field' => 'reply_id', 'direction' => 'desc'])
         ];
 
         $searchCriteria = $this->searchCriteriaBuilder
@@ -282,5 +284,21 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             ->create();
 
         return $this->replyRepository->getList($searchCriteria);
+    }
+
+    /**
+     * Get case followers
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\Api\SearchResultsInterface
+     */
+    public function getFollowers(\Magento\Framework\Model\AbstractModel $object)
+    {
+        $this->searchCriteriaBuilder
+            ->addFilter(\Dem\HelpDesk\Api\Data\FollowerInterface::CASE_ID, $object->getId());
+
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+
+        return $this->followerRepository->getList($searchCriteria);
     }
 }
