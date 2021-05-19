@@ -1,0 +1,23 @@
+<!--
+/**
+ * Base Adminhtml Grid Column Header Template - Text Center
+ *
+ * Adds "th-center" class to allow for CSS manipulation of text-alignment
+ *
+ * =============================================================================
+ *
+ * @package    Dem\Base
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ *
+ */
+-->
+<th class="data-grid-th th-center" click="sort"
+    css="
+        _sortable: sortable,
+        _draggable: draggable,
+        _ascend: sorting === 'asc',
+        _descend: sorting === 'desc'">
+    <span class="data-grid-cell-content" translate="label"/>
+</th>

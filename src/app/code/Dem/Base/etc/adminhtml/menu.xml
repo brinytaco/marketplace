@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Base - Adminhtml Menu
+ *
+ * =============================================================================
+ *
+ * @package    Dem\Base
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <!--
+            This (Dem_Base::base) is a top-level menu item,
+            so that all new modules can be listed beneath instead
+            of having a bunch of new menu items at the top level.
+
+            Each module should have a main-level item with this as its parent
+            so that it appears as a "group" in this context (like "Stores" menu does).
+
+            Note that group titles won't be visible unless:
+                a) There's more than one group
+                b) Additional groups have at least one menu item (or no header to show)
+        -->
+        <add id="Dem_Base::base"
+             title="Direct Edge"
+             translate="title"
+             module="Dem_Base"
+             resource="Dem_Base::base"
+             sortOrder="0" />
+
+        <!-- This will not be visible unless it has children. So don't use it,
+             it allows for the other group titles to be visible -->
+        <add id="Placeholder"
+             parent="Dem_Base::base"
+             title="Group Title"
+             translate="title"
+             module="Dem_Base"
+             sortOrder="10"
+             resource="Dem_Base::base" />
+
+    </menu>
+</config>
