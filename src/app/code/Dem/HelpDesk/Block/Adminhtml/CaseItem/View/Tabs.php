@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View;
 
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Info
@@ -46,6 +47,11 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     protected $replyRepository;
 
     /**
+     * @var \Dem\HelpDesk\Api\UserRepositoryInterface
+     */
+    protected $userRepository;
+
+    /**
      * @var \Dem\HelpDesk\Model\Source\CaseItem\Status
      */
     protected $statusSource;
@@ -72,6 +78,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
      * @param \Magento\Framework\Registry $registry
      * @param \Dem\HelpDesk\Model\ResourceModel\CaseItem $caseResource
      * @param \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository
+     * @param \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository
      * @param \Dem\HelpDesk\Model\Source\CaseItem\Status $statusSource
      * @param \Dem\HelpDesk\Helper\Data $helper
      * @param array $data
@@ -82,6 +89,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
         \Magento\Framework\Registry $registry,
         \Dem\HelpDesk\Model\ResourceModel\CaseItem $caseResource,
         \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository,
+        \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository,
         \Dem\HelpDesk\Model\Source\CaseItem\Status $statusSource,
         \Dem\HelpDesk\Helper\Data $helper,
         array $data = []
@@ -90,6 +98,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
         $this->moduleDir = $moduleDir;
         $this->caseResource = $caseResource;
         $this->replyRepository = $replyRepository;
+        $this->userRepository = $userRepository;
         $this->statusSource = $statusSource;
         $this->helper = $helper;
         parent::__construct($context, $data);
@@ -350,44 +359,51 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * Check if current user is NOT the creator or case manager
-     * and is a helpdesk-user.
+     * Check if should render follower toggle.
+     *
+     * Current user cannot be the creator or case manager
+     * and must be a helpdesk-user.
      *
      * @return bool
      */
     public function getCanRenderFollowerBlock()
     {
-        return true;
-    }
-
-    public function getIsUserFollower()
-    {
-        /** @var $followers \Dem\HelpDesk\Model\FollowerInterface [] */
-        $followers = $this->getCase()->getFollowers();
-
-        $dataProcessor = new \Dem\HelpDesk\Data\SearchResultsProcessor($followers);
-
-        $currentFollowerIds = $dataProcessor->getColumnValues('user_id');
-
         /* @var $user \Magento\User\Model\User */
         $user = $this->helper->getBackendSession()->getUser();
 
+        // User is the case creator
+        if ($user->getId() == $this->getCase()->getCreatorAdminId()) {
+            return false;
+        }
+        // User is the department case manager
+        if ($user->getId() == $this->getCase()->getCaseManager()->getId()) {
+            return false;
+        }
+        // User must be a helpdesk user
+        if (!$this->userRepository->getById($user->getId())) {
+            return false;
+        }
+        return true;
     }
 
-    public function getFollowerToggleBlock()
+    /**
+     * Check if current admin user is a case follower
+     *
+     * @return bool
+     */
+    public function getIsUserFollower()
     {
-//        $followers = $this->getCase()->getFollowersCollection();
-//        $currentUser = $this->getCurrentHelpdeskUser();
+        /* @var $user \Magento\User\Model\User */
+        $user = $this->helper->getBackendSession()->getUser();
 
-//        return (in_array($currentUser->getId(), $followers->getColumnValues('user_id')));
-//
-//        return sprintf('<input type="checkbox" id="follower-toggle"%s>&nbsp;&nbsp;<span>%s</span><p class="note">%s</p>',
-//                ($isFollowing ? ' checked' : ''),
-//                ($isFollowing ? $this->__('Currently Following') : $this->__('Not Following')),
-//                $note
-//        );
+        /** @var $followers \Dem\HelpDesk\Model\FollowerInterface [] */
+        $followers = $this->getCase()->getFollowers();
 
-        return '';
+        $followerCollection = new \Dem\HelpDesk\Data\SearchResultsProcessor($followers);
+
+        // null value returned if not matched
+        $isFollower = $followerCollection->getItemByColumnValue('user_id', $user->getId());
+
+        return ($isFollower);
     }
-
 }

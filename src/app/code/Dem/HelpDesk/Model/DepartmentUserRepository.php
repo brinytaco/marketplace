@@ -68,17 +68,16 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface|null
      */
     public function getById($id)
     {
-        $user = $this->factory->create();
-        $this->resource->load($user, $id);
-        if (!$user->getId()) {
-            throw new NoSuchEntityException(__('Unable to find user with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            return null;
         }
-        return $user;
+        return $object;
     }
 
     /**
@@ -133,11 +132,11 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
      */
     public function deleteById($id)
     {
-        $user = $this->factory->create();
-        $this->resource->load($user, $id);
-        if (!$user->getId()) {
-            throw new NoSuchEntityException(__('Unable to find user with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
         }
-        return $this->delete($user);
+        return $this->delete($object);
     }
 }

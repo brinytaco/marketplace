@@ -5,6 +5,7 @@ namespace Dem\HelpDesk\Model;
 
 use Magento\Framework\Model\AbstractModel;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Api\Data\DepartmentInterface;
 use Dem\HelpDesk\Api\Data\ReplyInterface;
 use Dem\HelpDesk\Api\Data\FollowerInterface;
 use Magento\Framework\Api\SearchResultsInterface;
@@ -78,6 +79,27 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     }
 
     /**
+     * Get case manager data
+     *
+     * @return \Magento\Framework\DataObject
+     */
+    public function getCaseManager()
+    {
+        return $this->getData(CaseItemInterface::CASE_MANAGER);
+    }
+
+    /**
+     * Set case manager data
+     *
+     * @param \Magento\Framework\DataObject $data
+     * @return $this
+     */
+    public function setCaseManager(\Magento\Framework\DataObject $data)
+    {
+        return $this->setData(CaseItemInterface::CASE_MANAGER, $data);
+    }
+
+    /**
      * Get website id
      *
      * @return int
@@ -128,6 +150,8 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     {
         return $this->getData(CaseItemInterface::DEPARTMENT_NAME);
     }
+
+
 
     /**
      * Get protect code
@@ -425,6 +449,16 @@ class CaseItem extends AbstractModel implements CaseItemInterface
 
     /**************************************************************************/
     /**************************************************************************/
+
+    /**
+     * Get department object for current case
+     *
+     * @return int
+     */
+    public function getDepartment()
+    {
+        return $this->getResource()->getDepartment($this);
+    }
 
     /**
      * Get case replies

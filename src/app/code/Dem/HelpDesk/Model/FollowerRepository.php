@@ -68,17 +68,16 @@ class FollowerRepository implements FollowerRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\FollowerInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return \Dem\HelpDesk\Api\Data\FollowerInterface|null
      */
     public function getById($id)
     {
-        $follower = $this->factory->create();
-        $this->resource->load($follower, $id);
-        if (!$follower->getId()) {
-            throw new NoSuchEntityException(__('Unable to find follower with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            return null;
         }
-        return $follower;
+        return $object;
     }
 
     /**
@@ -133,11 +132,11 @@ class FollowerRepository implements FollowerRepositoryInterface
      */
     public function deleteById($id)
     {
-        $follower = $this->factory->create();
-        $this->resource->load($follower, $id);
-        if (!$follower->getId()) {
-            throw new NoSuchEntityException(__('Unable to find follower with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
         }
-        return $this->delete($follower);
+        return $this->delete($object);
     }
 }

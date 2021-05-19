@@ -24,7 +24,7 @@ interface CaseItemInterface
     const DEPARTMENT_ID         = 'department_id';
     const DEPARTMENT_NAME       = 'department_name';
     const CASE_NUMBER           = 'case_number';
-    const CASE_MANAGER_NAME     = 'case_manager_name';
+    const CASE_MANAGER          = 'case_manager';
     const PROTECT_CODE          = 'protect_code';
     const CREATOR_CUSTOMER_ID   = 'creator_customer_id';
     const CREATOR_ADMIN_ID      = 'creator_admin_id';
@@ -53,6 +53,21 @@ interface CaseItemInterface
      * @return string
      */
     public function getCaseNumber();
+
+    /**
+     * Get case manager data
+     *
+     * @return DataObject
+     */
+    public function getCaseManager();
+
+    /**
+     * Set case manager data
+     *
+     * @param \Magento\Framework\DataObject $data
+     * @return string
+     */
+    public function setCaseManager(\Magento\Framework\DataObject $data);
 
     /**
      * Get website id

@@ -80,6 +80,11 @@ $case = $block->getCase();
                     </span>
                 </td>
             </tr>
+        </tbody>
+    </table>
+
+    <table class="admin__table-secondary half-width">
+        <tbody>
             <tr>
                 <th><?= $block->escapeHtml(__('Case Manager')) ?>:</th>
                 <td>
@@ -88,11 +93,6 @@ $case = $block->getCase();
                     </span>
                 </td>
             </tr>
-        </tbody>
-    </table>
-
-    <table class="admin__table-secondary half-width">
-        <tbody>
             <tr>
                 <th><?= $block->escapeHtml(__('Case Status')) ?>:</th>
                 <td>
@@ -138,14 +138,18 @@ $case = $block->getCase();
                 <td>
                     <?php /* This row would show n/a if the current user is the creator or case manager */ ?>
                     <?php if ($block->getCanRenderFollowerBlock()): ?>
-                        <?= $block->getFollowerToggleBlock() ?>
+                        <?= sprintf('<input type="checkbox" class="follower-toggle"%s><span>%s</span>',
+                            $block->getIsUserFollower() ? ' checked' : '',
+                            $block->getIsUserFollower() ? __('Currently Following') : __('Not Following')
+                        );
+                        ?>
                         <p class="note">
-                        <?= $block->escapeHtml(
+                            <?= $block->escapeHtml(
                                 __('You %1%2 currently receiving notifications of case replies and changes.',
                                     __('ARE'),
                                     $block->getIsUserFollower() ? '' : sprintf(' %s', __('NOT'))
                                 )
-                        ) ?>
+                            ) ?>
                         </p>
                     <?php else: ?>
                         <?= __('n/a') ?>

@@ -67,17 +67,16 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface|null
      */
     public function getById($id)
     {
-        $department = $this->factory->create();
-        $this->resource->load($department, $id);
-        if (!$department->getId()) {
-            throw new NoSuchEntityException(__('Unable to find department with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            return null;
         }
-        return $department;
+        return $object;
     }
 
     /**
@@ -132,11 +131,11 @@ class DepartmentRepository implements DepartmentRepositoryInterface
      */
     public function deleteById($id)
     {
-        $department = $this->factory->create();
-        $this->resource->load($department, $id);
-        if (!$department->getId()) {
-            throw new NoSuchEntityException(__('Unable to find department with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
         }
-        return $this->delete($department);
+        return $this->delete($object);
     }
 }

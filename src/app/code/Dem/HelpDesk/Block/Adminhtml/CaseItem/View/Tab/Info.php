@@ -129,7 +129,7 @@ class Info extends \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs
      */
     public function getCaseManagerName()
     {
-        return $this->getCase()->getCaseManagerName();
+        return $this->getCase()->getCaseManager()->getName();
     }
 
     /**

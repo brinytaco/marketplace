@@ -68,17 +68,16 @@ class ReplyRepository implements ReplyRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\ReplyInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return \Dem\HelpDesk\Api\Data\ReplyInterface|null
      */
     public function getById($id)
     {
-        $reply = $this->factory->create();
-        $this->resource->load($reply, $id);
-        if (!$reply->getId()) {
-            throw new NoSuchEntityException(__('Unable to find reply with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            return null;
         }
-        return $reply;
+        return $object;
     }
 
     /**
@@ -133,11 +132,11 @@ class ReplyRepository implements ReplyRepositoryInterface
      */
     public function deleteById($id)
     {
-        $reply = $this->factory->create();
-        $this->resource->load($reply, $id);
-        if (!$reply->getId()) {
-            throw new NoSuchEntityException(__('Unable to find reply with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
         }
-        return $this->delete($reply);
+        return $this->delete($object);
     }
 }

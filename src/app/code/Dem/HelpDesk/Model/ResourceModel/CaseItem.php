@@ -106,7 +106,7 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $this->setCaseNumber($object);
         $this->setDepartmentName($object);
         $this->setWebsiteName($object);
-        $this->setCaseManagerName($object);
+        $this->setCaseManager($object);
 
         return parent::_afterLoad($object);
     }
@@ -254,11 +254,11 @@ class CaseItem extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      * @return $this
      * @since 1.0.0
      */
-    public function setCaseManagerName(\Magento\Framework\Model\AbstractModel $object)
+    public function setCaseManager(\Magento\Framework\Model\AbstractModel $object)
     {
         $caseManagerId = $this->getDepartment($object)->getCaseManagerId();
         $user = $this->userRepository->getById($caseManagerId);
-        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_MANAGER_NAME, $user->getName());
+        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_MANAGER, $user);
         return $this;
     }
 

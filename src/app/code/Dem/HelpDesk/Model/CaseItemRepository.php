@@ -67,17 +67,16 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface|null
      */
     public function getById($id)
     {
-        $caseItem = $this->factory->create();
-        $this->resource->load($caseItem, $id);
-        if (!$caseItem->getId()) {
-            throw new NoSuchEntityException(__('Unable to find case with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            return null;
         }
-        return $caseItem;
+        return $object;
     }
 
     /**
@@ -132,11 +131,11 @@ class CaseItemRepository implements CaseItemRepositoryInterface
      */
     public function deleteById($id)
     {
-        $caseItem = $this->factory->create();
-        $this->resource->load($caseItem, $id);
-        if (!$caseItem->getId()) {
-            throw new NoSuchEntityException(__('Unable to find case with ID `%1`', $id));
+        $object = $this->factory->create();
+        $this->resource->load($object, $id);
+        if (!$object->getId()) {
+            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
         }
-        return $this->delete($caseItem);
+        return $this->delete($object);
     }
 }
