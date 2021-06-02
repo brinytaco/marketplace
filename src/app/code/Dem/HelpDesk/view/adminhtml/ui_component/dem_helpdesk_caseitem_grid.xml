@@ -271,7 +271,9 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="number">80</item>
-                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <item name="fieldClass" xsi:type="array">
+                        <item name="a-center" xsi:type="boolean">true</item>
+                    </item>
                     <!-- custom header template for centering header text -->
                     <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
@@ -290,7 +292,9 @@
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="number">80</item>
-                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <item name="fieldClass" xsi:type="array">
+                        <item name="a-center" xsi:type="boolean">true</item>
+                    </item>
                     <!-- custom header template for centering header text -->
                     <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
@@ -313,7 +317,9 @@
 
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="number">80</item>
-                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <item name="fieldClass" xsi:type="array">
+                        <item name="a-center" xsi:type="boolean">true</item>
+                    </item>
                     <!-- custom header template for centering header text -->
                     <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
