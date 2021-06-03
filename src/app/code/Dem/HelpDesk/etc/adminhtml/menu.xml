@@ -24,12 +24,22 @@
              resource="Dem_HelpDesk::helpdesk"/>
 
         <!-- Actionable Menu Item -->
+        <add id="Dem_HelpDesk::helpdesk_case_create"
+             parent="Dem_HelpDesk::helpdesk"
+             title="Open a New Case"
+             translate="title"
+             module="Dem_HelpDesk"
+             sortOrder="10"
+             resource="Dem_HelpDesk::helpdesk_case_create"
+             action="helpdesk/caseitem/create"/>
+
+        <!-- Actionable Menu Item -->
         <add id="Dem_HelpDesk::helpdesk_case"
              parent="Dem_HelpDesk::helpdesk"
              title="Manage Cases"
              translate="title"
              module="Dem_HelpDesk"
-             sortOrder="10"
+             sortOrder="20"
              resource="Dem_HelpDesk::helpdesk_case"
              action="helpdesk/caseitem/index"/>
 
@@ -39,7 +49,7 @@
              title="Manage Departments"
              translate="title"
              module="Dem_HelpDesk"
-             sortOrder="20"
+             sortOrder="30"
              resource="Dem_HelpDesk::helpdesk_department"
              action="helpdesk/department/index"/>
 
@@ -49,7 +59,7 @@
              title="Configuration"
              translate="title"
              module="Dem_HelpDesk"
-             sortOrder="30"
+             sortOrder="40"
              resource="Dem_HelpDesk::helpdesk_config"
              action="adminhtml/system_config/edit/section/dem_helpdesk/"/>
     </menu>

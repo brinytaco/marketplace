@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons;
+namespace Dem\HelpDesk\Block\Adminhtml\Department\Buttons;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * HelpDesk Block - Adminhtml CaseItem View BackButton
+ * HelpDesk Block - Adminhtml Department View BackButton
  *
  * =============================================================================
  *
@@ -43,7 +43,7 @@ class BackButton implements ButtonProviderInterface
     {
         return [
             'label' => __('Back'),
-            'on_click' => sprintf("location.href = '%s';", $this->urlBuilder->getUrl('*/caseitem/')),
+            'on_click' => sprintf("location.href = '%s';", $this->urlBuilder->getUrl('*/department/')),
             'class' => 'back',
             'sort_order' => 10
         ];

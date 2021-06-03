@@ -284,7 +284,7 @@
                     <!-- Item index field -->
                     <item name="indexField" xsi:type="string">department_id</item>
                     <!-- Base link url -->
-                    <item name="viewUrlPath" xsi:type="string">helpdesk/department/view</item>
+                    <item name="viewUrlPath" xsi:type="string">helpdesk/department/edit</item>
                     <!-- Url parameter name. This can also be an array -->
                     <item name="urlEntityParamName" xsi:type="string">department_id</item>
                     <item name="resizeEnabled" xsi:type="boolean">false</item>

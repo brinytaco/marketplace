@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons;
+namespace Dem\HelpDesk\Block\Adminhtml\Department\Buttons;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 
 /**
- * HelpDesk Block - Adminhtml CaseItem View SaveButton
+ * HelpDesk Block - Adminhtml Department View SaveButton
  *
  * =============================================================================
  *
@@ -50,7 +50,7 @@ class SaveButton implements ButtonProviderInterface
     public function getButtonData()
     {
         // If is new case only
-        $case = $this->coreRegistry->registry(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY);
+        $case = $this->coreRegistry->registry(\Dem\HelpDesk\Model\Department::CURRENT_KEY);
 
         if (!$case) {
             return [

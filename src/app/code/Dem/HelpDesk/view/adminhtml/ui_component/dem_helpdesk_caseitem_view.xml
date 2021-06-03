@@ -30,7 +30,7 @@
             <dep>dem_helpdesk_caseitem_view.dem_helpdesk_caseitem_view_data_source</dep>
         </deps>
     </settings>
-    <dataSource name="dem_helpdesk_caseitem_view_data_source">
+    <dataSource>
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Dem\HelpDesk\Model\DataProvider\CaseItem</argument>
             <argument name="name" xsi:type="string">dem_helpdesk_caseitem_view_data_source</argument>
