@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\ResourceModel\Follower;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Dem\HelpDesk\Model\Follower;
+use Dem\HelpDesk\Model\ResourceModel\Follower as Resource;
 
 /**
  * HelpDesk Resource Model - Follower Collection
@@ -46,8 +48,8 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(
-            \Dem\HelpDesk\Model\Follower::class,
-            \Dem\HelpDesk\Model\ResourceModel\Follower::class
+            Follower::class,
+            Resource::class
         );
     }
 

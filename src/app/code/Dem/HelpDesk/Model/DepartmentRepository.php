@@ -67,22 +67,22 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface|null
+     * @return DepartmentInterface|false
      */
     public function getById($id)
     {
         $object = $this->factory->create();
         $this->resource->load($object, $id);
         if (!$object->getId()) {
-            return null;
+            return false;
         }
         return $object;
     }
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -95,9 +95,9 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\DepartmentInterface $department
-     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param DepartmentInterface $department
+     * @return DepartmentInterface
+     * @throws LocalizedException
      */
     public function save(DepartmentInterface $department)
     {
@@ -106,9 +106,9 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\DepartmentInterface $department
+     * @param DepartmentInterface $department
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws CouldNotDeleteException
      */
     public function delete(DepartmentInterface $department)
     {
@@ -126,16 +126,12 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return DepartmentInterface
+     * @throws NoSuchEntityException
      */
     public function deleteById($id)
     {
-        $object = $this->factory->create();
-        $this->resource->load($object, $id);
-        if (!$object->getId()) {
-            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
-        }
+        $object = $this->getById($id);
         return $this->delete($object);
     }
 }

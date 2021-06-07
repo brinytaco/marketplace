@@ -68,22 +68,22 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\UserInterface|null
+     * @return UserInterface|false
      */
     public function getById($id)
     {
         $object = $this->factory->create();
         $this->resource->load($object, $id);
         if (!$object->getId()) {
-            return null;
+            return false;
         }
         return $object;
     }
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -96,9 +96,9 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\UserInterface $user
-     * @return \Dem\HelpDesk\Api\Data\UserInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param UserInterface $user
+     * @return UserInterface
+     * @throws LocalizedException
      */
     public function save(UserInterface $user)
     {
@@ -107,9 +107,9 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\UserInterface $user
+     * @param UserInterface $user
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws CouldNotDeleteException
      */
     public function delete(UserInterface $user)
     {
@@ -127,16 +127,12 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\UserInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return UserInterface
+     * @throws NoSuchEntityException
      */
     public function deleteById($id)
     {
-        $object = $this->factory->create();
-        $this->resource->load($object, $id);
-        if (!$object->getId()) {
-            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
-        }
+        $object = $this->getById($id);
         return $this->delete($object);
     }
 }

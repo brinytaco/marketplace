@@ -3,16 +3,20 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
-use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchCriteriaInterface;
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Api\SearchResultsInterfaceFactory;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
+use Dem\HelpDesk\Model\CaseItemFactory;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem as CaseItemResource;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
-use Dem\HelpDesk\Model\CaseItemFactory;
+
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchResultsInterfaceFactory;
 
 /**
  * HelpDesk Model Repository - CaseItem
@@ -67,22 +71,22 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface|null
+     * @return CaseItemInterface|false
      */
     public function getById($id)
     {
         $object = $this->factory->create();
         $this->resource->load($object, $id);
         if (!$object->getId()) {
-            return null;
+            return false;
         }
         return $object;
     }
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -95,9 +99,9 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\CaseItemInterface $caseItem
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param CaseItemInterface $caseItem
+     * @return CaseItemInterface
+     * @throws CouldNotSaveException
      */
     public function save(CaseItemInterface $caseItem)
     {
@@ -106,9 +110,9 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\CaseItemInterface $caseItem
+     * @param CaseItemInterface $caseItem
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws CouldNotDeleteException
      */
     public function delete(CaseItemInterface $caseItem)
     {
@@ -126,16 +130,12 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return bool
+     * @throws NoSuchEntityException
      */
     public function deleteById($id)
     {
-        $object = $this->factory->create();
-        $this->resource->load($object, $id);
-        if (!$object->getId()) {
-            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
-        }
+        $object = $this->getById($id);
         return $this->delete($object);
     }
 }

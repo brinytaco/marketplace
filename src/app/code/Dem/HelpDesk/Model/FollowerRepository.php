@@ -68,22 +68,22 @@ class FollowerRepository implements FollowerRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\FollowerInterface|null
+     * @return FollowerInterface|false
      */
     public function getById($id)
     {
         $object = $this->factory->create();
         $this->resource->load($object, $id);
         if (!$object->getId()) {
-            return null;
+            return false;
         }
         return $object;
     }
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -96,9 +96,9 @@ class FollowerRepository implements FollowerRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\FollowerInterface $follower
-     * @return \Dem\HelpDesk\Api\Data\FollowerInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param FollowerInterface $follower
+     * @return FollowerInterface
+     * @throws LocalizedException
      */
     public function save(FollowerInterface $follower)
     {
@@ -107,9 +107,9 @@ class FollowerRepository implements FollowerRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\FollowerInterface $follower
+     * @param FollowerInterface $follower
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws CouldNotDeleteException
      */
     public function delete(FollowerInterface $follower)
     {
@@ -127,16 +127,12 @@ class FollowerRepository implements FollowerRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\FollowerInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return FollowerInterface
+     * @throws NoSuchEntityException
      */
     public function deleteById($id)
     {
-        $object = $this->factory->create();
-        $this->resource->load($object, $id);
-        if (!$object->getId()) {
-            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
-        }
+        $object = $this->getById($id);
         return $this->delete($object);
     }
 }

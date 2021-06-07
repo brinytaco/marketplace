@@ -4,8 +4,12 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\ResourceModel\CaseItem\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem\Collection as CaseItemCollection;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem;
 
 /**
  * HelpDesk Resource Model - Case Grid Collection
@@ -25,7 +29,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     protected $aggregations;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaInterface
+     * @var SearchCriteriaInterface
      */
     protected $searchCriteria;
 
@@ -35,7 +39,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     protected $totalCount;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataInterface[]
+     * @var ExtensibleDataInterface[]
      */
     protected $items;
 
@@ -62,8 +66,8 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     public function _construct()
     {
         $this->_init(
-            \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
-            \Dem\HelpDesk\Model\ResourceModel\CaseItem::class
+            Document::class,
+            CaseItem::class
         );
 
         // Add department_name alias to grid filter
@@ -97,7 +101,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     /**
      * Get search criteria.
      *
-     * @return \Magento\Framework\Api\SearchCriteriaInterface|null
+     * @return SearchCriteriaInterface|null
      * @since 1.0.0
      */
     public function getSearchCriteria()
@@ -108,11 +112,11 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     /**
      * Set search criteria.
      *
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
+     * @param SearchCriteriaInterface $searchCriteria
      * @return $this
      * @since 1.0.0
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(SearchCriteriaInterface $searchCriteria = null)
     {
         $this->searchCriteria = $searchCriteria;
         return $this;
@@ -148,7 +152,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     /**
      * Set items list.
      *
-     * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
+     * @param ExtensibleDataInterface[] $items
      * @return $this
      * @since 1.0.0
      */

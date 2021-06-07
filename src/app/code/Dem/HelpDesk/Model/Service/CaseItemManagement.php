@@ -3,11 +3,19 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
+use Dem\HelpDesk\Model\CaseItem;
 use Dem\HelpDesk\Api\CaseItemManagementInterface;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\ReplyInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
-
+use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\HelpDesk\Model\DepartmentRepository;
+use Dem\HelpDesk\Api\Data\CaseInterface;
+use Dem\HelpDesk\Api\Data\DepartmentInterface;
+use Dem\HelpDesk\Helper\Config;
+use Magento\Framework\Registry;
+use Magento\Framework\Event\ManagerInterface;
+use Psr\Log\LoggerInterface;
+use Magento\User\Model\User;
 
 /**
  * HelpDesk Model - CaseItem Management
@@ -25,57 +33,57 @@ class CaseItemManagement implements CaseItemManagementInterface
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Dem\HelpDesk\Helper\Data
+     * @var Helper
      */
     protected $helper;
 
     /**
-     * @var \Dem\HelpDesk\Model\DepartmentRepository
+     * @var DepartmentRepository
      */
     protected $departmentRepository;
 
     /**
      *
-     * @var \Dem\HelpDesk\Api\Data\CaseInterface
+     * @var CaseInterface
      */
     protected $caseItem;
 
     /**
      *
-     * @var \Dem\HelpDesk\Api\Data\DepartmentInterface
+     * @var DepartmentInterface
      */
     protected $department;
 
     /**
      * Data constructor.
      *
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Dem\HelpDesk\Helper\Data $helper
-     * @param \Dem\HelpDesk\Model\DepartmentRepository $departmentRepository
+     * @param Registry $coreRegistry
+     * @param ManagerInterface $eventManager
+     * @param LoggerInterface $logger
+     * @param Helper $helper
+     * @param DepartmentRepository $departmentRepository
      */
     public function __construct(
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Psr\Log\LoggerInterface $logger,
-        \Dem\HelpDesk\Helper\Data $helper,
-        \Dem\HelpDesk\Model\DepartmentRepository $departmentRepository
+        Registry $coreRegistry,
+        ManagerInterface $eventManager,
+        LoggerInterface $logger,
+        Helper $helper,
+        DepartmentRepository $departmentRepository
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->eventManager = $eventManager;
@@ -87,10 +95,10 @@ class CaseItemManagement implements CaseItemManagementInterface
     /**
      * Create a new case
      *
-     * @param \Dem\HelpDesk\Api\CaseItemInterface $case
+     * @param CaseItem $case
      * @param array $data
-     * @return \Dem\HelpDesk\Api\CaseItemInterface
-     * @throws \Dem\HelpDesk\Exception
+     * @return CaseItemInterface
+     * @throws HelpDeskException
      * @since 1.0.0
      */
     public function createCase(CaseItemInterface $case, array $data)
@@ -99,7 +107,7 @@ class CaseItemManagement implements CaseItemManagementInterface
         $this->validateHelpDeskWebsiteById($data['website_id']);
         $this->validateDepartmentByWebsiteId($data['website_id'], $data['department_id']);
 
-        /* @var $creator \Magento\User\Model\User */
+        /** @var User $creator */
         $creator = $this->helper->getBackendSession()->getUser();
 
         $case->addData($data);
@@ -122,7 +130,7 @@ class CaseItemManagement implements CaseItemManagementInterface
      *
      * @param array $data
      * @return void
-     * @throws \Dem\HelpDesk\Exception
+     * @throws HelpDeskException
      * @since 1.0.0
      */
     public function validate(array $data)
@@ -171,13 +179,13 @@ class CaseItemManagement implements CaseItemManagementInterface
      *
      * @param int $websiteId
      * @return void
-     * @throws \Dem\HelpDesk\Exception
+     * @throws HelpDeskException
      * @since 1.0.0
      */
     protected function validateHelpDeskWebsiteById($websiteId)
     {
         if (
-            (int) $websiteId === \Dem\HelpDesk\Helper\Config::HELPDESK_WEBSITE_ID_DEFAULT
+            (int) $websiteId === Config::HELPDESK_WEBSITE_ID_DEFAULT
             || !$this->helper->isEnabled($websiteId)
         ) {
             throw new HelpDeskException(__('Invalid website selected'));
@@ -190,7 +198,7 @@ class CaseItemManagement implements CaseItemManagementInterface
      * @param int $websiteId
      * @param int $departmentId
      * @return void
-     * @throws \Dem\HelpDesk\Exception
+     * @throws HelpDeskException
      * @since 1.0.0
      */
     protected function validateDepartmentByWebsiteId($websiteId, $departmentId)
@@ -198,7 +206,7 @@ class CaseItemManagement implements CaseItemManagementInterface
         $this->loadDepartmentById($departmentId);
 
         // Default department selection is always valid
-        if (! \Dem\HelpDesk\Helper\Config::isDefaultDepartment($departmentId)) {
+        if (!Config::isDefaultDepartment($departmentId)) {
             if ($this->department->getWebsiteId() != $websiteId) {
                 throw new HelpDeskException(__('Invalid department selected'));
             }
@@ -208,7 +216,7 @@ class CaseItemManagement implements CaseItemManagementInterface
     /**
      * Get loaded department model
      *
-     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface
+     * @return DepartmentInterface
      * @since 1.0.0
      */
     public function getDepartment()
@@ -226,7 +234,7 @@ class CaseItemManagement implements CaseItemManagementInterface
      */
     protected function loadDepartmentById($departmentId)
     {
-        /* @var $department \Dem\HelpDesk\Api\Data\DepartmentInterface */
+        /** @var DepartmentInterface $department */
         $this->department = $this->departmentRepository->getById($departmentId);
         if (!$this->department) {
             throw new HelpDeskException(__('Invalid department selected'));

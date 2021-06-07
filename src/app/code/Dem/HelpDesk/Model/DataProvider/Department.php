@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\DataProvider;
 
 use Dem\HelpDesk\Model\ResourceModel\Department\CollectionFactory;
+use Magento\Ui\DataProvider\AbstractDataProvider;
 
 /**
  * HelpDesk DataProvider - Department
@@ -16,13 +17,13 @@ use Dem\HelpDesk\Model\ResourceModel\Department\CollectionFactory;
  * @since      1.0.0
  *
  */
-class Department extends \Magento\Ui\DataProvider\AbstractDataProvider
+class Department extends AbstractDataProvider
 {
     /**
      * @param string $name
      * @param string $primaryFieldName
      * @param string $requestFieldName
-     * @param CollectionFactory $departmentCollectionFactory
+     * @param CollectionFactory $collectionFactory
      * @param array $meta
      * @param array $data
      */
@@ -30,11 +31,11 @@ class Department extends \Magento\Ui\DataProvider\AbstractDataProvider
         $name,
         $primaryFieldName,
         $requestFieldName,
-        CollectionFactory $departmentCollectionFactory,
+        CollectionFactory $collectionFactory,
         array $meta = [],
         array $data = []
     ) {
-        $this->collection = $departmentCollectionFactory->create();
+        $this->collection = $collectionFactory->create();
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 

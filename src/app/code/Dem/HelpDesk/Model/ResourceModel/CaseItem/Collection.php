@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel\CaseItem;
 
+use Dem\HelpDesk\Controller\Adminhtml\CaseItem as AdminhtmlCaseItem;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Dem\HelpDesk\Model\CaseItem;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
 
 /**
  * HelpDesk Resource Model - Case Collection
@@ -48,8 +51,8 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(
-            \Dem\HelpDesk\Model\CaseItem::class,
-            \Dem\HelpDesk\Model\ResourceModel\CaseItem::class
+            CaseItem::class,
+            Resource::class
         );
     }
 

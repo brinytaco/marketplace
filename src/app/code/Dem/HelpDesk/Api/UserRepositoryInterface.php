@@ -4,6 +4,12 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Api;
 
 use Dem\HelpDesk\Api\Data\UserInterface;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchResultsInterface;
 
 /**
  * HelpDesk Api Interface - User Repository
@@ -19,35 +25,35 @@ interface UserRepositoryInterface
 {
     /**
      * @param UserInterface $entity
-     * @return \Dem\HelpDesk\Api\Data\StudentInterface
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
+     * @return UserInterface
+     * @throws CouldNotSaveException
      */
     public function save(UserInterface $entity);
 
     /**
      * @param $entityId
-     * @return \Dem\HelpDesk\Api\Data\StudentInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return UserInterface|false
      */
     public function getById($entityId);
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchResultsInterface
+     * @throws LocalizedException
      */
-    public function getList(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria);
+    public function getList(SearchCriteriaInterface $searchCriteria);
 
     /**
      * @param UserInterface $entity
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws CouldNotDeleteException
      */
     public function delete(UserInterface $entity);
 
     /**
      * @param $entityId
-     * @return mixed
+     * @return bool
+     * @throws NoSuchEntityException
      */
     public function deleteById($entityId);
 }

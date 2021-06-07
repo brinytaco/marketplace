@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Model\AbstractModel;
+
 /**
  * HelpDesk Resource Model - User
  *
@@ -13,22 +18,22 @@ namespace Dem\HelpDesk\Model\ResourceModel;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class User extends AbstractDb
 {
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     protected $date;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param Context $context
+     * @param DateTime $date
      * @return void
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date
+        Context $context,
+        DateTime $date
     ) {
         $this->date = $date;
         parent::__construct($context);
@@ -45,11 +50,11 @@ class User extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      *  Set created_at for saving
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @param \Dem\HelpDesk\Model\User $object
      * @return $this
      * @since 1.0.0
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         if ($object->isObjectNew()) {
             $object->setCreatedAt($this->date->gmtDate());

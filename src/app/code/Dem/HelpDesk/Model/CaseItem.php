@@ -59,6 +59,17 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     }
 
     /**
+     * Set id
+     *
+     * @param int $id
+     * @return CaseItemInterface
+     */
+    public function setId($id)
+    {
+        return $this->setData(CaseItemInterface::CASE_ID, $id);
+    }
+
+    /**
      * Get ID
      *
      * @return int|null
@@ -69,12 +80,29 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     }
 
     /**
+     * Set case number
+     *
+     * This value is set dynamically on load,
+     * it cannot be set here
+     *
+     * @param string $caseNumber
+     * @return CaseItemInterface
+     */
+    public function setCaseNumber($caseNumber)
+    {
+        return $this;
+    }
+
+    /**
      * Get case number
      *
      * @return string
      */
     public function getCaseNumber()
     {
+        if (!$this->hasData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_NUMBER)) {
+            $this->getResource()->setCaseNumber($this);
+        }
         return $this->getData(CaseItemInterface::CASE_NUMBER);
     }
 
@@ -91,12 +119,15 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**
      * Set case manager data
      *
+     * This value is set dynamically on load,
+     * it cannot be set here
+     *
      * @param \Magento\Framework\DataObject $data
-     * @return $this
+     * @return CaseItemInterface
      */
     public function setCaseManager(\Magento\Framework\DataObject $data)
     {
-        return $this->setData(CaseItemInterface::CASE_MANAGER, $data);
+        return $this;
     }
 
     /**
@@ -151,6 +182,44 @@ class CaseItem extends AbstractModel implements CaseItemInterface
         return $this->getData(CaseItemInterface::DEPARTMENT_NAME);
     }
 
+    /**
+     * Set department name
+     *
+     * This value is set dynamically on load,
+     * it cannot be set here
+     *
+     * @param string $name
+     * @return CaseItemInterface
+     */
+    public function setDepartmentName($name)
+    {
+        return $this;
+    }
+
+
+    /**
+     * Get website name
+     *
+     * @return string
+     */
+    public function getWebsiteName()
+    {
+        return $this->getData(CaseItemInterface::WEBSITE_NAME);
+    }
+
+    /**
+     * Set website name
+     *
+     * This value is set dynamically on load,
+     * it cannot be set here
+     *
+     * @param string $name
+     * @return CaseItemInterface
+     */
+    public function setWebsiteName($name)
+    {
+        return $this;
+    }
 
 
     /**

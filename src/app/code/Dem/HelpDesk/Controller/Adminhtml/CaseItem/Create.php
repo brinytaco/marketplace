@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
 use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
+use Magento\Backend\Model\View\Result\Page;
 
 /**
  * HelpDesk Controller - Adminhtml Case View
@@ -21,7 +22,7 @@ use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 class Create extends CaseItem
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
     public function execute()
     {

@@ -5,6 +5,24 @@ namespace Dem\HelpDesk\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\Registry;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
+use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Model\CaseItemFactory;
+use Dem\HelpDesk\Api\CaseItemManagementInterface;
+use Dem\HelpDesk\Model\ReplyFactory;
+use Dem\HelpDesk\Api\ReplyManagementInterface;
+use Dem\HelpDesk\Model\FollowerFactory;
+use Dem\HelpDesk\Api\FollowerManagementInterface;
+use Dem\HelpDesk\Model\Service\Notifications;
+use Dem\HelpDesk\Helper\Data;
 
 /**
  * HelpDesk - Adminhtml Abstract Case Controller
@@ -28,87 +46,87 @@ abstract class CaseItem extends Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     * @var RedirectFactory
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var LayoutFactory
      */
     protected $resultLayoutFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
     /**
-     * @var \Dem\HelpDesk\Api\CaseItemRepositoryInterface
+     * @var CaseItemRepositoryInterface
      */
     protected $caseItemRepository;
 
     /**
-     * @var \Dem\HelpDesk\Api\DepartmentRepositoryInterface
+     * @var DepartmentRepositoryInterface
      */
     protected $departmentRepository;
 
     /**
-     * @var \Dem\HelpDesk\Helper\Data
+     * @var Data
      */
     protected $helper;
 
     /**
-     * @var \Dem\HelpDesk\Api\CaseItemManagementInterface
+     * @var CaseItemManagementInterface
      */
     protected $caseItemManager;
 
     /**
-     * @var \Dem\HelpDesk\Model\CaseItemFactory
+     * @var CaseItemFactory
      */
     protected $caseItemFactory;
 
     /**
-     * @var \Dem\HelpDesk\Api\ReplyManagementInterface
+     * @var ReplyManagementInterface
      */
     protected $replyManager;
 
     /**
-     * @var \Dem\HelpDesk\Model\ReplyFactory
+     * @var ReplyFactory
      */
     protected $replyFactory;
 
     /**
-     * @var \Dem\HelpDesk\Api\FollowerManagementInterface
+     * @var FollowerManagementInterface
      */
     protected $followerManager;
 
     /**
-     * @var \Dem\HelpDesk\Model\FollowerFactory
+     * @var FollowerFactory
      */
     protected $followerFactory;
 
     /**
-     * @var \Dem\HelpDesk\Model\Service\Notifications
+     * @var Notifications
      */
     protected $notificationService;
 
@@ -116,39 +134,39 @@ abstract class CaseItem extends Action
      * Data constructor.
      *
      * @param Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseItemRepository
-     * @param \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory
-     * @param \Dem\HelpDesk\Api\CaseItemManagementInterface $caseItemManager
-     * @param \Dem\HelpDesk\Model\ReplyFactory $replyFactory
-     * @param \Dem\HelpDesk\Api\ReplyManagementInterface $replyManager
-     * @param \Dem\HelpDesk\Model\FollowerFactory $followerFactory
-     * @param \Dem\HelpDesk\Api\FollowerManagementInterface $followerManager
-     * @param \Dem\HelpDesk\Model\Service\Notifications $notificationService
-     * @param \Dem\HelpDesk\Helper\Data $helper
+     * @param Registry $coreRegistry
+     * @param LoggerInterface $logger
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param RawFactory $resultRawFactory
+     * @param CaseItemRepositoryInterface $caseItemRepository
+     * @param CaseItemFactory $caseItemFactory
+     * @param CaseItemManagementInterface $caseItemManager
+     * @param ReplyFactory $replyFactory
+     * @param ReplyManagementInterface $replyManager
+     * @param FollowerFactory $followerFactory
+     * @param FollowerManagementInterface $followerManager
+     * @param Notifications $notificationService
+     * @param Data $helper
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseItemRepository,
-        \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory,
-        \Dem\HelpDesk\Api\CaseItemManagementInterface $caseItemManager,
-        \Dem\HelpDesk\Model\ReplyFactory $replyFactory,
-        \Dem\HelpDesk\Api\ReplyManagementInterface $replyManager,
-        \Dem\HelpDesk\Model\FollowerFactory $followerFactory,
-        \Dem\HelpDesk\Api\FollowerManagementInterface $followerManager,
-        \Dem\HelpDesk\Model\Service\Notifications $notificationService,
-        \Dem\HelpDesk\Helper\Data $helper
+        Registry $coreRegistry,
+        LoggerInterface $logger,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $resultLayoutFactory,
+        RawFactory $resultRawFactory,
+        CaseItemRepositoryInterface $caseItemRepository,
+        CaseItemFactory $caseItemFactory,
+        CaseItemManagementInterface $caseItemManager,
+        ReplyFactory $replyFactory,
+        ReplyManagementInterface $replyManager,
+        FollowerFactory $followerFactory,
+        FollowerManagementInterface $followerManager,
+        Notifications $notificationService,
+        Data $helper
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->logger = $logger;
@@ -172,11 +190,12 @@ abstract class CaseItem extends Action
     /**
      * Init layout, menu and breadcrumb
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      * @since 1.0.0
      */
     protected function _initAction()
     {
+        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_case');
         return $resultPage;
@@ -185,7 +204,7 @@ abstract class CaseItem extends Action
     /**
      * Initialize case model instance
      *
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface|false
+     * @return CaseItemInterface|false
      * @since 1.0.0
      */
     protected function _initCase()
@@ -193,31 +212,64 @@ abstract class CaseItem extends Action
         $id = $this->getRequest()->getParam('case_id');
         $objectStr = __('case');
         try {
+            /** @var \Dem\HelpDesk\Model\CaseItem $case */
             $case = $this->caseItemRepository->getById($id);
+            if (!$case) {
+                throw new NoSuchEntityException(__('The requested %1 no longer exists', $objectStr));
+            }
+            /** @var \Dem\HelpDesk\Model\Reply $initialReply */
+            $initialReply = $case->getInitialReply();
         } catch (NoSuchEntityException $e) {
-            $this->messageManager->addErrorMessage(__('The requested %1 no longer exists', $objectStr));
+            $this->messageManager->addErrorMessage($e->getMessage());
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            return false;
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('The requested %1 no longer exists', $objectStr));
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
+            // Redirect ?
             return false;
         }
-        $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY, $case);
-        $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::INITIAL_REPLY_KEY, $case->getInitialReply());
+        $this->coreRegistry->register($case::CURRENT_KEY, $case);
+        $this->coreRegistry->register($case::INITIAL_REPLY_KEY, $initialReply);
         return $case;
     }
+
+    /***********************************************************************************/
+    /** @todo Move to Base */
+    /***********************************************************************************/
 
     /**
      * Check is valid post request
      *
+     * @todo Move to abstract base
+     *
      * @return bool
      * @since 1.0.0
      */
-    protected function isValidPostRequest()
+    public function isValidPostRequest()
     {
-        $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
-        $isPost = $this->getRequest()->isPost();
-        return ($formKeyIsValid && $isPost);
+        return ($this->isPostRequest() && $this->isFormKeyValid());
+    }
+
+    /**
+     * Check is post request
+     *
+     * @todo Move to abstract base
+     *
+     * @return bool
+     * @since 1.0.0
+     */
+    public function isPostRequest()
+    {
+        return (!strcasecmp($_SERVER['REQUEST_METHOD'], 'POST'));
+    }
+
+    /**
+     * Check is valid form key
+     *
+     * @todo Move to abstract base
+     *
+     * @return bool
+     * @since 1.0.0
+     */
+    public function isFormKeyValid()
+    {
+        return ($this->_formKeyValidator->validate($this->getRequest()));
     }
 }

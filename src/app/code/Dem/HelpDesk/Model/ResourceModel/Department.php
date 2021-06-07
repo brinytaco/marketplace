@@ -3,6 +3,17 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
 
+use Dem\HelpDesk\Model\User;
+use Dem\HelpDesk\Model\Follower;
+use Dem\HelpDesk\Api\Data\DepartmentInterface;
+use Dem\HelpDesk\Api\UserRepositoryInterface;
+use Dem\HelpDesk\Api\DepartmentUserRepositoryInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Model\AbstractModel;
+
 /**
  * HelpDesk Resource Model - Department
  *
@@ -13,42 +24,42 @@ namespace Dem\HelpDesk\Model\ResourceModel;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Department extends AbstractDb
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     protected $date;
 
     /**
-     * @var \Dem\HelpDesk\Api\UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     protected $userRepository;
 
     /**
-     * @var \Dem\HelpDesk\Api\DepartmentUserRepositoryInterface
+     * @var DepartmentUserRepositoryInterface
      */
     protected $deptUserRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository
-     * @param \Dem\HelpDesk\Api\DepartmentUserRepositoryInterface $deptUserRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param Context $context
+     * @param DateTime $date
+     * @param UserRepositoryInterface $userRepository
+     * @param DepartmentUserRepositoryInterface $deptUserRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @return void
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository,
-        \Dem\HelpDesk\Api\DepartmentUserRepositoryInterface $deptUserRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+        Context $context,
+        DateTime $date,
+        UserRepositoryInterface $userRepository,
+        DepartmentUserRepositoryInterface $deptUserRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->date = $date;
         $this->userRepository = $userRepository;
@@ -68,11 +79,11 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      *  Set updated_at for saving
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @param \Dem\HelpDesk\Model\Department $object
      * @return $this
      * @since 1.0.0
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         if ($object->isObjectNew()) {
             $object->setCreatedAt($this->date->gmtDate());
@@ -87,16 +98,20 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @param \Dem\HelpDesk\Model\Department $object
      * @return $this
      * @since 1.0.0
      */
-    protected function _afterLoad(\Magento\Framework\Model\AbstractModel $object)
+    protected function _afterLoad(AbstractModel $object)
     {
+        if (!$object->getId()) {
+            return $this;
+        }
         // Get case manager user
+        /** @var User $user */
         $user = $this->userRepository->getById($object->getCaseManagerId());
-        $object->setCaseManagerName($user->getName());
-        $object->setCaseManagerEmail($user->getEmail());
+        $object->setData(DepartmentInterface::CASE_MANAGER_NAME, $user->getName());
+        $object->setData(DepartmentInterface::CASE_MANAGER_EMAIL, $user->getEmail());
 
         // Get default follower user ids
         $searchCriteria = $this->searchCriteriaBuilder
@@ -106,11 +121,12 @@ class Department extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         $deptFollowers = $this->deptUserRepository->getList($searchCriteria);
         $defaultFollowers = [];
+        /** @var Follower $follower */
         foreach ($deptFollowers->getItems() as $follower) {
             $defaultFollowers[] = $follower->getUserId();
         }
 
-        $object->setDefaultFollowers($defaultFollowers);
+        $object->setData(DepartmentInterface::DEFAULT_FOLLOWERS, $defaultFollowers);
 
         return parent::_afterLoad($object);
     }

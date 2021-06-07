@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Controller\Adminhtml\Department;
 
 use Dem\HelpDesk\Controller\Adminhtml\Department;
+use Magento\Backend\Model\View\Result\Page;
 
 /**
  * HelpDesk Controller - Adminhtml Department Edit
@@ -21,17 +22,20 @@ use Dem\HelpDesk\Controller\Adminhtml\Department;
 class Edit extends Department
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
     public function execute()
     {
+        /** @var \Dem\HelpDesk\Model\Department $department */
+        $department = $this->_initDepartment();
+        /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
         $objectStr = __('department');
-
         try {
-            $department = $this->_initDepartment();
+            /** @var Page $resultPage */
             $resultPage = $this->_initAction();
-            $resultPage->getConfig()->getTitle()->prepend(sprintf('%s `%s`',
+            $resultPage->getConfig()->getTitle()->prepend(sprintf(
+                '%s #%s',
                 __('Editing'),
                 $department->getName(),
             ));
@@ -39,9 +43,8 @@ class Edit extends Department
         } catch (\Exception $e) {
             $this->logger->critical($e);
             $this->messageManager->addErrorMessage(__('Exception occurred during %1 load', $objectStr));
+            $resultRedirect->setPath('helpdesk/department');
         }
-
-        $resultRedirect->setPath('helpdesk/department/');
         return $resultRedirect;
     }
 }

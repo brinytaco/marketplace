@@ -26,6 +26,10 @@ interface DepartmentInterface
     const CREATED_AT            = 'created_at';
     const UPDATED_AT            = 'updated_at';
 
+    const DEFAULT_FOLLOWERS     = '_default_followers';
+    const CASE_MANAGER_NAME     = '_case_manager_name';
+    const CASE_MANAGER_EMAIL     = '_case_manager_email';
+
     /**
      * Get ID
      *
@@ -167,4 +171,19 @@ interface DepartmentInterface
      * @return DepartmentInterface
      */
     public function setUpdatedAt($updatedAt);
+
+    /**
+     * Get default followers
+     *
+     * @return array int
+     */
+    public function getDefaultFollowers();
+
+    /**
+     * set default followers
+     *
+     * @param $followerIds
+     * @return DepartmentInterface
+     */
+    public function setDefaultFollowers($followerIds);
 }

@@ -5,6 +5,10 @@ namespace Dem\HelpDesk\Model\Service;
 
 use Dem\HelpDesk\Api\UserManagementInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
+use Dem\HelpDesk\Helper\Data as Helper;
+use Magento\Framework\Registry;
+use Magento\Framework\Event\ManagerInterface;
+use Psr\Log\LoggerInterface;
 
 
 /**
@@ -23,38 +27,38 @@ class UserManagement implements UserManagementInterface
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Dem\HelpDesk\Helper\Data
+     * @var Helper
      */
     protected $helper;
 
     /**
      * Data constructor.
      *
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Dem\HelpDesk\Helper\Data $helper
+     * @param Registry $coreRegistry
+     * @param ManagerInterface $eventManager
+     * @param LoggerInterface $logger
+     * @param Helper $helper
      */
     public function __construct(
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Psr\Log\LoggerInterface $logger,
-        \Dem\HelpDesk\Helper\Data $helper
+        Registry $coreRegistry,
+        ManagerInterface $eventManager,
+        LoggerInterface $logger,
+        Helper $helper
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->eventManager = $eventManager;
@@ -67,7 +71,7 @@ class UserManagement implements UserManagementInterface
      *
      * @param array $data
      * @return void
-     * @throws \Dem\HelpDesk\Exception
+     * @throws HelpDeskException
      */
     public function validate(array $data)
     {

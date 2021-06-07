@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Api;
 
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Exception;
 
 /**
  * HelpDesk Api Interface - CaseItem Management
@@ -20,10 +21,10 @@ interface CaseItemManagementInterface
     /**
      * Create a new case
      *
-     * @param \Dem\HelpDesk\Api\CaseItemInterface $case
+     * @param CaseItemInterface $case
      * @param array $data
-     * @return \Dem\HelpDesk\Api\CaseItemManagementInterface
-     * @throws \Dem\HelpDesk\Exception
+     * @return CaseItemManagementInterface
+     * @throws Exception
      */
     public function createCase(
         CaseItemInterface $case,
@@ -35,7 +36,7 @@ interface CaseItemManagementInterface
      *
      * @param array $data
      * @return void
-     * @throws \Dem\HelpDesk\Exception
+     * @throws Exception
      */
     public function validate(array $data);
 

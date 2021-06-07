@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons;
 
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Framework\UrlInterface;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View BackButton
@@ -20,15 +21,15 @@ class BackButton implements ButtonProviderInterface
     /**
      * URL builder
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
     /**
-     * @param \Magento\Framework\UrlInterface $urlBuilder
+     * @param UrlInterface $urlBuilder
      */
     public function __construct(
-        \Magento\Framework\UrlInterface $urlBuilder
+        UrlInterface $urlBuilder
     ) {
         $this->urlBuilder = $urlBuilder;
     }

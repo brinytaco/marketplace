@@ -4,8 +4,12 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\ResourceModel\Department\Grid;
 
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\Search\AggregationInterface;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
 use Dem\HelpDesk\Model\ResourceModel\Department\Collection as DepartmentCollection;
+use Dem\HelpDesk\Model\ResourceModel\Department;
 
 /**
  * HelpDesk Resource Model - Department Grid Collection
@@ -25,7 +29,7 @@ class Collection extends DepartmentCollection implements SearchResultInterface
     protected $aggregations;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaInterface
+     * @var SearchCriteriaInterface
      */
     protected $searchCriteria;
 
@@ -35,7 +39,7 @@ class Collection extends DepartmentCollection implements SearchResultInterface
     protected $totalCount;
 
     /**
-     * @var \Magento\Framework\Api\ExtensibleDataInterface[]
+     * @var ExtensibleDataInterface[]
      */
     protected $items;
 
@@ -62,8 +66,8 @@ class Collection extends DepartmentCollection implements SearchResultInterface
     public function _construct()
     {
         $this->_init(
-            \Magento\Framework\View\Element\UiComponent\DataProvider\Document::class,
-            \Dem\HelpDesk\Model\ResourceModel\Department::class
+            Document::class,
+            Department::class
         );
 
         // Add department_name alias to grid filter
@@ -111,7 +115,7 @@ class Collection extends DepartmentCollection implements SearchResultInterface
      * @return $this
      * @since 1.0.0
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(SearchCriteriaInterface $searchCriteria = null)
     {
         $this->searchCriteria = $searchCriteria;
         return $this;
@@ -147,7 +151,7 @@ class Collection extends DepartmentCollection implements SearchResultInterface
     /**
      * Set items list.
      *
-     * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
+     * @param ExtensibleDataInterface[] $items
      * @return $this
      * @since 1.0.0
      */

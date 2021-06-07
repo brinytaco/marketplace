@@ -3,7 +3,11 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
+use Dem\HelpDesk\Model\Source\CaseItem\Priority;
+use Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Phrase;
+use Magento\Framework\Data\Collection;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Info
@@ -15,10 +19,10 @@ use Magento\Framework\App\ObjectManager;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Info extends \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs
+class Info extends Tabs
 {
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -26,7 +30,7 @@ class Info extends \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabTitle()
     {
@@ -141,9 +145,10 @@ class Info extends \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs
     public function getPriorityItem()
     {
         $objectManager = ObjectManager::getInstance();
+        /** @var Priority $source */
         $source = $objectManager->get('Dem\HelpDesk\Model\Source\CaseItem\Priority');
 
-        /* @var $statusOptions \Magento\Framework\Data\Collection */
+        /** @var Collection $statusOptions */
         $statusOptions = $source->getOptions();
 
         return $statusOptions

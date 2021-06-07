@@ -236,5 +236,77 @@ class Department extends AbstractModel implements DepartmentInterface
         return $this->setData(DepartmentInterface::UPDATED_AT, $updatedAt);
     }
 
+    /**
+     * Get default followers
+     *
+     * @return [] int
+     */
+    public function getDefaultFollowers()
+    {
+        return $this->getData(DepartmentInterface::DEFAULT_FOLLOWERS);
+    }
+
+
+    /**
+     * set default followers
+     *
+     * This value is set dynamically on load,
+     * it should not be set here
+     *
+     * @param $followerIds
+     * @return DepartmentInterface
+     */
+    public function setDefaultFollowers($followerIds)
+    {
+        return $this;
+    }
+
+    /**
+     * Get case manager name
+     *
+     * @return string
+     */
+    public function getCaseManagerName()
+    {
+        return $this->getData(DepartmentInterface::CASE_MANAGER_NAME);
+    }
+
+    /**
+     * Set case manager name
+     *
+     * This value is set dynamically on load,
+     * it should not be set here
+     *
+     * @param string $name
+     * @return DepartmentInterface
+     */
+    public function setCaseManagerName($name)
+    {
+        return $this;
+    }
+
+    /**
+     * Get case manager email
+     *
+     * @return string
+     */
+    public function getCaseManagerEmail()
+    {
+        return $this->getData(DepartmentInterface::CASE_MANAGER_EMAIL);
+    }
+
+    /**
+     * Set case manager email
+     *
+     * This value is set dynamically on load,
+     * it should not be set here
+     *
+     * @param string $name
+     * @return DepartmentInterface
+     */
+    public function setCaseManagerEmail($name)
+    {
+        return $this;
+    }
 
 }

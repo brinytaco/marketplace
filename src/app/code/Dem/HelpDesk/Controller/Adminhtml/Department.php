@@ -5,6 +5,19 @@ namespace Dem\HelpDesk\Controller\Adminhtml;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Backend\Model\View\Result\Page;
+use Magento\Framework\Registry;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Dem\HelpDesk\Api\DepartmentRepositoryInterface;
+use Dem\HelpDesk\Api\DepartmentManagementInterface;
+use Dem\HelpDesk\Model\DepartmentFactory;
+use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\HelpDesk\Api\Data\DepartmentInterface;
 
 /**
  * HelpDesk - Adminhtml Abstract Department Controller
@@ -28,57 +41,57 @@ abstract class Department extends Action
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory
+     * @var RedirectFactory
      */
     protected $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\View\Result\PageFactory
+     * @var PageFactory
      */
     protected $resultPageFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $resultJsonFactory;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory
+     * @var LayoutFactory
      */
     protected $resultLayoutFactory;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RawFactory
+     * @var RawFactory
      */
     protected $resultRawFactory;
 
     /**
-     * @var \Dem\HelpDesk\Api\DepartmentRepositoryInterface
+     * @var DepartmentRepositoryInterface
      */
     protected $departmentRepository;
 
     /**
-     * @var \Dem\HelpDesk\Helper\Data
+     * @var Helper
      */
     protected $helper;
 
     /**
-     * @var \Dem\HelpDesk\Model\Service\DepartmentManagementInterface
+     * @var DepartmentManagementInterface
      */
     protected $departmentManager;
 
     /**
-     * @var \Dem\HelpDesk\Model\DepartmentFactory
+     * @var DepartmentFactory
      */
     protected $departmentFactory;
 
@@ -86,29 +99,29 @@ abstract class Department extends Action
      * Data constructor.
      *
      * @param Action\Context $context
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
-     * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
-     * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
-     * @param \Dem\HelpDesk\Api\DepartmentManagementInterface $departmentManager
-     * @param \Dem\HelpDesk\Model\DepartmentFactory $departmentFactory
-     * @param \Dem\HelpDesk\Helper\Data $helper
+     * @param Registry $coreRegistry
+     * @param LoggerInterface $logger
+     * @param PageFactory $resultPageFactory
+     * @param JsonFactory $resultJsonFactory
+     * @param LayoutFactory $resultLayoutFactory
+     * @param RawFactory $resultRawFactory
+     * @param DepartmentRepositoryInterface $departmentRepository
+     * @param DepartmentManagementInterface $departmentManager
+     * @param DepartmentFactory $departmentFactory
+     * @param Helper $helper
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\Registry $coreRegistry,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
-        \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
-        \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository,
-        \Dem\HelpDesk\Api\DepartmentManagementInterface $departmentManager,
-        \Dem\HelpDesk\Model\DepartmentFactory $departmentFactory,
-        \Dem\HelpDesk\Helper\Data $helper
+        Registry $coreRegistry,
+        LoggerInterface $logger,
+        PageFactory $resultPageFactory,
+        JsonFactory $resultJsonFactory,
+        LayoutFactory $resultLayoutFactory,
+        RawFactory $resultRawFactory,
+        DepartmentRepositoryInterface $departmentRepository,
+        DepartmentManagementInterface $departmentManager,
+        DepartmentFactory $departmentFactory,
+        Helper $helper
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->logger = $logger;
@@ -127,27 +140,29 @@ abstract class Department extends Action
     /**
      * Init layout, menu and breadcrumb
      *
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      * @since 1.0.0
      */
     protected function _initAction()
     {
+        /** @var Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_department');
         return $resultPage;
     }
 
     /**
-     * Initialize department model instance
-     *
-     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface|false
-     * @since 1.0.0
-     */
+         * Initialize department model instance
+         *
+         * @return DepartmentInterface|false
+         * @since 1.0.0
+         */
     protected function _initDepartment()
     {
         $id = $this->getRequest()->getParam('department_id');
         $objectStr = __('department');
         try {
+            /** @var \Dem\HelpDesk\Model\Department $department */
             $department = $this->departmentRepository->getById($id);
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('The requested %1 no longer exists', $objectStr));
@@ -158,7 +173,7 @@ abstract class Department extends Action
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }
-        $this->coreRegistry->register(\Dem\HelpDesk\Model\Department::CURRENT_KEY, $department);
+        $this->coreRegistry->register(Department::CURRENT_KEY, $department);
         return $department;
     }
 

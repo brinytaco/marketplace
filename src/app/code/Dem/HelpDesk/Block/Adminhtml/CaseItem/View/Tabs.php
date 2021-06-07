@@ -3,8 +3,27 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View;
 
+use Dem\HelpDesk\Model\CaseItem;
+use Dem\HelpDesk\Model\Reply;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
+use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Api\Data\FollowerInterface;
+use Dem\HelpDesk\Api\ReplyRepositoryInterface;
+use Dem\HelpDesk\Api\UserRepositoryInterface;
+use Dem\HelpDesk\Model\Source\CaseItem\Status;
+use Dem\HelpDesk\Api\Data\ReplyInterface;
+use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\Base\Data\SearchResultsProcessor;
+
+use Magento\Backend\Block\Template\Context;
 use Magento\Ui\Component\Layout\Tabs\TabInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
+use Magento\Backend\Block\Template;
+use Magento\Framework\Module\Dir;
+use Magento\Framework\Registry;
+use Magento\Framework\Data\Collection;
+use Magento\Framework\Model\AbstractModel;
+use Magento\User\Model\User;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Info
@@ -16,7 +35,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Tabs extends \Magento\Backend\Block\Template implements TabInterface
+class Tabs extends Template implements TabInterface
 {
     /**
      * Reply template constants
@@ -25,73 +44,73 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     const ADMIN_REPLY_TEMPLATE_PATH_USER   = 'case/view/tab/replies/user.phtml';
 
     /**
-     * \Magento\Framework\Module\Dir
+     * @var Dir
      */
     protected $moduleDir;
 
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var \Dem\HelpDesk\Model\ResourceModel\CaseItem
+     * @var Resource
      */
     protected $caseResource;
 
     /**
-     * @var \Dem\HelpDesk\Api\ReplyRepositoryInterface
+     * @var ReplyRepositoryInterface
      */
     protected $replyRepository;
 
     /**
-     * @var \Dem\HelpDesk\Api\UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     protected $userRepository;
 
     /**
-     * @var \Dem\HelpDesk\Model\Source\CaseItem\Status
+     * @var Status
      */
     protected $statusSource;
 
     /**
-     * @var \Magento\Framework\Data\Collection
+     * @var Collection
      */
     protected $statusOptions;
 
     /**
-     * @var \Dem\HelpDesk\Api\Data\ReplyInterface []
+     * @var ReplyInterface []
      */
     protected $replies;
 
     /**
-     * @var \Dem\HelpDesk\Helper\Data
+     * @var Helper
      */
     protected $helper;
 
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Module\Dir $moduleDir
-     * @param \Magento\Framework\Registry $registry
-     * @param \Dem\HelpDesk\Model\ResourceModel\CaseItem $caseResource
-     * @param \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository
-     * @param \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository
-     * @param \Dem\HelpDesk\Model\Source\CaseItem\Status $statusSource
-     * @param \Dem\HelpDesk\Helper\Data $helper
+     * @param Context $context
+     * @param Dir $moduleDir
+     * @param Registry $registry
+     * @param CaseItem $caseResource
+     * @param ReplyRepositoryInterface $replyRepository
+     * @param UserRepositoryInterface $userRepository
+     * @param Status $statusSource
+     * @param Helper $helper
      * @param array $data
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Module\Dir $moduleDir,
-        \Magento\Framework\Registry $registry,
-        \Dem\HelpDesk\Model\ResourceModel\CaseItem $caseResource,
-        \Dem\HelpDesk\Api\ReplyRepositoryInterface $replyRepository,
-        \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository,
-        \Dem\HelpDesk\Model\Source\CaseItem\Status $statusSource,
-        \Dem\HelpDesk\Helper\Data $helper,
+        Context $context,
+        Dir $moduleDir,
+        Registry $registry,
+        CaseItem $caseResource,
+        ReplyRepositoryInterface $replyRepository,
+        UserRepositoryInterface $userRepository,
+        Status $statusSource,
+        Helper $helper,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
@@ -106,7 +125,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
 
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -114,7 +133,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabTitle()
     {
@@ -158,7 +177,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * Tab should be loaded trough Ajax call
+     * Tab should be loaded through Ajax call
      *
      * @return bool
      */
@@ -170,23 +189,23 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     /**
      * Retrieve registered Case model
      *
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface
+     * @return CaseItemInterface
      * @since 1.0.0
      */
     public function getCase()
     {
-        return $this->coreRegistry->registry(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY);
+        return $this->coreRegistry->registry(CaseItem::CURRENT_KEY);
     }
 
     /**
      * Get initial reply message
      *
-     * @return \Dem\HelpDesk\Api\Data\ReplyInterface|bool
+     * @return ReplyInterface|bool
      * @since 1.0.0
      */
     public function getInitialReply()
     {
-        return $this->coreRegistry->registry(\Dem\HelpDesk\Model\CaseItem::INITIAL_REPLY_KEY);
+        return $this->coreRegistry->registry(CaseItem::INITIAL_REPLY_KEY);
     }
 
     /**
@@ -195,7 +214,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
      * @param int $limit Limit results value (0 = no limit)
      * @param bool $includeInitial
      * @param bool $includeSystem
-     * @return \Dem\HelpDesk\Api\Data\ReplyInterface []
+     * @return ReplyInterface[]
      * @since 1.0.0
      */
     public function getVisibleReplies($limit = 0, $includeInitial = true, $includeSystem = true)
@@ -205,6 +224,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
         if (!isset($this->replies)) {
             $this->replies = $this->getCase()->getReplies();
         }
+        /** @var ReplyInterface $reply */
         foreach ($this->replies->getItems() as $reply) {
             if (!$includeInitial && $reply->getIsInitial()) {
                 continue;
@@ -221,13 +241,13 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     }
 
     /**
-     * Get created at as formatted string
-     *
-     * @param \Magento\Framework\Model\AbstractModel $object
-     * @return string
-     * @since 1.0.0
-     */
-    public function getCreatedDate(\Magento\Framework\Model\AbstractModel $object)
+         * Get created at as formatted string
+         *
+         * @param CaseItem|Reply $object
+         * @return string
+         * @since 1.0.0
+         */
+    public function getCreatedDate(AbstractModel $object)
     {
         return $this->formatDate(
             $object->getCreatedAt(),
@@ -241,11 +261,11 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
      *
      * If null, do not return current date
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param CaseItem|Reply $object
      * @return string
      * @since 1.0.0
      */
-    public function getUpdatedDate(\Magento\Framework\Model\AbstractModel $object)
+    public function getUpdatedDate(AbstractModel $object)
     {
         if ($object->getUpdatedAt()) {
             return $this->formatDate(
@@ -260,11 +280,11 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     /**
      * Get status as object
      *
-     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param CaseItem|Reply $object
      * @return DataObject
      * @since 1.0.0
      */
-    public function getStatusItem(\Magento\Framework\Model\AbstractModel $object)
+    public function getStatusItem(AbstractModel $object)
     {
         if (!isset($this->statusOptions)) {
             $this->statusOptions = $this->statusSource->getOptions();
@@ -277,11 +297,11 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     /**
      * Get lowercase author_type for use as class name
      *
-     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
+     * @param Reply $reply
      * @return string
      * @since 1.0.0
      */
-    public function getReplyClass(\Dem\HelpDesk\Api\Data\ReplyInterface $reply)
+    public function getReplyClass(ReplyInterface $reply)
     {
         return strtolower(str_replace('_', '-', $reply->getAuthorType()));
     }
@@ -291,11 +311,11 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
      *
      * If author is creator, get case creator_name
      *
-     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
+     * @param Reply $reply
      * @return string
      * @since 1.0.0
      */
-    public function getAuthorName(\Dem\HelpDesk\Api\Data\ReplyInterface $reply)
+    public function getAuthorName(ReplyInterface $reply)
     {
         if ($reply->getAuthorName()) {
             return $reply->getAuthorName();
@@ -311,10 +331,10 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
     /**
      * Render reply from specified template
      *
-     * @param \Dem\HelpDesk\Api\Data\ReplyInterface $reply
+     * @param Reply $reply
      * @return string
      */
-    public function renderReplyBlock(\Dem\HelpDesk\Api\Data\ReplyInterface $reply)
+    public function renderReplyBlock(ReplyInterface $reply)
     {
         $templatePath = $reply->getIsAuthorTypeSystem()
                 ? self::ADMIN_REPLY_TEMPLATE_PATH_SYSTEM
@@ -368,7 +388,7 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
      */
     public function getCanRenderFollowerBlock()
     {
-        /* @var $user \Magento\User\Model\User */
+        /** @var User $user */
         $user = $this->helper->getBackendSession()->getUser();
 
         // User is the case creator
@@ -393,18 +413,19 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
      */
     public function getIsUserFollower()
     {
-        /* @var $user \Magento\User\Model\User */
+        /** @var User $user */
         $user = $this->helper->getBackendSession()->getUser();
 
-        /** @var $followers \Dem\HelpDesk\Model\FollowerInterface [] */
+        /** @var \Dem\HelpDesk\Api\Data\FollowerInterface[] $followers */
         $followers = $this->getCase()->getFollowers();
 
         // Allows manipulation of items similar to \Magento\Framework\Data\Collection
-        $followerCollection = new \Dem\Base\Data\SearchResultsProcessor($followers);
+        $followerCollection = new SearchResultsProcessor($followers);
 
         // null value returned if not matched
-        $isFollower = $followerCollection->getItemByColumnValue('user_id', $user->getId());
+        /** @var FollowerInterface|null $follower */
+        $follower = $followerCollection->getItemByColumnValue('user_id', $user->getId());
 
-        return ($isFollower);
+        return ($follower);
     }
 }

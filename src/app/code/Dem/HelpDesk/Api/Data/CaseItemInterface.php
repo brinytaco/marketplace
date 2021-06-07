@@ -20,11 +20,7 @@ interface CaseItemInterface
 {
     const CASE_ID               = 'case_id';
     const WEBSITE_ID            = 'website_id';
-    const WEBSITE_NAME          = 'website_name';
     const DEPARTMENT_ID         = 'department_id';
-    const DEPARTMENT_NAME       = 'department_name';
-    const CASE_NUMBER           = 'case_number';
-    const CASE_MANAGER          = 'case_manager';
     const PROTECT_CODE          = 'protect_code';
     const CREATOR_CUSTOMER_ID   = 'creator_customer_id';
     const CREATOR_ADMIN_ID      = 'creator_admin_id';
@@ -39,6 +35,18 @@ interface CaseItemInterface
     const UPDATER_NAME          = 'updater_name';
     const CREATED_AT            = 'created_at';
     const UPDATED_AT            = 'updated_at';
+    const WEBSITE_NAME          = '_website_name';
+    const DEPARTMENT_NAME       = '_department_name';
+    const CASE_NUMBER           = '_case_number';
+    const CASE_MANAGER          = '_case_manager';
+
+    /**
+     * Set id
+     *
+     * @param int $id
+     * @return CaseItemInterface
+     */
+    public function setId($id);
 
     /**
      * Get ID
@@ -65,7 +73,7 @@ interface CaseItemInterface
      * Set case manager data
      *
      * @param \Magento\Framework\DataObject $data
-     * @return string
+     * @return CaseItemInterface
      */
     public function setCaseManager(\Magento\Framework\DataObject $data);
 
@@ -105,6 +113,14 @@ interface CaseItemInterface
      * @return string
      */
     public function getDepartmentName();
+
+    /**
+     * Set department name
+     *
+     * @param string $name
+     * @return CaseItemInterface
+     */
+    public function setDepartmentName($name);
 
     /**
      * Get protect code
@@ -165,6 +181,21 @@ interface CaseItemInterface
      * @return CaseItemInterface
      */
     public function setCreatorName($name);
+
+    /**
+     * Get website name
+     *
+     * @return string
+     */
+    public function getWebsiteName();
+
+    /**
+     * Set website name
+     *
+     * @param string $name
+     * @return CaseItemInterface
+     */
+    public function setWebsiteName($name);
 
     /**
      * Get creator email

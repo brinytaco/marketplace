@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Dem\HelpDesk\Api\UserRepositoryInterface;
+use Magento\Framework\Model\AbstractModel;
+
 /**
  * HelpDesk Resource Model - Reply
  *
@@ -13,29 +19,29 @@ namespace Dem\HelpDesk\Model\ResourceModel;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Reply extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Reply extends AbstractDb
 {
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     protected $date;
 
     /**
-     * @var \Dem\HelpDesk\Api\UserRepositoryInterface
+     * @var UserRepositoryInterface
      */
     protected $userRepository;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
+     * @param Context $context
+     * @param UserRepositoryInterface $userRepository
+     * @param DateTime $date
      * @return void
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Dem\HelpDesk\Api\UserRepositoryInterface $userRepository,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date
+        Context $context,
+        UserRepositoryInterface $userRepository,
+        DateTime $date
     ) {
         $this->date = $date;
         $this->userRepository = $userRepository;
@@ -53,14 +59,13 @@ class Reply extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      *  Set created_at for saving
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @param \Dem\HelpDesk\Model\Reply $object
      * @return $this
      * @since 1.0.0
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         $object->setCreatedAt($this->date->gmtDate());
-
         return parent::_beforeSave($object);
     }
 }

@@ -68,22 +68,22 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface|null
+     * @return DepartmentUserInterface|false
      */
     public function getById($id)
     {
         $object = $this->factory->create();
         $this->resource->load($object, $id);
         if (!$object->getId()) {
-            return null;
+            return false;
         }
         return $object;
     }
 
     /**
-     * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
-     * @return \Magento\Framework\Api\SearchResultsInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param SearchCriteriaInterface $searchCriteria
+     * @return SearchResultsInterface
+     * @throws LocalizedException
      */
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
@@ -96,9 +96,9 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\DepartmentUserInterface $user
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param DepartmentUserInterface $user
+     * @return DepartmentUserInterface
+     * @throws LocalizedException
      */
     public function save(DepartmentUserInterface $user)
     {
@@ -107,9 +107,9 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
     }
 
     /**
-     * @param \Dem\HelpDesk\Api\Data\DepartmentUserInterface $user
+     * @param DepartmentUserInterface $user
      * @return bool true on success
-     * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @throws CouldNotDeleteException
      */
     public function delete(DepartmentUserInterface $user)
     {
@@ -127,16 +127,12 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
 
     /**
      * @param int $id
-     * @return \Dem\HelpDesk\Api\Data\DepartmentUserInterface
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @return DepartmentUserInterface
+     * @throws NoSuchEntityException
      */
     public function deleteById($id)
     {
-        $object = $this->factory->create();
-        $this->resource->load($object, $id);
-        if (!$object->getId()) {
-            throw new NoSuchEntityException(__('Unable to find object with ID `%1`', $id));
-        }
+        $object = $this->getById($id);
         return $this->delete($object);
     }
 }

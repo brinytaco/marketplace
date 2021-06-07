@@ -3,6 +3,12 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel;
 
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
+use Dem\HelpDesk\Model\UserRepository;
+
 /**
  * HelpDesk Resource Model - Department
  *
@@ -13,28 +19,28 @@ namespace Dem\HelpDesk\Model\ResourceModel;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentUser extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class DepartmentUser extends AbstractDb
 {
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime
      */
     protected $date;
 
     /**
-     * @var \Dem\HelpDesk\Model\UserRepository
+     * @var UserRepository
      */
     protected $userRepository;
 
     /**
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param \Dem\HelpDesk\Model\UserRepository $userRepository
+     * @param Context $context
+     * @param DateTime $date
+     * @param UserRepository $userRepository
      * @return void
      */
     public function __construct(
-        \Magento\Framework\Model\ResourceModel\Db\Context $context,
-        \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        \Dem\HelpDesk\Model\UserRepository $userRepository
+        Context $context,
+        DateTime $date,
+        UserRepository $userRepository
     ) {
         $this->date = $date;
         $this->userRepository = $userRepository;
@@ -52,11 +58,11 @@ class DepartmentUser extends \Magento\Framework\Model\ResourceModel\Db\AbstractD
     /**
      *  Set created_at for saving
      *
-     * @param \Magento\Framework\Model\AbstractModel|\Magento\Framework\DataObject $object
+     * @param \Dem\HelpDesk\Model\DepartmentUser $object
      * @return $this
      * @since 1.0.0
      */
-    protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    protected function _beforeSave(AbstractModel $object)
     {
         // New case, set protect_code value
         if ($object->isObjectNew()) {

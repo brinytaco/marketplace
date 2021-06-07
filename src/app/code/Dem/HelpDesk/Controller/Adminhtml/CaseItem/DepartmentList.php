@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
 use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
+use Dem\HelpDesk\Model\Source\CaseItem\Department;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Phrase;
+use Magento\Framework\Controller\Result\Json;
 
 /**
  * HelpDesk Controller - Adminhtml Case View
@@ -28,18 +32,17 @@ class DepartmentList extends CaseItem
      */
     public function execute()
     {
+        /** @var Json $result */
         $result = $this->resultJsonFactory->create();
 
         $websiteId = $this->getRequest()->getParam('website_id');
-
-        /* @var $this->helper \Dem\HelpDesk\Helper\Data */
         if (!is_null($websiteId)) {
             $website = $this->helper->getWebsite($websiteId);
             $this->coreRegistry->register('current_website', $website);
         }
 
-        /* @var $departmentSource \Dem\HelpDesk\Model\Source\CaseItem\Department */
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        /** @var Department $departmentSource */
+        $objectManager = ObjectManager::getInstance();
         $departmentSource = $objectManager->get('Dem\HelpDesk\Model\Source\CaseItem\Department');
 
         $deptOptions = $departmentSource->toOptionArray(false);
@@ -47,7 +50,7 @@ class DepartmentList extends CaseItem
         $options = [];
         foreach ($deptOptions as $deptOption) {
             // Convert phrase to string as needed
-            $label = ($deptOption['label'] instanceof \Magento\Framework\Phrase) ? $deptOption['label']->render() : $deptOption['label'];
+            $label = ($deptOption['label'] instanceof Phrase) ? $deptOption['label']->render() : $deptOption['label'];
             $options[] = ['label' => $label, 'value' => $deptOption['value']];
         }
 

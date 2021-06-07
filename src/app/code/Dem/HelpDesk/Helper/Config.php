@@ -3,6 +3,11 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Helper;
 
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Dem\HelpDesk\Api\Data\DepartmentInterface;
+
 /**
  * HelpDesk Helper - Config
  *
@@ -35,18 +40,19 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const HELPDESK_DEPARTMENT_DEFAULT_ID        = 1;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     private $storeManager;
 
     /**
-     * Config constructor.
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * Config constructor
+     *
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        Context $context,
+        StoreManagerInterface $storeManager
     ) {
         $this->storeManager = $storeManager;
         parent::__construct($context);
@@ -55,13 +61,13 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check if website is default
      *
-     * @param \Magento\Store\Api\Data\WebsiteInterface|int $website
+     * @param WebsiteInterface|int $website
      * @return bool
      * @since 1.0.0
      */
     public static function isDefaultWebsite($website)
     {
-        if ($website instanceof \Magento\Store\Api\Data\WebsiteInterface) {
+        if ($website instanceof WebsiteInterface) {
             $website = $website->getId();
         }
         return ((int)$website === self::HELPDESK_WEBSITE_ID_DEFAULT);
@@ -70,13 +76,13 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check if website is admin
      *
-     * @param \Magento\Store\Api\Data\WebsiteInterface|int $website
+     * @param WebsiteInterface|int $website
      * @return boolean
      * @since 1.0.0
      */
     public static function isAdminWebsite($website)
     {
-        if ($website instanceof \Magento\Store\Api\Data\WebsiteInterface) {
+        if ($website instanceof WebsiteInterface) {
             $website = $website->getId();
         }
         return ((int)$website === self::HELPDESK_WEBSITE_ID_ADMIN);
@@ -85,13 +91,13 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check if website is admin
      *
-     * @param \Dem\HelpDesk\Api\Data\DepartmentInterface|int $department
+     * @param DepartmentInterface|int $department
      * @return boolean
      * @since 1.0.0
      */
     public static function isDefaultDepartment($department)
     {
-        if ($department instanceof \Dem\HelpDesk\Api\Data\DepartmentInterface) {
+        if ($department instanceof DepartmentInterface) {
             $department = $department->getId();
         }
         return ((int)$department === self::HELPDESK_DEPARTMENT_DEFAULT_ID);

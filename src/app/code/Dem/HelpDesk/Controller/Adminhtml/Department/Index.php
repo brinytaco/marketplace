@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Controller\Adminhtml\Department;
 
 use Dem\HelpDesk\Controller\Adminhtml\Department;
+use Magento\Backend\Model\View\Result\Page;
 
 /**
  * HelpDesk Controller - Adminhtml Department Grid (Index)
@@ -21,10 +22,11 @@ use Dem\HelpDesk\Controller\Adminhtml\Department;
 class Index extends Department
 {
     /**
-     * @return \Magento\Backend\Model\View\Result\Page
+     * @return Page
      */
     public function execute()
     {
+        /** @var Page $resultPage */
         $resultPage = $this->_initAction();
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Departments'));
         return $resultPage;

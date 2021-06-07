@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\Department\Buttons;
 
+use Dem\HelpDesk\Model\Department;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\Registry;
 
 /**
  * HelpDesk Block - Adminhtml Department View SaveButton
@@ -20,22 +23,22 @@ class SaveButton implements ButtonProviderInterface
     /**
      * URL builder
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry = null;
 
     /**
-     * @param \Magento\Framework\UrlInterface $urlBuilder
-     * @param \Magento\Framework\Registry $coreRegistry
+     * @param UrlInterface $urlBuilder
+     * @param Registry $coreRegistry
      */
     public function __construct(
-        \Magento\Framework\UrlInterface $urlBuilder,
-        \Magento\Framework\Registry $coreRegistry
+        UrlInterface $urlBuilder,
+        Registry $coreRegistry
     ) {
         $this->urlBuilder = $urlBuilder;
         $this->coreRegistry = $coreRegistry;
@@ -49,9 +52,10 @@ class SaveButton implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        // If is new case only
-        $case = $this->coreRegistry->registry(\Dem\HelpDesk\Model\Department::CURRENT_KEY);
+        /** @var \Dem\HelpDesk\Api\Data\CaseItemInterface $case */
+        $case = $this->coreRegistry->registry(Department::CURRENT_KEY);
 
+        // If is new case only
         if (!$case) {
             return [
                 'label' => __('Submit'),

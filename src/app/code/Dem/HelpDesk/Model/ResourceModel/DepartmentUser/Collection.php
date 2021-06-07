@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\ResourceModel\DepartmentUser;
 
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Dem\HelpDesk\Model\DepartmentUser;
+use Dem\HelpDesk\Model\ResourceModel\DepartmentUser as Resource;
 
 /**
  * HelpDesk Resource Model - Case Collection
@@ -48,8 +50,8 @@ class Collection extends AbstractCollection
     protected function _construct()
     {
         $this->_init(
-            \Dem\HelpDesk\Model\DepartmentUser::class,
-            \Dem\HelpDesk\Model\ResourceModel\DepartmentUser::class
+            DepartmentUser::class,
+            Resource::class
         );
     }
 }

@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
-use Magento\Framework\App\ObjectManager;
+use Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs;
+use Magento\Framework\Phrase;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Replies
@@ -15,10 +16,10 @@ use Magento\Framework\App\ObjectManager;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Replies extends \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs
+class Replies extends Tabs
 {
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabLabel()
     {
@@ -26,7 +27,7 @@ class Replies extends \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs
     }
 
     /**
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getTabTitle()
     {

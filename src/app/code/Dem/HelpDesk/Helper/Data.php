@@ -5,6 +5,13 @@ namespace Dem\HelpDesk\Helper;
 
 use \Dem\HelpDesk\Helper\Config;
 use \Magento\Framework\App\ObjectManager;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\Helper\Context;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Area;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\State;
 
 /**
  * HelpDesk Helper - Data
@@ -19,24 +26,24 @@ use \Magento\Framework\App\ObjectManager;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
     /**
-     * Current area
+     * Current app state
      *
-     * @var string
+     * @var State
      */
-    private $currentArea;
+    private $currentState;
 
     /**
-     * @var \Magento\Backend\Model\Auth\Session
+     * @var Session
      */
     private $authSession;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\Backend\Model\Auth\Session $authSession
+     * @param Context $context
+     * @param Session $authSession
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Backend\Model\Auth\Session $authSession
+        Context $context,
+        Session $authSession
     ) {
         $this->authSession = $authSession;
         parent::__construct($context);
@@ -45,13 +52,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get helpdesk enabled for given website.
      *
-     * @param \Magento\Store\Api\Data\WebsiteInterface|int $websiteId
+     * @param WebsiteInterface|int $websiteId
      * @return bool
      * @since 1.0.0
      */
     public function isEnabled($websiteId)
     {
-        if ($websiteId instanceof \Magento\Store\Api\Data\WebsiteInterface) {
+        if ($websiteId instanceof WebsiteInterface) {
             $websiteId = $websiteId->getId();
         }
 
@@ -82,7 +89,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Fetch current backend session user
      *
-     * @return \Magento\Backend\Model\Auth\Session
+     * @return Session
      * @since 1.0.0
      */
     public static function getBackendSession()
@@ -93,7 +100,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Fetch instance of StoreManagerInterface
-     * @return \Magento\Store\Model\StoreManagerInterface
+     * @return StoreManagerInterface
      * @since 1.0.0
      */
     public static function getStoreManager()
@@ -106,7 +113,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * Get selected or current website by id
      *
      * @param int $websiteId
-     * @return \Magento\Store\Api\Data\WebsiteInterface
+     * @return WebsiteInterface
      * @since 1.0.0
      */
     public static function getWebsite($websiteId = null)
@@ -121,7 +128,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Get list of websites (excluding default)
      *
-     * @return \Magento\Store\Api\Data\WebsiteInterface[]
+     * @return WebsiteInterface[]
      * @since 1.0.0
      */
     public static function getWebsites()
@@ -137,11 +144,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getCurrentArea()
     {
-        if (!isset($this->currentArea)) {
+        if (!isset($this->currentState)) {
             $objectManager = ObjectManager::getInstance();
-            $this->currentArea = $objectManager->get('Magento\Framework\App\State');
+            $this->currentState = $objectManager->get('Magento\Framework\App\State');
         }
-        return $this->currentArea->getAreaCode();
+        return $this->currentState->getAreaCode();
     }
 
     /**
@@ -152,7 +159,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getIsAdminArea()
     {
-        return ($this->getCurrentArea() == \Magento\Framework\App\Area::AREA_ADMINHTML);
+        return ($this->getCurrentArea() == Area::AREA_ADMINHTML);
     }
 
     /**
@@ -163,7 +170,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getIsFrontendArea()
     {
-        return ($this->getCurrentArea() == \Magento\Framework\App\Area::AREA_FRONTEND);
+        return ($this->getCurrentArea() == Area::AREA_FRONTEND);
     }
 
     /* ====================================================================== */
@@ -183,7 +190,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             Config::XML_PATH_HELPDESK_STATUS_ENABLED,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            ScopeInterface::SCOPE_WEBSITE,
             $websiteId
         );
     }
@@ -201,7 +208,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             Config::XML_PATH_HELPDESK_FRONTEND_LABEL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            ScopeInterface::SCOPE_WEBSITE,
             $websiteId
         );
     }
@@ -219,7 +226,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             Config::XML_PATH_HELPDESK_SENDER_EMAIL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            ScopeInterface::SCOPE_WEBSITE,
             $websiteId
         );
     }
@@ -237,7 +244,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->getValue(
             Config::XML_PATH_HELPDESK_DEFAULT_DEPT_LABEL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            ScopeInterface::SCOPE_WEBSITE,
             $websiteId
         );
     }
@@ -255,7 +262,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return $this->scopeConfig->isSetFlag(
             Config::XML_PATH_HELPDESK_NOTIFY_ACTIVE,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            ScopeInterface::SCOPE_WEBSITE,
             $websiteId
         );
     }
@@ -273,7 +280,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->scopeConfig->getValue(
             Config::XML_PATH_HELPDESK_SESSION_TIMEOUT,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            ScopeInterface::SCOPE_WEBSITE,
             $websiteId
         );
     }
@@ -291,7 +298,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->scopeConfig->getValue(
             Config::XML_PATH_HELPDESK_INACTIVE_INTERVAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            ScopeInterface::SCOPE_WEBSITE,
             $websiteId
         );
     }
@@ -309,7 +316,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     {
         return (int) $this->scopeConfig->getValue(
             Config::XML_PATH_HELPDESK_ARCHIVE_INTERVAL,
-            \Magento\Store\Model\ScopeInterface::SCOPE_WEBSITE,
+            ScopeInterface::SCOPE_WEBSITE,
             $websiteId
         );
     }

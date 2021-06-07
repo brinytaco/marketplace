@@ -5,6 +5,17 @@ namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
 use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 use Dem\HelpDesk\Exception as HelpDeskException;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\App\RequestInterface;
+use Dem\HelpDesk\Model\Service\CaseItemManagement;
+use Dem\HelpDesk\Model\CaseItem as CaseObject;
+use Magento\User\Model\User;
+use Dem\HelpDesk\Model\Service\ReplyManagement;
+use Dem\HelpDesk\Model\Reply;
+use Dem\HelpDesk\Model\Department;
+use Dem\HelpDesk\Model\CaseItemRepository;
+use Dem\HelpDesk\Model\Service\FollowerManagement;
+use Dem\HelpDesk\Model\Follower;
 
 /**
  * HelpDesk Controller - Adminhtml Case Create New (Save)
@@ -21,7 +32,10 @@ class Save extends CaseItem
     /**
      * Save new case action
      *
-     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @todo Refactor for fewer lines/more methods
+     *       Should be using $this->caseItemManager
+     *
+     * @return Redirect
      */
     public function execute()
     {
@@ -38,18 +52,18 @@ class Save extends CaseItem
         if ($data) {
             try {
 
-                /* @var $caseItemManager \Dem\HelpDesk\Model\Service\CaseItemManagement */
-                /* @var $case \Dem\HelpDesk\Model\CaseItem */
+                /** @var CaseItemManagement $caseItemManager */
+                /** @var CaseObject $case */
                 $case = $this->caseItemManager->createCase(
                     $this->caseItemFactory->create(),
                     $data
                 );
 
-                /* @var $creator \Magento\User\Model\User */
+                /** @var User $creator */
                 $creator = $this->helper->getBackendSession()->getUser();
 
-                /* @var $replyManager \Dem\HelpDesk\Model\Service\ReplyManagement */
-                /* @var $initialReply \Dem\HelpDesk\Model\Reply */
+                /** @var ReplyManagement $replyManager */
+                /** @var Reply $initialReply */
                 $initialReply = $this->replyManager->createInitialReply(
                     $this->replyFactory->create(),
                     $case,
@@ -59,16 +73,16 @@ class Save extends CaseItem
 
                 $case->addReplyToSave($initialReply);
 
-                /* @var $department \Dem\HelpDesk\Model\Department */
+                /** @var Department $department */
                 $department = $this->caseItemManager->getDepartment();
 
-                /* @var $caseManagerName string */
+                /** @var string $caseManagerName */
                 $caseManagerName = $department->getCaseManagerName();
 
                 // Translate immediately for saving
                 $systemMessage = __('New case created and assigned to `%1`', $caseManagerName)->render();
 
-                /* @var $systemReply \Dem\HelpDesk\Model\Reply */
+                /** @var Reply $systemReply */
                 $systemReply = $this->replyManager->createSystemReply(
                     $this->replyFactory->create(),
                     $case,
@@ -79,7 +93,7 @@ class Save extends CaseItem
 
                 $this->prepareDefaultFollowers($case, $department);
 
-                /* @var $caseItemRepository \Dem\HelpDesk\Model\CaseItemRepository */
+                /** @var CaseItemRepository $caseItemRepository */
                 $this->caseItemRepository->save($case);
 
                 // Send notifications
@@ -112,16 +126,16 @@ class Save extends CaseItem
     /**
      * Prepare default followers (if any) for saving
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $case
-     * @param \Dem\HelpDesk\Model\Department $department
+     * @param CaseObject $case
+     * @param Department $department
      * @return void
      */
-    protected function prepareDefaultFollowers($case, $department)
+    protected function prepareDefaultFollowers(CaseObject $case, Department $department)
     {
         $defaultFollowers = $department->getDefaultFollowers();
 
-        /* @var $followerManager \Dem\HelpDesk\Model\Service\FollowerManagement */
-        /* @var $follower \Dem\HelpDesk\Model\Follower */
+        /** @var FollowerManagement $followerManager */
+        /** @var Follower $follower */
         foreach ($defaultFollowers as $userId) {
             $follower = $this->followerManager->createFollower(
                 $this->followerFactory->create(),
