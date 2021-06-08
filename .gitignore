@@ -3,6 +3,9 @@
 # Ignore all files except those noted with the prefixed "!" below
 # Explictly add any ignored files using git add -f <filename>
 
+# Ignore all untracked .html files. Explicitly add as needed.
+*.html 
+
 # 
 /*
 docker-compose.yml
