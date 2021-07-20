@@ -399,7 +399,8 @@ class Tabs extends \Magento\Backend\Block\Template implements TabInterface
         /** @var $followers \Dem\HelpDesk\Model\FollowerInterface [] */
         $followers = $this->getCase()->getFollowers();
 
-        $followerCollection = new \Dem\HelpDesk\Data\SearchResultsProcessor($followers);
+        // Allows manipulation of items similar to \Magento\Framework\Data\Collection
+        $followerCollection = new \Dem\Base\Data\SearchResultsProcessor($followers);
 
         // null value returned if not matched
         $isFollower = $followerCollection->getItemByColumnValue('user_id', $user->getId());

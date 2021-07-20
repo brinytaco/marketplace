@@ -83,6 +83,15 @@
     <!-- Grid column definition -->
     <columns name="dem_helpdesk_caseitem_grid_columns">
 
+        <!-- Required to allow column width and resize to function -->
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="resizeConfig" xsi:type="array">
+                    <item name="enabled" xsi:type="boolean">true</item><!-- This is required configuration -->
+                </item>
+            </item>
+        </argument>
+
         <!-- Make entire row clickable (requires actionsColumn defined below) -->
         <settings>
             <childDefaults>
@@ -102,7 +111,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">55</item>
                     <item name="indexField" xsi:type="string">case_id</item>
                 </item>
             </argument>
@@ -138,6 +147,8 @@
                     <item name="sorting" xsi:type="string">desc</item>
                     <item name="label" xsi:type="string" translate="true">Case Number</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">100</item>
                 </item>
             </argument>
         </column>
@@ -152,6 +163,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="label" xsi:type="string" translate="true">Website</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">150</item>
                 </item>
             </argument>
         </column>
@@ -165,6 +178,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="label" xsi:type="string" translate="true">Department</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">150</item>
                 </item>
             </argument>
         </column>
@@ -178,6 +193,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="label" xsi:type="string" translate="true">Case Manager</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">150</item>
                 </item>
             </argument>
         </column>
@@ -191,6 +208,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="label" xsi:type="string" translate="true">Created At</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">120</item>
                 </item>
             </argument>
         </column>
@@ -204,6 +223,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="label" xsi:type="string" translate="true">Created By</item>
                     <item name="visible" xsi:type="boolean">false</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">180</item>
                 </item>
             </argument>
         </column>
@@ -217,6 +238,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="label" xsi:type="string" translate="true">Updated At</item>
                     <item name="visible" xsi:type="boolean">false</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">180</item>
                 </item>
             </argument>
         </column>
@@ -230,6 +253,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="label" xsi:type="string" translate="true">Updated By</item>
                     <item name="visible" xsi:type="boolean">false</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">100</item>
                 </item>
             </argument>
         </column>
@@ -244,6 +269,11 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="label" xsi:type="string" translate="true">Priority</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
             </argument>
         </column>
@@ -258,6 +288,11 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
             </argument>
         </column>
@@ -275,6 +310,12 @@
                     <item name="viewUrlPath" xsi:type="string">helpdesk/caseitem/view</item>
                     <!-- Url parameter name. This can also be an array -->
                     <item name="urlEntityParamName" xsi:type="string">case_id</item>
+
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
             </argument>
         </actionsColumn>

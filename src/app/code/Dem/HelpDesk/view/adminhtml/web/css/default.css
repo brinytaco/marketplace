@@ -27,3 +27,8 @@
     font-size: 12px;
     margin: 5px 0;
 }
+
+.th-center {
+    text-align: center !important;
+    width: 80px;
+}

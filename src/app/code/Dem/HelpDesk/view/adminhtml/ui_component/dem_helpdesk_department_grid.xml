@@ -83,6 +83,15 @@
     <!-- Grid column definition -->
     <columns name="dem_helpdesk_department_grid_columns">
 
+        <!-- Required to allow column width and resize to function -->
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="resizeConfig" xsi:type="array">
+                    <item name="enabled" xsi:type="boolean">true</item><!-- This is required configuration -->
+                </item>
+            </item>
+        </argument>
+
         <!-- Make entire row clickable (requires actionsColumn defined below) -->
         <settings>
             <childDefaults>
@@ -102,7 +111,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
-                    <item name="resizeDefaultWidth" xsi:type="string">55</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">55</item>
                     <item name="indexField" xsi:type="string">department_id</item>
                 </item>
             </argument>
@@ -111,6 +120,7 @@
 
         <!-- Column order is natural by column "name" if no sortOrder is set -->
 
+        <!-- @see https://devdocs.magento.com/guides/v2.4/ui_comp_guide/components/ui-column.html -->
         <column name="department_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -120,7 +130,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="sorting" xsi:type="string">desc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
-                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="visible" xsi:type="boolean">false</item><!-- not used -->
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
@@ -134,6 +145,8 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="label" xsi:type="string" translate="true">Name</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">300</item>
                 </item>
             </argument>
         </column>
@@ -147,6 +160,7 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="label" xsi:type="string" translate="true">Description</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
@@ -160,6 +174,23 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="label" xsi:type="string" translate="true">Case Manager</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">250</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="updated_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="label" xsi:type="string" translate="true">Updated At</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">180</item>
                 </item>
             </argument>
         </column>
@@ -168,12 +199,17 @@
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="label" xsi:type="string" translate="true">Internal</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
             </argument>
         </column>
@@ -182,12 +218,17 @@
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
                     <item name="label" xsi:type="string" translate="true">Active</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
             </argument>
         </column>
@@ -195,12 +236,17 @@
         <column name="sort_order">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">number</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
                     <item name="label" xsi:type="string" translate="true">Sort Order</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">90</item>
+                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
             </argument>
         </column>
@@ -208,6 +254,7 @@
         <actionsColumn name="actions" class="Dem\HelpDesk\Ui\Component\Listing\Column\ViewAction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">100</item>
                     <!-- Column header (default is "Action") -->
                     <item name="label" xsi:type="string">Action</item>
                     <!-- Link text (translated) -->
@@ -218,6 +265,11 @@
                     <item name="viewUrlPath" xsi:type="string">helpdesk/department/view</item>
                     <!-- Url parameter name. This can also be an array -->
                     <item name="urlEntityParamName" xsi:type="string">department_id</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="string">a-center</item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
                 </item>
             </argument>
         </actionsColumn>

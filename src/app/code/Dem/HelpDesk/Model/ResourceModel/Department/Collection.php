@@ -52,4 +52,26 @@ class Collection extends AbstractCollection
             \Dem\HelpDesk\Model\ResourceModel\Department::class
         );
     }
+
+    /**
+     * Add extra fields as output columns
+     * department_name
+     * case_manager_name
+     *
+     * @return $this
+     * @since 1.0.0
+     */
+    protected function _initSelect()
+    {
+        parent::_initSelect();
+
+        // Add case_manager name to select
+        $this->getSelect()->join(
+            ['u' => $this->getTable('dem_helpdesk_user')],
+            'main_table.case_manager_id = u.user_id',
+            ['case_manager_name' => 'u.name']
+        );
+
+        return $this;
+    }
 }
