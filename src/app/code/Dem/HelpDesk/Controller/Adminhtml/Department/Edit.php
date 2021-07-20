@@ -37,9 +37,9 @@ class Edit extends Controller
             return $resultPage;
         }
 
+        $this->getMessageManager()->addErrorMessage(__('This %1 no longer exists.', __('department')));
         $resultRedirect = $this->getRedirect();
         $resultRedirect->setPath('helpdesk/department');
-        $this->getMessageManager()->addErrorMessage(__('This %1 no longer exists.', __('department')));
         return $resultRedirect;
     }
 }

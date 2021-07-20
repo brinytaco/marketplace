@@ -198,7 +198,7 @@ abstract class CaseItem extends AbstractAction
      */
     public function initAction()
     {
-        /** @var Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->getResultPage();
         return $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_case');
     }
@@ -380,5 +380,26 @@ abstract class CaseItem extends AbstractAction
     protected function getDepartmentSource()
     {
         return $this->departmentSource;
+    }
+
+    /**
+     * Provides an initialized Result object.
+     *
+     * @param string $path
+     * @param array $params
+     * @param array $response
+     * @return Json|Redirect
+     */
+    protected function returnResult($path = '', array $params = [], array $response = [])
+    {
+        if ($this->isAjax()) {
+            $layout = $this->getLayout();
+            $layout->initMessages();
+
+            $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
+            $response['params'] = $params;
+            return $this->getResultJson()->setData($response);
+        }
+        return $this->getRedirect()->setPath($path, $params);
     }
 }

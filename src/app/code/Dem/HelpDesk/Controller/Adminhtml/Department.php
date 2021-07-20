@@ -121,7 +121,7 @@ abstract class Department extends AbstractAction
      */
     public function initAction()
     {
-        /** @var Page $resultPage */
+        /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->getResultPage();
         return $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_department');
     }
@@ -211,5 +211,26 @@ abstract class Department extends AbstractAction
     protected function getAdminUser()
     {
         return $this->getHelper()->getBackendSession()->getUser();
+    }
+
+    /**
+     * Provides an initialized Result object.
+     *
+     * @param string $path
+     * @param array $params
+     * @param array $response
+     * @return Json|Redirect
+     */
+    protected function returnResult($path = '', array $params = [], array $response = [])
+    {
+        if ($this->isAjax()) {
+            $layout = $this->getLayout();
+            $layout->initMessages();
+
+            $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
+            $response['params'] = $params;
+            return $this->getResultJson()->setData($response);
+        }
+        return $this->getRedirect()->setPath($path, $params);
     }
 }

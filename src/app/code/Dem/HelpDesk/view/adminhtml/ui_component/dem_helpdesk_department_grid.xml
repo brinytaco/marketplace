@@ -146,7 +146,7 @@
                     <item name="label" xsi:type="string" translate="true">Name</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="resizeEnabled" xsi:type="boolean">true</item>
-                    <item name="resizeDefaultWidth" xsi:type="number">300</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">200</item>
                 </item>
             </argument>
         </column>
@@ -177,6 +177,7 @@
                     <item name="label" xsi:type="string" translate="true">Description</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">150</item>
                 </item>
             </argument>
         </column>
@@ -191,7 +192,7 @@
                     <item name="label" xsi:type="string" translate="true">Case Manager</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="resizeEnabled" xsi:type="boolean">true</item>
-                    <item name="resizeDefaultWidth" xsi:type="number">250</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">150</item>
                 </item>
             </argument>
         </column>
