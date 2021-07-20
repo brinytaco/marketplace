@@ -27,7 +27,7 @@ class Index extends CaseItem
     public function execute()
     {
         /** @var Page $resultPage */
-        $resultPage = $this->_initAction();
+        $resultPage = $this->initAction();
         $resultPage->getConfig()->getTitle()->prepend(__('Manage Cases'));
         return $resultPage;
     }

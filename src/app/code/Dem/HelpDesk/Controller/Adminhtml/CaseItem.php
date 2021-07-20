@@ -3,26 +3,26 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml;
 
-use Magento\Backend\App\Action;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Backend\Model\View\Result\RedirectFactory;
-use Magento\Framework\Registry;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\View\Result\LayoutFactory;
-use Magento\Framework\Controller\Result\RawFactory;
+use Dem\Base\Controller\Adminhtml\AbstractAction;
 use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Model\CaseItemFactory;
 use Dem\HelpDesk\Api\CaseItemManagementInterface;
 use Dem\HelpDesk\Model\ReplyFactory;
 use Dem\HelpDesk\Api\ReplyManagementInterface;
 use Dem\HelpDesk\Model\FollowerFactory;
 use Dem\HelpDesk\Api\FollowerManagementInterface;
 use Dem\HelpDesk\Model\Service\Notifications;
-use Dem\HelpDesk\Helper\Data;
+use Dem\HelpDesk\Helper\Data as Helper;
+
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Request\Http as RequestHttp;
+use Magento\Framework\Registry;
+use Psr\Log\LoggerInterface;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Backend\Model\View\Result\Page;
 
 /**
  * HelpDesk - Adminhtml Abstract Case Controller
@@ -34,7 +34,7 @@ use Dem\HelpDesk\Helper\Data;
  * @author     Toby Crain
  * @since      1.0.0
  */
-abstract class CaseItem extends Action
+abstract class CaseItem extends AbstractAction
 {
     /**
      * Authorization level of a basic admin session
@@ -42,43 +42,6 @@ abstract class CaseItem extends Action
      * @see _isAllowed()
      */
     const ACTION_RESOURCE = 'Dem_HelpDesk::helpdesk_cases';
-
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @var PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @var JsonFactory
-     */
-    protected $resultJsonFactory;
-
-    /**
-     * @var LayoutFactory
-     */
-    protected $resultLayoutFactory;
-
-    /**
-     * @var RawFactory
-     */
-    protected $resultRawFactory;
 
     /**
      * @var CaseItemRepositoryInterface
@@ -91,7 +54,7 @@ abstract class CaseItem extends Action
     protected $departmentRepository;
 
     /**
-     * @var Data
+     * @var Helper
      */
     protected $helper;
 
@@ -101,9 +64,9 @@ abstract class CaseItem extends Action
     protected $caseItemManager;
 
     /**
-     * @var CaseItemFactory
+     * @var CaseModel
      */
-    protected $caseItemFactory;
+    protected $caseItem;
 
     /**
      * @var ReplyManagementInterface
@@ -136,69 +99,69 @@ abstract class CaseItem extends Action
      * @param Action\Context $context
      * @param Registry $coreRegistry
      * @param LoggerInterface $logger
-     * @param PageFactory $resultPageFactory
-     * @param JsonFactory $resultJsonFactory
-     * @param LayoutFactory $resultLayoutFactory
-     * @param RawFactory $resultRawFactory
+     * @param RequestHttp $requestHttp
+     * @param PageFactory $pageFactory
+     * @param JsonFactory $jsonFactory
+     * @param LayoutFactory $layoutFactory
+     * @param RedirectFactory $redirectFactory
      * @param CaseItemRepositoryInterface $caseItemRepository
-     * @param CaseItemFactory $caseItemFactory
      * @param CaseItemManagementInterface $caseItemManager
      * @param ReplyFactory $replyFactory
      * @param ReplyManagementInterface $replyManager
      * @param FollowerFactory $followerFactory
      * @param FollowerManagementInterface $followerManager
      * @param Notifications $notificationService
-     * @param Data $helper
+     * @param Helper $helper
      */
     public function __construct(
         Action\Context $context,
         Registry $coreRegistry,
         LoggerInterface $logger,
-        PageFactory $resultPageFactory,
-        JsonFactory $resultJsonFactory,
-        LayoutFactory $resultLayoutFactory,
-        RawFactory $resultRawFactory,
+        RequestHttp $requestHttp,
+        PageFactory $pageFactory,
+        JsonFactory $jsonFactory,
+        LayoutFactory $layoutFactory,
+        RedirectFactory $redirectFactory,
         CaseItemRepositoryInterface $caseItemRepository,
-        CaseItemFactory $caseItemFactory,
         CaseItemManagementInterface $caseItemManager,
         ReplyFactory $replyFactory,
         ReplyManagementInterface $replyManager,
         FollowerFactory $followerFactory,
         FollowerManagementInterface $followerManager,
         Notifications $notificationService,
-        Data $helper
+        Helper $helper
     ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->logger = $logger;
-        $this->resultRedirectFactory = $context->getResultRedirectFactory();
-        $this->resultPageFactory = $resultPageFactory;
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->resultLayoutFactory = $resultLayoutFactory;
-        $this->resultRawFactory = $resultRawFactory;
         $this->caseItemRepository = $caseItemRepository;
-        $this->caseItemFactory = $caseItemFactory;
         $this->caseItemManager = $caseItemManager;
-        $this->replyManager = $replyManager;
         $this->replyFactory = $replyFactory;
-        $this->followerManager = $followerManager;
+        $this->replyManager = $replyManager;
         $this->followerFactory = $followerFactory;
+        $this->followerManager = $followerManager;
         $this->notificationService = $notificationService;
         $this->helper = $helper;
-        parent::__construct($context);
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $logger,
+            $requestHttp,
+            $pageFactory,
+            $jsonFactory,
+            $layoutFactory,
+            $redirectFactory
+        );
     }
 
     /**
      * Init layout, menu and breadcrumb
      *
-     * @return Page
+     * @return void
      * @since 1.0.0
      */
-    protected function _initAction()
+    protected function initAction()
     {
         /** @var Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_case');
-        return $resultPage;
+        $resultPage = $this->pageFactory->create();
+        return $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_case');
     }
 
     /**
@@ -207,69 +170,21 @@ abstract class CaseItem extends Action
      * @return CaseItemInterface|false
      * @since 1.0.0
      */
-    protected function _initCase()
+    protected function initCase()
     {
         $id = $this->getRequest()->getParam('case_id');
-        $objectStr = __('case');
-        try {
-            /** @var \Dem\HelpDesk\Model\CaseItem $case */
-            $case = $this->caseItemRepository->getById($id);
-            if (!$case) {
-                throw new NoSuchEntityException(__('The requested %1 no longer exists', $objectStr));
-            }
-            /** @var \Dem\HelpDesk\Model\Reply $initialReply */
-            $initialReply = $case->getInitialReply();
-        } catch (NoSuchEntityException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            // Redirect ?
+
+        /** @var \Dem\HelpDesk\Model\CaseItem $case */
+        $case = $this->caseItemRepository->getById($id);
+        if (!$case) {
             return false;
         }
+
+        /** @var \Dem\HelpDesk\Model\Reply $initialReply */
+        $initialReply = $case->getInitialReply();
+
         $this->coreRegistry->register($case::CURRENT_KEY, $case);
         $this->coreRegistry->register($case::INITIAL_REPLY_KEY, $initialReply);
         return $case;
-    }
-
-    /***********************************************************************************/
-    /** @todo Move to Base */
-    /***********************************************************************************/
-
-    /**
-     * Check is valid post request
-     *
-     * @todo Move to abstract base
-     *
-     * @return bool
-     * @since 1.0.0
-     */
-    public function isValidPostRequest()
-    {
-        return ($this->isPostRequest() && $this->isFormKeyValid());
-    }
-
-    /**
-     * Check is post request
-     *
-     * @todo Move to abstract base
-     *
-     * @return bool
-     * @since 1.0.0
-     */
-    public function isPostRequest()
-    {
-        return (!strcasecmp($_SERVER['REQUEST_METHOD'], 'POST'));
-    }
-
-    /**
-     * Check is valid form key
-     *
-     * @todo Move to abstract base
-     *
-     * @return bool
-     * @since 1.0.0
-     */
-    public function isFormKeyValid()
-    {
-        return ($this->_formKeyValidator->validate($this->getRequest()));
     }
 }

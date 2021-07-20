@@ -26,7 +26,8 @@ class Create extends CaseItem
      */
     public function execute()
     {
-        $resultPage = $this->_initAction();
+        /** @var Page $resultPage */
+        $resultPage = $this->initAction();
         $resultPage->getConfig()->getTitle()->prepend(__('Open a New Case'));
         return $resultPage;
     }

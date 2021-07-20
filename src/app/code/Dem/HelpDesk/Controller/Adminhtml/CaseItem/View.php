@@ -28,26 +28,23 @@ class View extends CaseItem
     public function execute()
     {
         /** @var \Dem\HelpDesk\Model\CaseItem $case */
-        $case = $this->_initCase();
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $objectStr = __('case');
+        $case = $this->initCase();
+
         if ($case) {
-            try {
-                /** @var Page $resultPage */
-                $resultPage = $this->_initAction();
-                $resultPage->getConfig()->getTitle()->prepend(sprintf(
-                    '%s #%s',
-                    __('Case'),
-                    $case->getCaseNumber(),
-                ));
-                return $resultPage;
-            } catch (\Exception $e) {
-                $this->logger->critical($e);
-                $this->messageManager->addErrorMessage(__('Exception occurred during %1 load', $objectStr));
-                $resultRedirect->setPath('helpdesk/caseitem');
-            }
+            /** @var Page $resultPage */
+            $resultPage = $this->initAction();
+            $resultPage->getConfig()->getTitle()->prepend(sprintf(
+                '%s #%s',
+                __('Case'),
+                $case->getCaseNumber()
+            ));
+            return $resultPage;
         }
+
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->redirectFactory->create();
+        $resultRedirect->setPath('helpdesk/caseitem');
+        $this->messageManager->addErrorMessage(__('This %1 no longer exists.', __('case')));
         return $resultRedirect;
     }
 }

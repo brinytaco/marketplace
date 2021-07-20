@@ -27,24 +27,23 @@ class Edit extends Department
     public function execute()
     {
         /** @var \Dem\HelpDesk\Model\Department $department */
-        $department = $this->_initDepartment();
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
-        $objectStr = __('department');
-        try {
+        $department = $this->initDepartment();
+
+        if ($department) {
             /** @var Page $resultPage */
-            $resultPage = $this->_initAction();
+            $resultPage = $this->initAction();
             $resultPage->getConfig()->getTitle()->prepend(sprintf(
                 '%s #%s',
                 __('Editing'),
-                $department->getName(),
+                $department->getName()
             ));
             return $resultPage;
-        } catch (\Exception $e) {
-            $this->logger->critical($e);
-            $this->messageManager->addErrorMessage(__('Exception occurred during %1 load', $objectStr));
-            $resultRedirect->setPath('helpdesk/department');
         }
+
+        /** @var Redirect $resultRedirect */
+        $resultRedirect = $this->redirectFactory->create();
+        $resultRedirect->setPath('helpdesk/department');
+        $this->messageManager->addErrorMessage(__('This %1 no longer exists.', __('department')));
         return $resultRedirect;
     }
 }

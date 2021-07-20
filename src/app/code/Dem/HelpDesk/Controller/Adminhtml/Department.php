@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml;
 
-use Magento\Backend\App\Action;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Backend\Model\View\Result\Page;
-use Magento\Framework\Registry;
-use Psr\Log\LoggerInterface;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\View\Result\LayoutFactory;
-use Magento\Framework\Controller\Result\RawFactory;
-use Magento\Framework\Controller\Result\RedirectFactory;
+use Dem\Base\Controller\Adminhtml\AbstractAction;
 use Dem\HelpDesk\Api\DepartmentRepositoryInterface;
 use Dem\HelpDesk\Api\DepartmentManagementInterface;
-use Dem\HelpDesk\Model\DepartmentFactory;
 use Dem\HelpDesk\Helper\Data as Helper;
 use Dem\HelpDesk\Api\Data\DepartmentInterface;
+
+use Magento\Backend\App\Action;
+use Magento\Framework\App\Request\Http as RequestHttp;
+use Magento\Framework\Registry;
+use Psr\Log\LoggerInterface;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Backend\Model\View\Result\Page;
 
 /**
  * HelpDesk - Adminhtml Abstract Department Controller
@@ -29,7 +29,7 @@ use Dem\HelpDesk\Api\Data\DepartmentInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-abstract class Department extends Action
+abstract class Department extends AbstractAction
 {
     /**
      * Authorization level of a basic admin session
@@ -37,43 +37,6 @@ abstract class Department extends Action
      * @see _isAllowed()
      */
     const ACTION_RESOURCE = 'Dem_HelpDesk::helpdesk_department';
-
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var RedirectFactory
-     */
-    protected $resultRedirectFactory;
-
-    /**
-     * @var PageFactory
-     */
-    protected $resultPageFactory;
-
-    /**
-     * @var JsonFactory
-     */
-    protected $resultJsonFactory;
-
-    /**
-     * @var LayoutFactory
-     */
-    protected $resultLayoutFactory;
-
-    /**
-     * @var RawFactory
-     */
-    protected $resultRawFactory;
 
     /**
      * @var DepartmentRepositoryInterface
@@ -91,9 +54,9 @@ abstract class Department extends Action
     protected $departmentManager;
 
     /**
-     * @var DepartmentFactory
+     * @var Department
      */
-    protected $departmentFactory;
+    protected $department;
 
     /**
      * Data constructor.
@@ -101,40 +64,41 @@ abstract class Department extends Action
      * @param Action\Context $context
      * @param Registry $coreRegistry
      * @param LoggerInterface $logger
-     * @param PageFactory $resultPageFactory
-     * @param JsonFactory $resultJsonFactory
-     * @param LayoutFactory $resultLayoutFactory
-     * @param RawFactory $resultRawFactory
+     * @param RequestHttp $requestHttp
+     * @param PageFactory $pageFactory
+     * @param JsonFactory $jsonFactory
+     * @param LayoutFactory $layoutFactory
+     * @param RedirectFactory $redirectFactory
      * @param DepartmentRepositoryInterface $departmentRepository
      * @param DepartmentManagementInterface $departmentManager
-     * @param DepartmentFactory $departmentFactory
      * @param Helper $helper
      */
     public function __construct(
         Action\Context $context,
         Registry $coreRegistry,
         LoggerInterface $logger,
-        PageFactory $resultPageFactory,
-        JsonFactory $resultJsonFactory,
-        LayoutFactory $resultLayoutFactory,
-        RawFactory $resultRawFactory,
+        RequestHttp $requestHttp,
+        PageFactory $pageFactory,
+        JsonFactory $jsonFactory,
+        LayoutFactory $layoutFactory,
+        RedirectFactory $redirectFactory,
         DepartmentRepositoryInterface $departmentRepository,
         DepartmentManagementInterface $departmentManager,
-        DepartmentFactory $departmentFactory,
         Helper $helper
     ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->logger = $logger;
-        $this->resultRedirectFactory = $context->getResultRedirectFactory();
-        $this->resultPageFactory = $resultPageFactory;
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->resultLayoutFactory = $resultLayoutFactory;
-        $this->resultRawFactory = $resultRawFactory;
         $this->departmentRepository = $departmentRepository;
         $this->departmentManager = $departmentManager;
-        $this->departmentFactory = $departmentFactory;
         $this->helper = $helper;
-        parent::__construct($context);
+        parent::__construct(
+            $context,
+            $coreRegistry,
+            $logger,
+            $requestHttp,
+            $pageFactory,
+            $jsonFactory,
+            $layoutFactory,
+            $redirectFactory
+        );
     }
 
     /**
@@ -143,50 +107,31 @@ abstract class Department extends Action
      * @return Page
      * @since 1.0.0
      */
-    protected function _initAction()
+    protected function initAction()
     {
         /** @var Page $resultPage */
-        $resultPage = $this->resultPageFactory->create();
+        $resultPage = $this->pageFactory->create();
         $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_department');
         return $resultPage;
     }
 
     /**
-         * Initialize department model instance
-         *
-         * @return DepartmentInterface|false
-         * @since 1.0.0
-         */
-    protected function _initDepartment()
-    {
-        $id = $this->getRequest()->getParam('department_id');
-        $objectStr = __('department');
-        try {
-            /** @var \Dem\HelpDesk\Model\Department $department */
-            $department = $this->departmentRepository->getById($id);
-        } catch (NoSuchEntityException $e) {
-            $this->messageManager->addErrorMessage(__('The requested %1 no longer exists', $objectStr));
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            return false;
-        } catch (\Exception $e) {
-            $this->messageManager->addErrorMessage(__('The requested %1 no longer exists', $objectStr));
-            $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
-            return false;
-        }
-        $this->coreRegistry->register(Department::CURRENT_KEY, $department);
-        return $department;
-    }
-
-    /**
-     * Check is valid post request
+     * Initialize department model instance
      *
-     * @return bool
+     * @return DepartmentInterface|false
      * @since 1.0.0
      */
-    protected function isValidPostRequest()
+    protected function initDepartment()
     {
-        $formKeyIsValid = $this->_formKeyValidator->validate($this->getRequest());
-        $isPost = $this->getRequest()->isPost();
-        return ($formKeyIsValid && $isPost);
+        $id = $this->getRequest()->getParam('department_id');
+
+        /** @var \Dem\HelpDesk\Model\Department $department */
+        $department = $this->departmentRepository->getById($id);
+        if (!$department) {
+            return false;
+        }
+
+        $this->coreRegistry->register(\Dem\HelpDesk\Model\Department::CURRENT_KEY, $department);
+        return $department;
     }
 }
