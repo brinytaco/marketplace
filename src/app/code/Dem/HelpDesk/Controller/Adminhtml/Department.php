@@ -7,7 +7,7 @@ use Magento\Backend\App\Action;
 use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * HelpDesk - Adminhtml Abstract Case Controller
+ * HelpDesk - Adminhtml Abstract Department Controller
  *
  * =============================================================================
  *
@@ -16,14 +16,14 @@ use Magento\Framework\Exception\NoSuchEntityException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-abstract class CaseItem extends Action
+abstract class Department extends Action
 {
     /**
      * Authorization level of a basic admin session
      *
      * @see _isAllowed()
      */
-    const ACTION_RESOURCE = 'Dem_HelpDesk::helpdesk_cases';
+    const ACTION_RESOURCE = 'Dem_HelpDesk::helpdesk_department';
 
     /**
      * Core registry
@@ -63,11 +63,6 @@ abstract class CaseItem extends Action
     protected $resultRawFactory;
 
     /**
-     * @var \Dem\HelpDesk\Api\CaseItemRepositoryInterface
-     */
-    protected $caseItemRepository;
-
-    /**
      * @var \Dem\HelpDesk\Api\DepartmentRepositoryInterface
      */
     protected $departmentRepository;
@@ -78,39 +73,14 @@ abstract class CaseItem extends Action
     protected $helper;
 
     /**
-     * @var \Dem\HelpDesk\Api\CaseItemManagementInterface
+     * @var \Dem\HelpDesk\Model\Service\DepartmentManagementInterface
      */
-    protected $caseItemManager;
+    protected $departmentManager;
 
     /**
-     * @var \Dem\HelpDesk\Model\CaseItemFactory
+     * @var \Dem\HelpDesk\Model\DepartmentFactory
      */
-    protected $caseItemFactory;
-
-    /**
-     * @var \Dem\HelpDesk\Api\ReplyManagementInterface
-     */
-    protected $replyManager;
-
-    /**
-     * @var \Dem\HelpDesk\Model\ReplyFactory
-     */
-    protected $replyFactory;
-
-    /**
-     * @var \Dem\HelpDesk\Api\FollowerManagementInterface
-     */
-    protected $followerManager;
-
-    /**
-     * @var \Dem\HelpDesk\Model\FollowerFactory
-     */
-    protected $followerFactory;
-
-    /**
-     * @var \Dem\HelpDesk\Model\Service\Notifications
-     */
-    protected $notificationService;
+    protected $departmentFactory;
 
     /**
      * Data constructor.
@@ -122,14 +92,9 @@ abstract class CaseItem extends Action
      * @param \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory
      * @param \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseItemRepository
-     * @param \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory
-     * @param \Dem\HelpDesk\Api\CaseItemManagementInterface $caseItemManager
-     * @param \Dem\HelpDesk\Model\ReplyFactory $replyFactory
-     * @param \Dem\HelpDesk\Api\ReplyManagementInterface $replyManager
-     * @param \Dem\HelpDesk\Model\FollowerFactory $followerFactory
-     * @param \Dem\HelpDesk\Api\FollowerManagementInterface $followerManager
-     * @param \Dem\HelpDesk\Model\Service\Notifications $notificationService
+     * @param \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
+     * @param \Dem\HelpDesk\Api\DepartmentManagementInterface $departmentManager
+     * @param \Dem\HelpDesk\Model\DepartmentFactory $departmentFactory
      * @param \Dem\HelpDesk\Helper\Data $helper
      */
     public function __construct(
@@ -140,14 +105,9 @@ abstract class CaseItem extends Action
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Dem\HelpDesk\Api\CaseItemRepositoryInterface $caseItemRepository,
-        \Dem\HelpDesk\Model\CaseItemFactory $caseItemFactory,
-        \Dem\HelpDesk\Api\CaseItemManagementInterface $caseItemManager,
-        \Dem\HelpDesk\Model\ReplyFactory $replyFactory,
-        \Dem\HelpDesk\Api\ReplyManagementInterface $replyManager,
-        \Dem\HelpDesk\Model\FollowerFactory $followerFactory,
-        \Dem\HelpDesk\Api\FollowerManagementInterface $followerManager,
-        \Dem\HelpDesk\Model\Service\Notifications $notificationService,
+        \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository,
+        \Dem\HelpDesk\Api\DepartmentManagementInterface $departmentManager,
+        \Dem\HelpDesk\Model\DepartmentFactory $departmentFactory,
         \Dem\HelpDesk\Helper\Data $helper
     ) {
         $this->coreRegistry = $coreRegistry;
@@ -157,14 +117,9 @@ abstract class CaseItem extends Action
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultLayoutFactory = $resultLayoutFactory;
         $this->resultRawFactory = $resultRawFactory;
-        $this->caseItemRepository = $caseItemRepository;
-        $this->caseItemFactory = $caseItemFactory;
-        $this->caseItemManager = $caseItemManager;
-        $this->replyManager = $replyManager;
-        $this->replyFactory = $replyFactory;
-        $this->followerManager = $followerManager;
-        $this->followerFactory = $followerFactory;
-        $this->notificationService = $notificationService;
+        $this->departmentRepository = $departmentRepository;
+        $this->departmentManager = $departmentManager;
+        $this->departmentFactory = $departmentFactory;
         $this->helper = $helper;
         parent::__construct($context);
     }
@@ -180,26 +135,26 @@ abstract class CaseItem extends Action
         $frontendLabel = $this->helper->getConfiguredFrontendLabel();
 
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_cases');
+        $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_department');
         $resultPage->addBreadcrumb($frontendLabel, $frontendLabel);
-        $resultPage->addBreadcrumb(__('Cases'), __('Cases'));
+        $resultPage->addBreadcrumb(__('Departments'), __('Departments'));
 
         $resultPage->getConfig()->getTitle()->prepend($frontendLabel);
         return $resultPage;
     }
 
     /**
-     * Initialize case model instance
+     * Initialize department model instance
      *
-     * @return \Dem\HelpDesk\Api\Data\CaseItemInterface|false
+     * @return \Dem\HelpDesk\Api\Data\DepartmentInterface|false
      * @since 1.0.0
      */
-    protected function _initCase()
+    protected function _initDepartment()
     {
-        $id = $this->getRequest()->getParam('case_id');
-        $objectStr = __('case');
+        $id = $this->getRequest()->getParam('department_id');
+        $objectStr = __('department');
         try {
-            $case = $this->caseItemRepository->getById($id);
+            $department = $this->departmentRepository->getById($id);
         } catch (NoSuchEntityException $e) {
             $this->messageManager->addErrorMessage(__('The requested %1 no longer exists', $objectStr));
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
@@ -209,9 +164,8 @@ abstract class CaseItem extends Action
             $this->_actionFlag->set('', self::FLAG_NO_DISPATCH, true);
             return false;
         }
-        $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY, $case);
-        $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::INITIAL_REPLY_KEY, $case->getInitialReply());
-        return $case;
+        $this->coreRegistry->register(\Dem\HelpDesk\Model\Department::CURRENT_KEY, $department);
+        return $department;
     }
 
     /**

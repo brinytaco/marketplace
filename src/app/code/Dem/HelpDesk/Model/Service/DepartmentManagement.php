@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
+use Dem\HelpDesk\Api\DepartmentManagementInterface;
 use Dem\HelpDesk\Api\Data\DepartmentInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 
@@ -17,7 +18,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInterface
+class DepartmentManagement implements DepartmentManagementInterface
 {
 
     /**
@@ -33,11 +34,6 @@ class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInte
     protected $eventManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
      * @var \Dem\HelpDesk\Helper\Data
      */
     protected $helper;
@@ -47,18 +43,15 @@ class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInte
      *
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Psr\Log\LoggerInterface $logger
      * @param \Dem\HelpDesk\Helper\Data $helper
      */
     public function __construct(
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Psr\Log\LoggerInterface $logger,
         \Dem\HelpDesk\Helper\Data $helper
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->eventManager = $eventManager;
-        $this->logger = $logger;
         $this->helper = $helper;
     }
 
@@ -69,7 +62,7 @@ class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInte
      * @return void
      * @throws \Dem\HelpDesk\Exception
      */
-    public function validate($data)
+    public function validate(array $data)
     {
         $requiredFields = $this->getRequiredFields();
 
@@ -80,7 +73,7 @@ class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInte
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The reply `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The department `%1` cannot be empty', $requiredField));
             }
         }
 
@@ -88,7 +81,7 @@ class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInte
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The reply `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The department `%1` cannot be empty', $field));
             }
         }
 
@@ -102,11 +95,11 @@ class DepartmentManagement implements \Dem\HelpDesk\Api\DepartmentManagementInte
      */
     public function getRequiredFields()
     {
-        return array(
+        return [
             'website_id',
             'case_manager_id',
             'name'
-        );
+        ];
     }
 
 }

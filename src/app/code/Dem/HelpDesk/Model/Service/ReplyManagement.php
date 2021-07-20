@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
+use Dem\HelpDesk\Api\ReplyManagementInterface;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 use Dem\HelpDesk\Api\Data\ReplyInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
@@ -18,7 +19,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class ReplyManagement implements \Dem\HelpDesk\Api\ReplyManagementInterface
+class ReplyManagement implements ReplyManagementInterface
 {
 
     /**
@@ -84,7 +85,7 @@ class ReplyManagement implements \Dem\HelpDesk\Api\ReplyManagementInterface
         $replyText,
         $isInitial = false
     ) {
-        $data = array(
+        $data = [
             'case_id'     => $case->getId(),
             'author_id'   => $authorId,
             'author_type' => $authorType,
@@ -93,7 +94,7 @@ class ReplyManagement implements \Dem\HelpDesk\Api\ReplyManagementInterface
                 ? null : $this->helper::getServerRemoteIp(),
             'status_id'   => $case->getStatusId(),
             'is_initial'  => (int) $isInitial
-        );
+        ];
         $this->validate($data);
 
         return $reply->addData($data);
@@ -153,7 +154,7 @@ class ReplyManagement implements \Dem\HelpDesk\Api\ReplyManagementInterface
      * @return void
      * @throws \Dem\HelpDesk\Exception
      */
-    public function validate($data)
+    public function validate(array $data)
     {
         $requiredFields = $this->getRequiredFields();
 
@@ -186,10 +187,10 @@ class ReplyManagement implements \Dem\HelpDesk\Api\ReplyManagementInterface
      */
     public function getRequiredFields()
     {
-        return array(
+        return [
             'reply_text',
             'author_type'
-        );
+        ];
     }
 
 }

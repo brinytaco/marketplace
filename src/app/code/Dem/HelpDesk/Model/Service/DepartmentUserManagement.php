@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
+use Dem\HelpDesk\Api\DepartmentUserManagementInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 
 
@@ -17,7 +17,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManagementInterface
+class DepartmentUserManagement implements DepartmentUserManagementInterface
 {
 
     /**
@@ -69,7 +69,7 @@ class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManage
      * @return void
      * @throws \Dem\HelpDesk\Exception
      */
-    public function validate($data)
+    public function validate(array $data)
     {
         $requiredFields = $this->getRequiredFields();
 
@@ -102,10 +102,10 @@ class DepartmentUserManagement implements \Dem\HelpDesk\Api\DepartmentUserManage
      */
     public function getRequiredFields()
     {
-        return array(
+        return [
             'department_id',
             'user_id'
-        );
+        ];
     }
 
 }

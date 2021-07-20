@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * HelpDesk Case Layout - Grid
+ * HelpDesk Department Layout - Grid
  *
  * =============================================================================
  *
@@ -15,15 +15,13 @@
     <update handle="styles"/>
     <head>
         <css src="Dem_HelpDesk::css/default.css" />
-        <css src="Dem_HelpDesk::css/case.css" />
-        <!--<script src="Dem_HelpDesk::js/case.js" />-->
 
         <!-- Window title, not page header. Translated -->
-        <title>Manage Cases</title>
+        <title>Manage Departments</title>
    </head>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="dem_helpdesk_caseitem_grid"/>
+            <uiComponent name="dem_helpdesk_department_grid"/>
         </referenceContainer>
     </body>
 </page>

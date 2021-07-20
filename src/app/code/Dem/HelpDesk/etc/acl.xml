@@ -16,7 +16,8 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Dem_HelpDesk::helpdesk" title="Help Desk" sortOrder="0">
-                    <resource id="Dem_HelpDesk::helpdesk_cases" title="Manage Cases" sortOrder="10"/>
+                    <resource id="Dem_HelpDesk::helpdesk_case" title="Manage Cases" sortOrder="10"/>
+                    <resource id="Dem_HelpDesk::helpdesk_department" title="Manage Departments" sortOrder="20"/>
                 </resource>
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">

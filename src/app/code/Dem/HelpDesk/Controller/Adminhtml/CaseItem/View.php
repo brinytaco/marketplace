@@ -25,21 +25,22 @@ class View extends CaseItem
      */
     public function execute()
     {
-        $case = $this->_initCase();
         $resultRedirect = $this->resultRedirectFactory->create();
-        if ($case) {
-            try {
-                $resultPage = $this->_initAction();
-                $resultPage->getConfig()->getTitle()->prepend(sprintf('%s #%s',
-                    __('Case'),
-                    $case->getCaseNumber(),
-                ));
-                return $resultPage;
-            } catch (\Exception $e) {
-                $this->logger->critical($e);
-                $this->messageManager->addErrorMessage(__('Exception occurred during case load'));
-            }
+        $objectStr = __('case');
+
+        try {
+            $case = $this->_initCase();
+            $resultPage = $this->_initAction();
+            $resultPage->getConfig()->getTitle()->prepend(sprintf('%s #%s',
+                __('Case'),
+                $case->getCaseNumber(),
+            ));
+            return $resultPage;
+        } catch (\Exception $e) {
+            $this->logger->critical($e);
+            $this->messageManager->addErrorMessage(__('Exception occurred during %1 load', $objectStr));
         }
+
         $resultRedirect->setPath('helpdesk/caseitem/');
         return $resultRedirect;
     }

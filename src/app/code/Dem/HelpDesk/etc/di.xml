@@ -14,26 +14,35 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
+    <!-- For each interface, we must define a preferred instance to be dynamically injected -->
+
     <!-- CaseItem -->
     <preference for="Dem\HelpDesk\Api\Data\CaseItemInterface" type="Dem\HelpDesk\Model\CaseItem" />
     <preference for="Dem\HelpDesk\Api\CaseItemRepositoryInterface" type="Dem\HelpDesk\Model\CaseItemRepository" />
+    <preference for="Dem\HelpDesk\Api\CaseItemManagementInterface" type="Dem\HelpDesk\Model\Service\CaseItemManagement" />
     <!-- Department -->
     <preference for="Dem\HelpDesk\Api\Data\DepartmentInterface" type="Dem\HelpDesk\Model\Department" />
     <preference for="Dem\HelpDesk\Api\DepartmentRepositoryInterface" type="Dem\HelpDesk\Model\DepartmentRepository" />
+    <preference for="Dem\HelpDesk\Api\DepartmentManagementInterface" type="Dem\HelpDesk\Model\Service\DepartmentManagement" />
     <!-- Reply -->
     <preference for="Dem\HelpDesk\Api\Data\ReplyInterface" type="Dem\HelpDesk\Model\Reply" />
     <preference for="Dem\HelpDesk\Api\ReplyRepositoryInterface" type="Dem\HelpDesk\Model\ReplyRepository" />
+    <preference for="Dem\HelpDesk\Api\ReplyManagementInterface" type="Dem\HelpDesk\Model\Service\ReplyManagement" />
     <!-- Follower -->
     <preference for="Dem\HelpDesk\Api\Data\FollowerInterface" type="Dem\HelpDesk\Model\Follower" />
     <preference for="Dem\HelpDesk\Api\FollowerRepositoryInterface" type="Dem\HelpDesk\Model\FollowerRepository" />
+    <preference for="Dem\HelpDesk\Api\FollowerManagementInterface" type="Dem\HelpDesk\Model\Service\FollowerManagement" />
     <!-- User -->
     <preference for="Dem\HelpDesk\Api\Data\UserInterface" type="Dem\HelpDesk\Model\User" />
     <preference for="Dem\HelpDesk\Api\UserRepositoryInterface" type="Dem\HelpDesk\Model\UserRepository" />
+    <preference for="Dem\HelpDesk\Api\UserManagementInterface" type="Dem\HelpDesk\Model\Service\UserManagement" />
     <!-- DepartmentUser -->
     <preference for="Dem\HelpDesk\Api\Data\DepartmentUserInterface" type="Dem\HelpDesk\Model\DepartmentUser" />
     <preference for="Dem\HelpDesk\Api\DepartmentUserRepositoryInterface" type="Dem\HelpDesk\Model\DepartmentUserRepository" />
+    <preference for="Dem\HelpDesk\Api\DepartmentUserManagementInterface" type="Dem\HelpDesk\Model\Service\DepartmentUserManagement" />
 
 
+    <!-- CaseItem -->
     <virtualType name="DemHelpDeskCaseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
             <argument name="collection" xsi:type="object" shared="false">Dem\HelpDesk\Model\Resource\CaseItem\Collection</argument>
@@ -52,6 +61,30 @@
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="dem_helpdesk_caseitem_grid_data_source" xsi:type="string">Dem\HelpDesk\Model\ResourceModel\CaseItem\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+
+    <!-- Department -->
+    <virtualType name="DemHelpDeskDepartmentGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Dem\HelpDesk\Model\Resource\Department\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">DemHelpDeskDepartmentGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="DemHelpDeskDepartmentGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="dem_helpdesk_department_grid_data_source" xsi:type="string">Dem\HelpDesk\Model\ResourceModel\Department\Grid\Collection</item>
             </argument>
         </arguments>
     </type>

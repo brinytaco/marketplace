@@ -20,8 +20,12 @@
 "Case Number","Case Number"
 "Cases","Cases"
 "Case","Case"
-"The requested case no longer exists","The requested case no longer exists"
-"Exception occurred during case load","Exception occurred during case load"
+"case","case"
+"department","department"
+"Department","Department"
+"Departments","Departments"
+"The requested %1 no longer exists","The requested %1 no longer exists"
+"Exception occurred during %1 load","Exception occurred during %1 load"
 "Admin", "DE INTERNAL"
 "How Can We Help You?","How Can We Help You?"
 
@@ -69,6 +73,7 @@
 "Invalid department selected","Invalid department selected"
 "Unable to find case with ID `%1`","Unable to find case with ID `%1`"
 "The reply `%1` cannot be empty","The reply `%1` cannot be empty"
+"The department `%1` cannot be empty","The department `%1` cannot be empty"
 "n/a","n/a"
 "Case Information","Case Information"
 

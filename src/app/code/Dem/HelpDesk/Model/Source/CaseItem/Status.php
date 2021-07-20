@@ -60,50 +60,50 @@ class Status extends SourceOptions
      */
     public function getOptions($auto = true)
     {
-        $statuses = array(
-            self::CASE_STATUS_NEW => new DataObject(array(
+        $statuses = [
+            self::CASE_STATUS_NEW => new DataObject([
                 'id' => self::CASE_STATUS_NEW,
                 'label' => __('New'),
                 'css_class' => 'new',
                 'automatic' => 0
-            )),
-            self::CASE_STATUS_ACTIVE => new DataObject(array(
+            ]),
+            self::CASE_STATUS_ACTIVE => new DataObject([
                 'id' => self::CASE_STATUS_ACTIVE,
                 'label' => __('Active'),
                 'css_class' => 'active',
                 'automatic' => 0
-            )),
-            self::CASE_STATUS_ACTIVE_PENDING => new DataObject(array(
+            ]),
+            self::CASE_STATUS_ACTIVE_PENDING => new DataObject([
                 'id' => self::CASE_STATUS_ACTIVE_PENDING,
                 'label' => __('Active - Pending Request'),
                 'css_class' => 'active-pending',
                 'automatic' => 0
-            )),
-            self::CASE_STATUS_INACTIVE => new DataObject(array(
+            ]),
+            self::CASE_STATUS_INACTIVE => new DataObject([
                 'id' => self::CASE_STATUS_INACTIVE,
                 'label' => __('Awaiting CM Response'),
                 'css_class' => 'awaiting-cm',
                 'automatic' => 1
-            )),
-            self::CASE_STATUS_INACTIVE_PENDING => new DataObject(array(
+            ]),
+            self::CASE_STATUS_INACTIVE_PENDING => new DataObject([
                 'id' => self::CASE_STATUS_INACTIVE_PENDING,
                 'label' => __('Awaiting Client Response'),
                 'css_class' => 'awaiting-client',
                 'automatic' => 1
-            )),
-            self::CASE_STATUS_RESOLVED => new DataObject(array(
+            ]),
+            self::CASE_STATUS_RESOLVED => new DataObject([
                 'id' => self::CASE_STATUS_RESOLVED,
                 'label' => __('Resolved'),
                 'css_class' => 'resolved',
                 'automatic' => 0
-            )),
-            self::CASE_STATUS_ARCHIVED => new DataObject(array(
+            ]),
+            self::CASE_STATUS_ARCHIVED => new DataObject([
                 'id' => self::CASE_STATUS_ARCHIVED,
                 'label' => __('Archived'),
                 'css_class' => 'archived',
                 'automatic' => 1
-            )),
-        );
+            ]),
+        ];
 
         $caseStatuses = $this->collectionFactory->create();
         foreach ($statuses as $status) {

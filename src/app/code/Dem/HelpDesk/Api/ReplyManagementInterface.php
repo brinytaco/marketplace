@@ -78,4 +78,11 @@ interface ReplyManagementInterface
      */
     public function validate(array $data);
 
+    /**
+     * Get required fields array
+     *
+     * @return array
+     */
+    public function getRequiredFields();
+
 }

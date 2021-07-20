@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
+use Dem\HelpDesk\Api\CaseItemManagementInterface;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 use Dem\HelpDesk\Api\Data\ReplyInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
@@ -18,7 +19,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterface
+class CaseItemManagement implements CaseItemManagementInterface
 {
 
     /**
@@ -102,7 +103,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
         $creator = $this->helper->getBackendSession()->getUser();
 
         $case->addData($data);
-        $case->addData(array(
+        $case->addData([
             'creator_customer_id' => null,
             'creator_admin_id' => $creator->getId(),
             'creator_name' => sprintf('%s %s', $creator->getFirstname(), $creator->getLastname()),
@@ -110,7 +111,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
             'status_id' => 0,
             'remote_ip' => $_SERVER['REMOTE_ADDR'],
             'http_user_agent' => $_SERVER['HTTP_USER_AGENT']
-        ));
+        ]);
 
         $case->setId(null);
         return $case;
@@ -124,7 +125,7 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
      * @throws \Dem\HelpDesk\Exception
      * @since 1.0.0
      */
-    public function validate($data)
+    public function validate(array $data)
     {
         $requiredFields = $this->getRequiredFields();
 
@@ -156,13 +157,13 @@ class CaseItemManagement implements \Dem\HelpDesk\Api\CaseItemManagementInterfac
      */
     public function getRequiredFields()
     {
-        return array(
+        return [
             'website_id',
             'department_id',
             'subject',
             'message',
             'priority'
-        );
+        ];
     }
 
     /**

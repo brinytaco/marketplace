@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Api;
 
-use Dem\HelpDesk\Api\Data\UserInterface;
-
 /**
  * HelpDesk Api Interface - User Management
  *
@@ -26,5 +24,12 @@ interface UserManagementInterface
      * @throws \Dem\HelpDesk\Exception
      */
     public function validate(array $data);
+
+    /**
+     * Get required fields array
+     *
+     * @return array
+     */
+    public function getRequiredFields();
 
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\Data\UserInterface;
+use Dem\HelpDesk\Api\UserManagementInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 
 
@@ -17,7 +17,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class UserManagement implements \Dem\HelpDesk\Api\UserManagementInterface
+class UserManagement implements UserManagementInterface
 {
 
     /**
@@ -69,7 +69,7 @@ class UserManagement implements \Dem\HelpDesk\Api\UserManagementInterface
      * @return void
      * @throws \Dem\HelpDesk\Exception
      */
-    public function validate($data)
+    public function validate(array $data)
     {
         $requiredFields = $this->getRequiredFields();
 
@@ -102,10 +102,7 @@ class UserManagement implements \Dem\HelpDesk\Api\UserManagementInterface
      */
     public function getRequiredFields()
     {
-        return array(
-            'user_text',
-            'author_type'
-        );
+        return [];
     }
 
 }

@@ -55,18 +55,21 @@ class ViewAction extends Column
     {
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
-                if (isset($item['case_id'])) {
+                if (isset($item['id_field_name'])) {
                     $viewUrlPath = $this->getData('config/viewUrlPath') ?: '#';
                     $urlEntityParamName = $this->getData('config/urlEntityParamName') ?: 'id';
+                    $indexField = $this->getData('config/indexField') ?: 'id';
+                    $actionLabel = $this->getData('config/actionLabel') ?: 'View';
                     $item[$this->getData('name')] = [
                         'view' => [
                             'href' => $this->urlBuilder->getUrl(
                                 $viewUrlPath,
                                 [
-                                    $urlEntityParamName => $item['case_id']
+                                    $urlEntityParamName => $item[$indexField]
                                 ]
                             ),
-                            'label' => __('View')
+                            // translate label
+                            'label' => __($actionLabel)
                         ]
                     ];
                 }

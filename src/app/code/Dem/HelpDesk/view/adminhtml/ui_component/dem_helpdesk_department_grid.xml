@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 /**
- * HelpDesk Case UI Component - Grid
+ * HelpDesk Department UI Component - Grid
  *
  * =============================================================================
  *
@@ -15,32 +15,32 @@
 
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid_data_source</item>
-            <item name="deps" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid_data_source</item>
+            <item name="provider" xsi:type="string">dem_helpdesk_department_grid.dem_helpdesk_department_grid_data_source</item>
+            <item name="deps" xsi:type="string">dem_helpdesk_department_grid.dem_helpdesk_department_grid_data_source</item>
         </item>
-        <item name="spinner" xsi:type="string">dem_helpdesk_caseitem_grid_columns</item>
+        <item name="spinner" xsi:type="string">dem_helpdesk_department_grid_columns</item>
         <item name="buttons" xsi:type="array">
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string" translate="true">Open New Case</item>
+                <item name="label" xsi:type="string" translate="true">Add Department</item>
                 <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/caseitem/create</item>
+                <item name="url" xsi:type="string">*/department/create</item>
             </item>
         </item>
     </argument>
 
-    <dataSource name="dem_helpdesk_caseitem_grid_data_source">
+    <dataSource name="dem_helpdesk_department_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">DemHelpDeskCaseGridDataProvider</argument>
-            <argument name="name" xsi:type="string">dem_helpdesk_caseitem_grid_data_source</argument>
-            <argument name="primaryFieldName" xsi:type="string">case_id</argument>
-            <argument name="requestFieldName" xsi:type="string">case_id</argument>
+            <argument name="class" xsi:type="string">DemHelpDeskDepartmentGridDataProvider</argument>
+            <argument name="name" xsi:type="string">dem_helpdesk_department_grid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">department_id</argument>
+            <argument name="requestFieldName" xsi:type="string">department_id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="indexField" xsi:type="string">case_id</item>
+                        <item name="indexField" xsi:type="string">department_id</item>
                     </item>
                 </item>
             </argument>
@@ -81,13 +81,13 @@
     </listingToolbar>
 
     <!-- Grid column definition -->
-    <columns name="dem_helpdesk_caseitem_grid_columns">
+    <columns name="dem_helpdesk_department_grid_columns">
 
         <!-- Make entire row clickable (requires actionsColumn defined below) -->
         <settings>
             <childDefaults>
                 <param name="fieldAction" xsi:type="array">
-                    <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid.dem_helpdesk_caseitem_grid_columns.actions</item>
+                    <item name="provider" xsi:type="string">dem_helpdesk_department_grid.dem_helpdesk_department_grid.dem_helpdesk_department_grid_columns.actions</item>
                     <item name="target" xsi:type="string">applyAction</item>
                     <item name="params" xsi:type="array">
                         <item name="0" xsi:type="string">view</item>
@@ -103,7 +103,7 @@
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">55</item>
-                    <item name="indexField" xsi:type="string">case_id</item>
+                    <item name="indexField" xsi:type="string">department_id</item>
                 </item>
             </argument>
         </selectionsColumn>
@@ -111,7 +111,7 @@
 
         <!-- Column order is natural by column "name" if no sortOrder is set -->
 
-        <column name="case_id">
+        <column name="department_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">0</item>
@@ -125,45 +125,27 @@
             </argument>
         </column>
 
-        <!-- NOTE: Column order/visibility is saved in ui_bookmark table. Be sure to remove
-                relevant entries & clear cache to observe changes. -->
-
-        <column name="case_number">
+        <column name="name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">10</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                    <item name="sorting" xsi:type="string">desc</item>
-                    <item name="label" xsi:type="string" translate="true">Case Number</item>
+                    <item name="label" xsi:type="string" translate="true">Name</item>
                     <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
 
-        <column name="website_id">
+        <column name="description">
             <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Website</item>
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">20</item>
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="label" xsi:type="string" translate="true">Website</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                </item>
-            </argument>
-        </column>
-
-        <column name="department_name">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">30</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                    <item name="label" xsi:type="string" translate="true">Department</item>
+                    <item name="label" xsi:type="string" translate="true">Description</item>
                     <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
@@ -172,7 +154,7 @@
         <column name="case_manager_name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
@@ -182,81 +164,42 @@
             </argument>
         </column>
 
-        <column name="created_at">
+        <column name="is_internal">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
                 <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">50</item>
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="label" xsi:type="string" translate="true">Created At</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">Internal</item>
                     <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
         </column>
 
-        <column name="creator_name">
+        <column name="is_active">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Config\Model\Config\Source\Yesno</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">Active</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="sort_order">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">60</item>
                     <item name="filter" xsi:type="string">text</item>
                     <item name="dataType" xsi:type="string">text</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                    <item name="label" xsi:type="string" translate="true">Created By</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                </item>
-            </argument>
-        </column>
-
-        <column name="updated_at">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">70</item>
-                    <item name="filter" xsi:type="string">dateRange</item>
-                    <item name="dataType" xsi:type="string">date</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
-                    <item name="label" xsi:type="string" translate="true">Updated At</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                </item>
-            </argument>
-        </column>
-
-        <column name="updater_name">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">80</item>
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="dataType" xsi:type="string">text</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
-                    <item name="label" xsi:type="string" translate="true">Updated By</item>
-                    <item name="visible" xsi:type="boolean">false</item>
-                </item>
-            </argument>
-        </column>
-
-        <column name="priority">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Priority</item>
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">90</item>
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="label" xsi:type="string" translate="true">Priority</item>
-                    <item name="visible" xsi:type="boolean">true</item>
-                </item>
-            </argument>
-        </column>
-
-        <column name="status_id">
-            <argument name="data" xsi:type="array">
-                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Status</item>
-                <item name="config" xsi:type="array">
-                    <item name="sortOrder" xsi:type="number">100</item>
-                    <item name="filter" xsi:type="string">select</item>
-                    <item name="dataType" xsi:type="string">select</item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
-                    <item name="label" xsi:type="string" translate="true">Status</item>
+                    <item name="label" xsi:type="string" translate="true">Sort Order</item>
                     <item name="visible" xsi:type="boolean">true</item>
                 </item>
             </argument>
@@ -268,13 +211,13 @@
                     <!-- Column header (default is "Action") -->
                     <item name="label" xsi:type="string">Action</item>
                     <!-- Link text (translated) -->
-                    <item name="actionLabel" xsi:type="string">View</item>
+                    <item name="actionLabel" xsi:type="string">Edit</item>
                     <!-- Item index field -->
-                    <item name="indexField" xsi:type="string">case_id</item>
+                    <item name="indexField" xsi:type="string">department_id</item>
                     <!-- Base link url -->
-                    <item name="viewUrlPath" xsi:type="string">helpdesk/caseitem/view</item>
+                    <item name="viewUrlPath" xsi:type="string">helpdesk/department/view</item>
                     <!-- Url parameter name. This can also be an array -->
-                    <item name="urlEntityParamName" xsi:type="string">case_id</item>
+                    <item name="urlEntityParamName" xsi:type="string">department_id</item>
                 </item>
             </argument>
         </actionsColumn>

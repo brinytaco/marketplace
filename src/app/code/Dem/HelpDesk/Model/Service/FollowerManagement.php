@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
+use Dem\HelpDesk\Api\FollowerManagementInterface;
 use Dem\HelpDesk\Api\Data\CaseItemInterface;
 use Dem\HelpDesk\Api\Data\FollowerInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
@@ -18,7 +19,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterface
+class FollowerManagement implements FollowerManagementInterface
 {
 
     /**
@@ -81,10 +82,10 @@ class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterfac
         CaseItemInterface $case,
         $userId
     ) {
-        $data = array(
+        $data = [
             'case_id'     => $case->getId(),
             'user_id'     => $userId,
-        );
+        ];
         $this->validate($data);
 
         return $follower->addData($data);
@@ -97,7 +98,7 @@ class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterfac
      * @return void
      * @throws \Dem\HelpDesk\Exception
      */
-    public function validate($data)
+    public function validate(array $data)
     {
         $requiredFields = $this->getRequiredFields();
 
@@ -129,9 +130,7 @@ class FollowerManagement implements \Dem\HelpDesk\Api\FollowerManagementInterfac
      */
     public function getRequiredFields()
     {
-        return array(
-            'user_id'
-        );
+        return [];
     }
 
 }

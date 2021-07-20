@@ -18,6 +18,9 @@
         <css src="Dem_HelpDesk::css/case.css" />
         <css src="Dem_HelpDesk::css/reply.css" />
         <script src="Dem_HelpDesk::js/case.js" />
+
+        <!-- Window title, not page header. Translated -->
+        <title>Case View</title>
    </head>
     <body>
         <referenceContainer name="content">

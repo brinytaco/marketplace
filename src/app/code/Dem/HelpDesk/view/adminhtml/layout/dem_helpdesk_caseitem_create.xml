@@ -19,7 +19,7 @@
         <css src="Dem_HelpDesk::css/case.css" />
         <!--<script src="Dem_HelpDesk::js/case.js" />-->
 
-        <!-- Translated automatically -->
+        <!-- Window title, not page header. Translated -->
         <title>Open New Case</title>
    </head>
     <body>
