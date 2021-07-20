@@ -19,8 +19,6 @@ use Dem\HelpDesk\Model\ResourceModel\DepartmentUser as Resource;
  */
 class Collection extends AbstractCollection
 {
-    const EVENT_PREFIX = 'helpdesk_department_user_collection';
-
     /**
      * Identifier field name for collection items
      *
@@ -33,7 +31,7 @@ class Collection extends AbstractCollection
      *
      * @var string
      */
-    protected $_eventPrefix = self::EVENT_PREFIX;
+    protected $_eventPrefix = 'helpdesk_department_user_collection';
 
     /**
      * Name of event parameter

@@ -11,14 +11,15 @@ use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\DataObject;
 use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Api\SearchResultsInterface;
-use Dem\HelpDesk\Api\ReplyRepositoryInterface;
-use Dem\HelpDesk\Api\FollowerRepositoryInterface;
-use Dem\HelpDesk\Api\DepartmentRepositoryInterface;
-use Dem\HelpDesk\Api\UserRepositoryInterface;
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\ReplyInterface;
-use Dem\HelpDesk\Api\Data\FollowerInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Dem\HelpDesk\Model\ReplyRepository;
+use Dem\HelpDesk\Model\FollowerRepository;
+use Dem\HelpDesk\Model\DepartmentRepository;
+use Dem\HelpDesk\Model\UserRepository;
+use Dem\HelpDesk\Model\Department;
+use Dem\HelpDesk\Model\CaseItem as CaseModel;
+use Dem\HelpDesk\Model\Reply;
+use Dem\HelpDesk\Model\Follower;
 use Dem\HelpDesk\Helper\Data as Helper;
 
 /**
@@ -34,22 +35,22 @@ use Dem\HelpDesk\Helper\Data as Helper;
 class CaseItem extends AbstractDb
 {
     /**
-     * @var ReplyRepositoryInterface
+     * @var ReplyRepository
      */
     protected $replyRepository;
 
     /**
-     * @var FollowerRepositoryInterface
+     * @var FollowerRepository
      */
     protected $followerRepository;
 
     /**
-     * @var DepartmentRepositoryInterface
+     * @var DepartmentRepository
      */
     protected $departmentRepository;
 
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepository
      */
     protected $userRepository;
 
@@ -64,7 +65,7 @@ class CaseItem extends AbstractDb
     protected $helper;
 
     /**
-     * @var DepartmentInterface
+     * @var Department
      */
     private $department;
 
@@ -76,10 +77,10 @@ class CaseItem extends AbstractDb
     /**
      * @param Context $context
      * @param DateTime $date
-     * @param ReplyRepositoryInterface $replyRepository
-     * @param FollowerRepositoryInterface $followerRepository
-     * @param DepartmentRepositoryInterface $departmentRepository
-     * @param UserRepositoryInterface $userRepository
+     * @param ReplyRepository $replyRepository
+     * @param FollowerRepository $followerRepository
+     * @param DepartmentRepository $departmentRepository
+     * @param UserRepository $userRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Helper $helper
      * @return void
@@ -87,10 +88,10 @@ class CaseItem extends AbstractDb
     public function __construct(
         Context $context,
         DateTime $date,
-        ReplyRepositoryInterface $replyRepository,
-        FollowerRepositoryInterface $followerRepository,
-        DepartmentRepositoryInterface $departmentRepository,
-        UserRepositoryInterface $userRepository,
+        ReplyRepository $replyRepository,
+        FollowerRepository $followerRepository,
+        DepartmentRepository $departmentRepository,
+        UserRepository $userRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         Helper $helper
     ) {
@@ -115,7 +116,7 @@ class CaseItem extends AbstractDb
     /**
      * Add case_number to object data after load
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
@@ -133,7 +134,7 @@ class CaseItem extends AbstractDb
     /**
      *  and add protectCode for
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
@@ -154,7 +155,7 @@ class CaseItem extends AbstractDb
     /**
      * After save, perform additional actions
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
@@ -169,14 +170,13 @@ class CaseItem extends AbstractDb
     /**
      * Save new replies
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
-    protected function saveReplies(AbstractModel $object)
+    protected function saveReplies(CaseModel $object)
     {
-        /** @var array $replies */
-        /** @var ReplyInterface $reply */
+        /** @var Reply $reply */
         $replies = $object->getRepliesToSave();
         foreach ($replies as $reply) {
             $reply->setCaseId($object->getId());
@@ -189,14 +189,13 @@ class CaseItem extends AbstractDb
     /**
      * Save added/removed followers
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
-    protected function saveFollowers(AbstractModel $object)
+    protected function saveFollowers(CaseModel $object)
     {
-        /* @var $followers array */
-        /* @var $follower \Dem\HelpDesk\Api\Data\FollowerInterface */
+        /** @var Follower $follower */
         $followers = $object->getFollowersToSave();
         foreach ($followers as $follower) {
             $follower->setCaseId($object->getId());
@@ -209,37 +208,37 @@ class CaseItem extends AbstractDb
     /**
      * Build and set case number value
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
     public function setCaseNumber(AbstractModel $object)
     {
-        $websiteId = str_pad($object->getWebsiteId(), 3, '0', STR_PAD_LEFT);
+        $websiteId = str_pad((string) $object->getWebsiteId(), 3, '0', STR_PAD_LEFT);
         $caseId = str_pad($object->getCaseId(), 6, '0', STR_PAD_LEFT);
         $caseNumber = $websiteId . '-' . $caseId;
-        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_NUMBER, $caseNumber);
+        $object->setData(CaseModel::CASE_NUMBER, $caseNumber);
         return $this;
     }
 
     /**
      * Retrieve and set department_name value
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
     public function setDepartmentName(AbstractModel $object)
     {
-        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::DEPARTMENT_NAME, $this->getDepartment($object)->getName());
+        $object->setData(CaseModel::DEPARTMENT_NAME, $this->getDepartment($object)->getName());
         return $this;
     }
 
     /**
      * Fetch department instance for this object
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
-     * @return $this
+     * @param CaseModel $object
+     * @return Department
      * @since 1.0.0
      */
     public function getDepartment(AbstractModel $object)
@@ -253,22 +252,22 @@ class CaseItem extends AbstractDb
     /**
      * Retrieve and set website name value
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
     public function setWebsiteName(AbstractModel $object)
     {
-        /* @var $website \Magento\Store\Api\Data\WebsiteInterface */
+        /** @var WebsiteInterface $website */
         $website = $this->helper->getWebsite($object->getWebsiteId());
-        $object->setData(\Dem\HelpDesk\Api\Data\CaseItemInterface::WEBSITE_NAME, $website->getName());
+        $object->setData(CaseModel::WEBSITE_NAME, $website->getName());
         return $this;
     }
 
     /**
      * Retrieve and set case manager name value
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
@@ -276,7 +275,7 @@ class CaseItem extends AbstractDb
     {
         $caseManagerId = $this->getDepartment($object)->getCaseManagerId();
         $user = $this->userRepository->getById($caseManagerId);
-        $object->setData(CaseItemInterface::CASE_MANAGER, $user);
+        $object->setData(CaseModel::CASE_MANAGER, $user);
         return $this;
     }
 
@@ -285,13 +284,13 @@ class CaseItem extends AbstractDb
      *
      * Sort in reverse order to always place most recent on top
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return SearchResultsInterface
      */
     public function getReplies(AbstractModel $object)
     {
         $this->searchCriteriaBuilder
-            ->addFilter(ReplyInterface::CASE_ID, $object->getId());
+            ->addFilter(Reply::CASE_ID, $object->getId());
 
         $sortOrders = [
             new SortOrder(['field' => 'reply_id', 'direction' => 'desc'])
@@ -307,13 +306,13 @@ class CaseItem extends AbstractDb
     /**
      * Get case followers
      *
-     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @param CaseModel $object
      * @return SearchResultsInterface
      */
     public function getFollowers(AbstractModel $object)
     {
         $this->searchCriteriaBuilder
-            ->addFilter(FollowerInterface::CASE_ID, $object->getId());
+            ->addFilter(Follower::CASE_ID, $object->getId());
 
         $searchCriteria = $this->searchCriteriaBuilder->create();
 

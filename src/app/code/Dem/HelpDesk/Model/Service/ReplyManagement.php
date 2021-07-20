@@ -3,20 +3,17 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\ReplyManagementInterface;
-use Dem\HelpDesk\Model\Reply;
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Model\CaseItem;
-use Dem\HelpDesk\Api\Data\ReplyInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\HelpDesk\Model\Reply;
+use Dem\HelpDesk\Model\CaseItem;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface;
 
 
 /**
- * HelpDesk Model - Reply Management
+ * HelpDesk Service Model - Reply Management
  *
  * =============================================================================
  *
@@ -25,9 +22,8 @@ use Psr\Log\LoggerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class ReplyManagement implements ReplyManagementInterface
+class ReplyManagement
 {
-
     /**
      * Core registry
      *
@@ -51,6 +47,12 @@ class ReplyManagement implements ReplyManagementInterface
     protected $helper;
 
     /**
+     * Phrase object name
+     * @var string
+     */
+    protected $objectName = 'reply';
+
+    /**
      * Data constructor.
      *
      * @param Registry $coreRegistry
@@ -70,22 +72,21 @@ class ReplyManagement implements ReplyManagementInterface
         $this->helper = $helper;
     }
 
-
     /**
      * Create standard reply
      *
      * @param Reply $reply
-     * @param CaseItemInterface $case
+     * @param CaseItem $case
      * @param int $authorId
      * @param string $authorType
      * @param string $replyText
      * @param int|null $statusId
      * @param bool|null $isInitial
-     * @return ReplyInterface
+     * @return Reply
      */
     public function createReply(
-        ReplyInterface $reply,
-        CaseItemInterface $case,
+        Reply $reply,
+        CaseItem $case,
         $authorId,
         $authorType,
         $replyText,
@@ -96,7 +97,7 @@ class ReplyManagement implements ReplyManagementInterface
             'author_id'   => $authorId,
             'author_type' => $authorType,
             'reply_text'  => $replyText,
-            'remote_ip'   => ($authorType == ReplyInterface::AUTHOR_TYPE_SYSTEM)
+            'remote_ip'   => ($authorType == Reply::AUTHOR_TYPE_SYSTEM)
                 ? null : $this->helper::getServerRemoteIp(),
             'status_id'   => $case->getStatusId(),
             'is_initial'  => (int) $isInitial
@@ -109,15 +110,15 @@ class ReplyManagement implements ReplyManagementInterface
     /**
      * Create initial reply
      *
-     * @param ReplyInterface $reply
-     * @param CaseItemInterface $case
+     * @param Reply $reply
+     * @param CaseItem $case
      * @param int $authorId
      * @param string $replyText
-     * @return ReplyInterface
+     * @return Reply
      */
     public function createInitialReply(
-        ReplyInterface $reply,
-        CaseItemInterface $case,
+        Reply $reply,
+        CaseItem $case,
         $authorId,
         $replyText
     ) {
@@ -125,7 +126,7 @@ class ReplyManagement implements ReplyManagementInterface
             $reply,
             $case,
             $authorId,
-            $authorType = ReplyInterface::AUTHOR_TYPE_CREATOR,
+            $authorType = Reply::AUTHOR_TYPE_CREATOR,
             $replyText,
             $isInitial = true
         );
@@ -137,18 +138,18 @@ class ReplyManagement implements ReplyManagementInterface
      * @param Reply $reply
      * @param CaseItem $case
      * @param string $replyText
-     * @return ReplyInterface
+     * @return Reply
      */
     public function createSystemReply(
-        ReplyInterface $reply,
-        CaseItemInterface $case,
+        Reply $reply,
+        CaseItem $case,
         $replyText
     ) {
         return $this->createReply(
             $reply,
             $case,
             $authorId = null,
-            $authorType = ReplyInterface::AUTHOR_TYPE_SYSTEM,
+            $authorType = Reply::AUTHOR_TYPE_SYSTEM,
             $replyText
         );
     }
@@ -158,7 +159,7 @@ class ReplyManagement implements ReplyManagementInterface
      *
      * @param array $data
      * @return void
-     * @throws \Dem\HelpDesk\Exception
+     * @throws HelpDeskException
      */
     public function validate(array $data)
     {
@@ -171,7 +172,7 @@ class ReplyManagement implements ReplyManagementInterface
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The reply `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $requiredField));
             }
         }
 
@@ -179,7 +180,7 @@ class ReplyManagement implements ReplyManagementInterface
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The reply `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
 

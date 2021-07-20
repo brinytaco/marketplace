@@ -6,12 +6,10 @@ namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View;
 use Dem\HelpDesk\Model\CaseItem;
 use Dem\HelpDesk\Model\Reply;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\FollowerInterface;
-use Dem\HelpDesk\Api\ReplyRepositoryInterface;
-use Dem\HelpDesk\Api\UserRepositoryInterface;
+use Dem\HelpDesk\Model\Follower;
+use Dem\HelpDesk\Model\ReplyRepository;
+use Dem\HelpDesk\Model\UserRepository;
 use Dem\HelpDesk\Model\Source\CaseItem\Status;
-use Dem\HelpDesk\Api\Data\ReplyInterface;
 use Dem\HelpDesk\Helper\Data as Helper;
 use Dem\Base\Data\SearchResultsProcessor;
 
@@ -61,12 +59,12 @@ class Tabs extends Template implements TabInterface
     protected $caseResource;
 
     /**
-     * @var ReplyRepositoryInterface
+     * @var ReplyRepository
      */
     protected $replyRepository;
 
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepository
      */
     protected $userRepository;
 
@@ -81,7 +79,7 @@ class Tabs extends Template implements TabInterface
     protected $statusOptions;
 
     /**
-     * @var ReplyInterface []
+     * @var Reply[]
      */
     protected $replies;
 
@@ -96,8 +94,8 @@ class Tabs extends Template implements TabInterface
      * @param Dir $moduleDir
      * @param Registry $registry
      * @param CaseItem $caseResource
-     * @param ReplyRepositoryInterface $replyRepository
-     * @param UserRepositoryInterface $userRepository
+     * @param ReplyRepository $replyRepository
+     * @param UserRepository $userRepository
      * @param Status $statusSource
      * @param Helper $helper
      * @param array $data
@@ -107,8 +105,8 @@ class Tabs extends Template implements TabInterface
         Dir $moduleDir,
         Registry $registry,
         CaseItem $caseResource,
-        ReplyRepositoryInterface $replyRepository,
-        UserRepositoryInterface $userRepository,
+        ReplyRepository $replyRepository,
+        UserRepository $userRepository,
         Status $statusSource,
         Helper $helper,
         array $data = []
@@ -189,7 +187,7 @@ class Tabs extends Template implements TabInterface
     /**
      * Retrieve registered Case model
      *
-     * @return CaseItemInterface
+     * @return CaseItem
      * @since 1.0.0
      */
     public function getCase()
@@ -200,7 +198,7 @@ class Tabs extends Template implements TabInterface
     /**
      * Get initial reply message
      *
-     * @return ReplyInterface|bool
+     * @return Reply|bool
      * @since 1.0.0
      */
     public function getInitialReply()
@@ -214,7 +212,7 @@ class Tabs extends Template implements TabInterface
      * @param int $limit Limit results value (0 = no limit)
      * @param bool $includeInitial
      * @param bool $includeSystem
-     * @return ReplyInterface[]
+     * @return Reply[]
      * @since 1.0.0
      */
     public function getVisibleReplies($limit = 0, $includeInitial = true, $includeSystem = true)
@@ -224,7 +222,7 @@ class Tabs extends Template implements TabInterface
         if (!isset($this->replies)) {
             $this->replies = $this->getCase()->getReplies();
         }
-        /** @var ReplyInterface $reply */
+        /** @var Reply $reply */
         foreach ($this->replies->getItems() as $reply) {
             if (!$includeInitial && $reply->getIsInitial()) {
                 continue;
@@ -301,7 +299,7 @@ class Tabs extends Template implements TabInterface
      * @return string
      * @since 1.0.0
      */
-    public function getReplyClass(ReplyInterface $reply)
+    public function getReplyClass(Reply $reply)
     {
         return strtolower(str_replace('_', '-', $reply->getAuthorType()));
     }
@@ -315,7 +313,7 @@ class Tabs extends Template implements TabInterface
      * @return string
      * @since 1.0.0
      */
-    public function getAuthorName(ReplyInterface $reply)
+    public function getAuthorName(Reply $reply)
     {
         if ($reply->getAuthorName()) {
             return $reply->getAuthorName();
@@ -334,7 +332,7 @@ class Tabs extends Template implements TabInterface
      * @param Reply $reply
      * @return string
      */
-    public function renderReplyBlock(ReplyInterface $reply)
+    public function renderReplyBlock(Reply $reply)
     {
         $templatePath = $reply->getIsAuthorTypeSystem()
                 ? self::ADMIN_REPLY_TEMPLATE_PATH_SYSTEM
@@ -416,14 +414,13 @@ class Tabs extends Template implements TabInterface
         /** @var User $user */
         $user = $this->helper->getBackendSession()->getUser();
 
-        /** @var \Dem\HelpDesk\Api\Data\FollowerInterface[] $followers */
         $followers = $this->getCase()->getFollowers();
 
         // Allows manipulation of items similar to \Magento\Framework\Data\Collection
         $followerCollection = new SearchResultsProcessor($followers);
 
         // null value returned if not matched
-        /** @var FollowerInterface|null $follower */
+        /** @var Follower|null $follower */
         $follower = $followerCollection->getItemByColumnValue('user_id', $user->getId());
 
         return ($follower);

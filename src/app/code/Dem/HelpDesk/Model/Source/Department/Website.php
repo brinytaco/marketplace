@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Source\Department;
 
-use Dem\HelpDesk\Model\Source\SourceOptions;
-
 /**
  * HelpDesk Source Model - Department Website
  *

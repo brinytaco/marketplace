@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Data\Collection;
 use Dem\HelpDesk\Model\Source\SourceOptions;
 
 /**
@@ -54,8 +55,8 @@ class Status extends SourceOptions
     /**
      * Get available case statuses as \Magento\Framework\Data\Collection
      *
-     * @param boolean $auto | Include automatic status types
-     * @return \Magento\Framework\Data\Collection
+     * @param boolean $auto Option to include automatic status types
+     * @return Collection
      * @since 1.0.0
      */
     public function getOptions($auto = true)

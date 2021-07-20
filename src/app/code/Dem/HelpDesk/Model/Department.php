@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
+use Dem\HelpDesk\Model\ResourceModel\Department as Resource;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
 
 /**
  * HelpDesk Model - Department
@@ -17,11 +18,26 @@ use Dem\HelpDesk\Api\Data\DepartmentInterface;
  * @since      1.0.0
  *
  */
-class Department extends AbstractModel implements DepartmentInterface
+class Department extends AbstractModel
 {
     const CURRENT_KEY = 'current_department';
     const CACHE_TAG = 'helpdesk_department';
     const EVENT_PREFIX = 'helpdesk_department';
+
+    const DEPARTMENT_ID         = 'department_id';
+    const WEBSITE_ID            = 'website_id';
+    const CASE_MANAGER_ID       = 'case_manager_id';
+    const NAME                  = 'name';
+    const DESCRIPTION           = 'description';
+    const IS_INTERNAL           = 'is_internal';
+    const IS_ACTIVE             = 'is_active';
+    const SORT_ORDER            = 'sort_order';
+    const CREATED_AT            = 'created_at';
+    const UPDATED_AT            = 'updated_at';
+
+    const DEFAULT_FOLLOWERS     = '_default_followers';
+    const CASE_MANAGER_NAME     = '_case_manager_name';
+    const CASE_MANAGER_EMAIL     = '_case_manager_email';
 
     /**
      * @var string
@@ -34,7 +50,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\Department::class);
+        $this->_init(Resource::class);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @throws LocalizedException
+     * @return Resource
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -44,7 +71,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getId()
     {
-        return $this->getData(DepartmentInterface::DEPARTMENT_ID);
+        return $this->getData(self::DEPARTMENT_ID);
     }
 
     /**
@@ -54,18 +81,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getWebsiteId()
     {
-        return $this->getData(DepartmentInterface::WEBSITE_ID);
+        return $this->getData(self::WEBSITE_ID);
     }
 
     /**
      * Set website id
      *
      * @param int $websiteId
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setWebsiteId($websiteId)
     {
-        return $this->setData(DepartmentInterface::WEBSITE_ID, $websiteId);
+        return $this->setData(self::WEBSITE_ID, $websiteId);
     }
 
     /**
@@ -75,18 +102,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getCaseManagerId()
     {
-        return $this->getData(DepartmentInterface::CASE_MANAGER_ID);
+        return $this->getData(self::CASE_MANAGER_ID);
     }
 
     /**
      * Set case manager id
      *
      * @param int $caseManagerId
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setCaseManagerId($caseManagerId)
     {
-        return $this->setData(DepartmentInterface::CASE_MANAGER_ID, $caseManagerId);
+        return $this->setData(self::CASE_MANAGER_ID, $caseManagerId);
     }
 
     /**
@@ -96,7 +123,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getName()
     {
-        return $this->getData(DepartmentInterface::NAME);
+        return $this->getData(self::NAME);
     }
 
     /**
@@ -107,7 +134,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function setName($name)
     {
-        return $this->setData(DepartmentInterface::NAME, $name);
+        return $this->setData(self::NAME, $name);
     }
 
     /**
@@ -117,18 +144,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getDescription()
     {
-        return $this->getData(DepartmentInterface::DESCRIPTION);
+        return $this->getData(self::DESCRIPTION);
     }
 
     /**
      * Set description
      *
      * @param string $description
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setDescription($description)
     {
-        return $this->setData(DepartmentInterface::DESCRIPTION, $description);
+        return $this->setData(self::DESCRIPTION, $description);
     }
 
     /**
@@ -138,18 +165,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getIsInternal()
     {
-        return $this->getData(DepartmentInterface::IS_INTERNAL);
+        return $this->getData(self::IS_INTERNAL);
     }
 
     /**
      * Set is_internal flag
      *
      * @param int|bool $isInternal
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setIsInternal($isInternal)
     {
-        return $this->setData(DepartmentInterface::IS_INTERNAL, $isInternal);
+        return $this->setData(self::IS_INTERNAL, $isInternal);
     }
 
     /**
@@ -159,18 +186,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getIsActive()
     {
-        return $this->getData(DepartmentInterface::IS_ACTIVE);
+        return $this->getData(self::IS_ACTIVE);
     }
 
     /**
      * Set is_active flag
      *
      * @param int|bool $isActive
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setIsActive($isActive)
     {
-        return $this->setData(DepartmentInterface::IS_ACTIVE, $isActive);
+        return $this->setData(self::IS_ACTIVE, $isActive);
     }
 
     /**
@@ -180,18 +207,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getSortOrder()
     {
-        return $this->getData(DepartmentInterface::SORT_ORDER);
+        return $this->getData(self::SORT_ORDER);
     }
 
     /**
      * Set sort_order
      *
      * @param int $sortOrder
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setSortOrder($sortOrder)
     {
-        return $this->setData(DepartmentInterface::SORT_ORDER, $sortOrder);
+        return $this->setData(self::SORT_ORDER, $sortOrder);
     }
 
     /**
@@ -201,18 +228,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getCreatedAt()
     {
-        return $this->getData(DepartmentInterface::CREATED_AT);
+        return $this->getData(self::CREATED_AT);
     }
 
     /**
      * set created at
      *
      * @param $createdAt
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setCreatedAt($createdAt)
     {
-        return $this->setData(DepartmentInterface::CREATED_AT, $createdAt);
+        return $this->setData(self::CREATED_AT, $createdAt);
     }
 
     /**
@@ -222,18 +249,18 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getUpdatedAt()
     {
-        return $this->getData(DepartmentInterface::UPDATED_AT);
+        return $this->getData(self::UPDATED_AT);
     }
 
     /**
      * set updated at
      *
      * @param $updatedAt
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setUpdatedAt($updatedAt)
     {
-        return $this->setData(DepartmentInterface::UPDATED_AT, $updatedAt);
+        return $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
     /**
@@ -243,7 +270,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getDefaultFollowers()
     {
-        return $this->getData(DepartmentInterface::DEFAULT_FOLLOWERS);
+        return $this->getData(self::DEFAULT_FOLLOWERS);
     }
 
 
@@ -254,7 +281,7 @@ class Department extends AbstractModel implements DepartmentInterface
      * it should not be set here
      *
      * @param $followerIds
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setDefaultFollowers($followerIds)
     {
@@ -268,7 +295,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getCaseManagerName()
     {
-        return $this->getData(DepartmentInterface::CASE_MANAGER_NAME);
+        return $this->getData(self::CASE_MANAGER_NAME);
     }
 
     /**
@@ -278,7 +305,7 @@ class Department extends AbstractModel implements DepartmentInterface
      * it should not be set here
      *
      * @param string $name
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setCaseManagerName($name)
     {
@@ -292,7 +319,7 @@ class Department extends AbstractModel implements DepartmentInterface
      */
     public function getCaseManagerEmail()
     {
-        return $this->getData(DepartmentInterface::CASE_MANAGER_EMAIL);
+        return $this->getData(self::CASE_MANAGER_EMAIL);
     }
 
     /**
@@ -302,7 +329,7 @@ class Department extends AbstractModel implements DepartmentInterface
      * it should not be set here
      *
      * @param string $name
-     * @return DepartmentInterface
+     * @return Department
      */
     public function setCaseManagerEmail($name)
     {

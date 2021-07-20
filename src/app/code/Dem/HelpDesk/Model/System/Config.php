@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\System;
 
+use Magento\Framework\App\Config\Value;
+
 /**
  * HelpDesk System Model - Configuration
  *
@@ -13,7 +15,7 @@ namespace Dem\HelpDesk\Model\System;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Config extends \Magento\Framework\App\Config\Value
+class Config extends Value
 {
     /**
      * {@inheritdoc}

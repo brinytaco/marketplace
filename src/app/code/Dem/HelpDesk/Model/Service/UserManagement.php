@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\UserManagementInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 use Dem\HelpDesk\Helper\Data as Helper;
 use Magento\Framework\Registry;
@@ -12,7 +11,7 @@ use Psr\Log\LoggerInterface;
 
 
 /**
- * HelpDesk Model - User Management
+ * HelpDesk Service Model - User Management
  *
  * =============================================================================
  *
@@ -21,9 +20,8 @@ use Psr\Log\LoggerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class UserManagement implements UserManagementInterface
+class UserManagement
 {
-
     /**
      * Core registry
      *
@@ -45,6 +43,12 @@ class UserManagement implements UserManagementInterface
      * @var Helper
      */
     protected $helper;
+
+    /**
+     * Phrase object name
+     * @var string
+     */
+    protected $objectName = 'user';
 
     /**
      * Data constructor.
@@ -84,7 +88,7 @@ class UserManagement implements UserManagementInterface
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The user `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $requiredField));
             }
         }
 
@@ -92,7 +96,7 @@ class UserManagement implements UserManagementInterface
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The user `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
 

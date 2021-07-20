@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
+use Dem\HelpDesk\Model\ResourceModel\Follower as Resource;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Dem\HelpDesk\Api\Data\FollowerInterface;
 
 /**
  * HelpDesk Model - Follower
@@ -17,9 +18,16 @@ use Dem\HelpDesk\Api\Data\FollowerInterface;
  * @since      1.0.0
  *
  */
-class Follower extends AbstractModel implements FollowerInterface
+class Follower extends AbstractModel
 {
     const EVENT_PREFIX = 'helpdesk_follower';
+
+    const FOLLOWER_ID         = 'follower_id';
+    const CASE_ID             = 'case_id';
+    const USER_ID             = 'user_id';
+    const LAST_READ           = 'last_read';
+    const CREATED_AT          = 'created_at';
+    const UPDATED_AT          = 'updated_at';
 
     /**
      * @var string
@@ -32,7 +40,18 @@ class Follower extends AbstractModel implements FollowerInterface
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\Follower::class);
+        $this->_init(Resource::class);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @throws LocalizedException
+     * @return Resource
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -42,7 +61,7 @@ class Follower extends AbstractModel implements FollowerInterface
      */
     public function getId()
     {
-        return $this->getData(FollowerInterface::FOLLOWER_ID);
+        return $this->getData(self::FOLLOWER_ID);
     }
 
     /**
@@ -52,18 +71,18 @@ class Follower extends AbstractModel implements FollowerInterface
      */
     public function getCaseId()
     {
-        return $this->getData(FollowerInterface::CASE_ID);
+        return $this->getData(self::CASE_ID);
     }
 
     /**
      * Set case id
      *
      * @param int $caseId
-     * @return FollowerInterface
+     * @return Follower
      */
     public function setCaseId($caseId)
     {
-        return $this->setData(FollowerInterface::CASE_ID, $caseId);
+        return $this->setData(self::CASE_ID, $caseId);
     }
 
     /**
@@ -73,18 +92,18 @@ class Follower extends AbstractModel implements FollowerInterface
      */
     public function getUserId()
     {
-        return $this->getData(FollowerInterface::USER_ID);
+        return $this->getData(self::USER_ID);
     }
 
     /**
      * Set user id
      *
      * @param int $userId
-     * @return FollowerInterface
+     * @return Follower
      */
     public function setUserId($userId)
     {
-        return $this->setData(FollowerInterface::USER_ID, $userId);
+        return $this->setData(self::USER_ID, $userId);
     }
 
     /**
@@ -94,18 +113,18 @@ class Follower extends AbstractModel implements FollowerInterface
      */
     public function getLastRead()
     {
-        return $this->getData(FollowerInterface::LAST_READ);
+        return $this->getData(self::LAST_READ);
     }
 
     /**
      * Set last read reply id
      *
      * @param int $lastRead
-     * @return FollowerInterface
+     * @return Follower
      */
     public function setLastRead($lastRead)
     {
-        return $this->setData(FollowerInterface::LAST_READ, $lastRead);
+        return $this->setData(self::LAST_READ, $lastRead);
     }
 
     /**
@@ -115,18 +134,18 @@ class Follower extends AbstractModel implements FollowerInterface
      */
     public function getCreatedAt()
     {
-        return $this->getData(FollowerInterface::CREATED_AT);
+        return $this->getData(self::CREATED_AT);
     }
 
     /**
      * set created at
      *
      * @param $createdAt
-     * @return FollowerInterface
+     * @return Follower
      */
     public function setCreatedAt($createdAt)
     {
-        return $this->setData(FollowerInterface::CREATED_AT, $createdAt);
+        return $this->setData(self::CREATED_AT, $createdAt);
     }
 
     /**
@@ -136,18 +155,18 @@ class Follower extends AbstractModel implements FollowerInterface
      */
     public function getUpdatedAt()
     {
-        return $this->getData(FollowerInterface::UPDATED_AT);
+        return $this->getData(self::UPDATED_AT);
     }
 
     /**
      * set updated at
      *
      * @param $updatedAt
-     * @return FollowerInterface
+     * @return Follower
      */
     public function setUpdatedAt($updatedAt)
     {
-        return $this->setData(FollowerInterface::UPDATED_AT, $updatedAt);
+        return $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
 }

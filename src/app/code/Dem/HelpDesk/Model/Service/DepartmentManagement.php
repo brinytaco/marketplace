@@ -3,16 +3,16 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\DepartmentManagementInterface;
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
 use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\HelpDesk\Model\Department;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ManagerInterface;
+use Psr\Log\LoggerInterface;
 
 
 /**
- * HelpDesk Model - DepartmentUser Management
+ * HelpDesk Service Model - DepartmentUser Management
  *
  * =============================================================================
  *
@@ -21,7 +21,7 @@ use Magento\Framework\Event\ManagerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentManagement implements DepartmentManagementInterface
+class DepartmentManagement
 {
 
     /**
@@ -37,24 +37,45 @@ class DepartmentManagement implements DepartmentManagementInterface
     protected $eventManager;
 
     /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     *
+     * @var Department
+     */
+    protected $department;
+
+    /**
      * @var Helper
      */
     protected $helper;
+
+    /**
+     * Phrase object name
+     * @var string
+     */
+    protected $objectName = 'department';
+
 
     /**
      * Data constructor.
      *
      * @param Registry $coreRegistry
      * @param ManagerInterface $eventManager
+     * @param LoggerInterface $logger
      * @param Helper $helper
      */
     public function __construct(
         Registry $coreRegistry,
         ManagerInterface $eventManager,
+        LoggerInterface $logger,
         Helper $helper
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->eventManager = $eventManager;
+        $this->logger = $logger;
         $this->helper = $helper;
     }
 
@@ -76,7 +97,7 @@ class DepartmentManagement implements DepartmentManagementInterface
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The department `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $requiredField));
             }
         }
 
@@ -84,7 +105,7 @@ class DepartmentManagement implements DepartmentManagementInterface
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The department `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
 

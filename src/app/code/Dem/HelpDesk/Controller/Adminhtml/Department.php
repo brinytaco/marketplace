@@ -3,11 +3,11 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml;
 
+use Dem\HelpDesk\Model\Department as DepartmentModel;
 use Dem\Base\Controller\Adminhtml\AbstractAction;
-use Dem\HelpDesk\Api\DepartmentRepositoryInterface;
-use Dem\HelpDesk\Api\DepartmentManagementInterface;
+use Dem\HelpDesk\Model\DepartmentRepository;
+use Dem\HelpDesk\Model\Service\DepartmentManagement;
 use Dem\HelpDesk\Helper\Data as Helper;
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\App\Request\Http as RequestHttp;
@@ -39,7 +39,7 @@ abstract class Department extends AbstractAction
     const ACTION_RESOURCE = 'Dem_HelpDesk::helpdesk_department';
 
     /**
-     * @var DepartmentRepositoryInterface
+     * @var DepartmentRepository
      */
     protected $departmentRepository;
 
@@ -49,12 +49,12 @@ abstract class Department extends AbstractAction
     protected $helper;
 
     /**
-     * @var DepartmentManagementInterface
+     * @var DepartmentManagement
      */
     protected $departmentManager;
 
     /**
-     * @var Department
+     * @var DepartmentModel
      */
     protected $department;
 
@@ -69,8 +69,8 @@ abstract class Department extends AbstractAction
      * @param JsonFactory $jsonFactory
      * @param LayoutFactory $layoutFactory
      * @param RedirectFactory $redirectFactory
-     * @param DepartmentRepositoryInterface $departmentRepository
-     * @param DepartmentManagementInterface $departmentManager
+     * @param DepartmentRepository $departmentRepository
+     * @param DepartmentManagement $departmentManager
      * @param Helper $helper
      */
     public function __construct(
@@ -82,8 +82,8 @@ abstract class Department extends AbstractAction
         JsonFactory $jsonFactory,
         LayoutFactory $layoutFactory,
         RedirectFactory $redirectFactory,
-        DepartmentRepositoryInterface $departmentRepository,
-        DepartmentManagementInterface $departmentManager,
+        DepartmentRepository $departmentRepository,
+        DepartmentManagement $departmentManager,
         Helper $helper
     ) {
         $this->departmentRepository = $departmentRepository;
@@ -118,20 +118,19 @@ abstract class Department extends AbstractAction
     /**
      * Initialize department model instance
      *
-     * @return DepartmentInterface|false
+     * @return DepartmentModel|false
      * @since 1.0.0
      */
     protected function initDepartment()
     {
         $id = $this->getRequest()->getParam('department_id');
 
-        /** @var \Dem\HelpDesk\Model\Department $department */
         $department = $this->departmentRepository->getById($id);
         if (!$department) {
             return false;
         }
 
-        $this->coreRegistry->register(\Dem\HelpDesk\Model\Department::CURRENT_KEY, $department);
+        $this->coreRegistry->register(DepartmentModel::CURRENT_KEY, $department);
         return $department;
     }
 }

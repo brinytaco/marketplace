@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
 use Dem\HelpDesk\Model\Source\SourceOptions;
+use Dem\HelpDesk\Helper\Config;
 
 /**
  * HelpDesk Source Model - CaseItem Website
@@ -53,7 +54,7 @@ class Website extends SourceOptions
     protected function changeAdminWebsiteName()
     {
         foreach ($this->optionArray as $key => $option) {
-            if ($option['value'] === \Dem\HelpDesk\Helper\Config::HELPDESK_WEBSITE_ID_ADMIN) {
+            if (Config::isAdminWebsite($option['value'])) {
                 $this->optionArray[$key]['label'] = __('DE INTERNAL');
             }
         }
@@ -79,7 +80,7 @@ class Website extends SourceOptions
     protected function filterDefaultWebsite()
     {
         foreach ($this->optionArray as $key => $option) {
-            if ($option['value'] == \Dem\HelpDesk\Helper\Config::HELPDESK_WEBSITE_ID_DEFAULT) {
+            if (Config::isDefaultWebsite($option['value'])) {
                 unset($this->optionArray[$key]);
             }
         }
@@ -94,7 +95,7 @@ class Website extends SourceOptions
     protected function filterDisabledWebsites()
     {
         foreach ($this->optionArray as $key => $option) {
-            if ($option['value'] == \Dem\HelpDesk\Helper\Config::HELPDESK_WEBSITE_ID_ADMIN) {
+            if (Config::isAdminWebsite($option['value'])) {
                 continue;
             }
             if (!$this->helper->isEnabled($option['value'])) {

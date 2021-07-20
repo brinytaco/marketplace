@@ -8,8 +8,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
-use Dem\HelpDesk\Api\Data\ReplyInterface;
-use Dem\HelpDesk\Api\ReplyRepositoryInterface;
+use Dem\HelpDesk\Model\Reply;
 use Dem\HelpDesk\Model\ResourceModel\Reply as Resource;
 use Dem\HelpDesk\Model\ResourceModel\Reply\CollectionFactory;
 use Dem\HelpDesk\Model\ReplyFactory;
@@ -25,7 +24,7 @@ use Dem\HelpDesk\Model\ReplyFactory;
  * @since      1.0.0
  *
  */
-class ReplyRepository implements ReplyRepositoryInterface
+class ReplyRepository
 {
     /**
      * @var ReplyFactory
@@ -68,7 +67,7 @@ class ReplyRepository implements ReplyRepositoryInterface
 
     /**
      * @param int $id
-     * @return ReplyInterface|false
+     * @return Reply|false
      */
     public function getById($id)
     {
@@ -96,22 +95,22 @@ class ReplyRepository implements ReplyRepositoryInterface
     }
 
     /**
-     * @param ReplyInterface $reply
-     * @return ReplyInterface
+     * @param Reply $reply
+     * @return Reply
      * @throws LocalizedException
      */
-    public function save(ReplyInterface $reply)
+    public function save(Reply $reply)
     {
         $this->resource->save($reply);
         return $reply;
     }
 
     /**
-     * @param ReplyInterface $reply
+     * @param Reply $reply
      * @return bool true on success
      * @throws CouldNotDeleteException
      */
-    public function delete(ReplyInterface $reply)
+    public function delete(Reply $reply)
     {
         try {
             $this->resource->delete($reply);
@@ -127,7 +126,7 @@ class ReplyRepository implements ReplyRepositoryInterface
 
     /**
      * @param int $id
-     * @return ReplyInterface
+     * @return Reply
      * @throws NoSuchEntityException
      */
     public function deleteById($id)

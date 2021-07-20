@@ -3,19 +3,17 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\FollowerManagementInterface;
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\FollowerInterface;
-use Dem\HelpDesk\Model\Follower;
 use Dem\HelpDesk\Exception as HelpDeskException;
 use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\HelpDesk\Model\Follower;
+use Dem\HelpDesk\Model\CaseItem;
 use Magento\Framework\Registry;
 use Magento\Framework\Event\ManagerInterface;
 use Psr\Log\LoggerInterface;
 
 
 /**
- * HelpDesk Model - Follower Management
+ * HelpDesk Service Model - Follower Management
  *
  * =============================================================================
  *
@@ -24,9 +22,8 @@ use Psr\Log\LoggerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class FollowerManagement implements FollowerManagementInterface
+class FollowerManagement
 {
-
     /**
      * Core registry
      *
@@ -50,6 +47,12 @@ class FollowerManagement implements FollowerManagementInterface
     protected $helper;
 
     /**
+     * Phrase object name
+     * @var string
+     */
+    protected $objectName = 'follower';
+
+    /**
      * Data constructor.
      *
      * @param Registry $coreRegistry
@@ -69,22 +72,21 @@ class FollowerManagement implements FollowerManagementInterface
         $this->helper = $helper;
     }
 
-
     /**
      * Create standard follower
      *
      * @param Follower $follower
-     * @param CaseItemInterface $case
+     * @param CaseItem $case
      * @param int $authorId
      * @param string $authorType
      * @param string $followerText
      * @param int|null $statusId
      * @param bool|null $isInitial
-     * @return FollowerInterface
+     * @return Follower
      */
     public function createFollower(
-        FollowerInterface $follower,
-        CaseItemInterface $case,
+        Follower $follower,
+        CaseItem $case,
         $userId
     ) {
         $data = [
@@ -114,7 +116,7 @@ class FollowerManagement implements FollowerManagementInterface
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The follower `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $requiredField));
             }
         }
 
@@ -122,7 +124,7 @@ class FollowerManagement implements FollowerManagementInterface
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The follower `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
 

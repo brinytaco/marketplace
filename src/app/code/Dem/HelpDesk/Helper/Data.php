@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Helper;
 
-use \Dem\HelpDesk\Helper\Config;
-use \Magento\Framework\App\ObjectManager;
+use Dem\HelpDesk\Helper\Config;
+use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Api\Data\WebsiteInterface;

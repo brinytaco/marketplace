@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model;
 
 use Magento\Framework\Model\AbstractModel;
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
-use Dem\HelpDesk\Api\Data\ReplyInterface;
-use Dem\HelpDesk\Api\Data\FollowerInterface;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
+use Dem\HelpDesk\Model\Department;
+use Dem\HelpDesk\Model\Reply;
+use Dem\HelpDesk\Model\Follower;
 use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Exception\LocalizedException;
 
 /**
  * HelpDesk Model - Case
@@ -21,12 +22,34 @@ use Magento\Framework\Api\SearchResultsInterface;
  * @since      1.0.0
  *
  */
-class CaseItem extends AbstractModel implements CaseItemInterface
+class CaseItem extends AbstractModel
 {
-    const CURRENT_KEY = 'current_case';
-    const CACHE_TAG = 'helpdesk_case';
-    const EVENT_PREFIX = 'helpdesk_case';
-    const INITIAL_REPLY_KEY = 'initial_reply';
+    const CACHE_TAG             = 'helpdesk_case';
+    const EVENT_PREFIX          = 'helpdesk_case';
+    const CURRENT_KEY           = 'current_case';
+    const INITIAL_REPLY_KEY     = 'initial_reply';
+
+    const CASE_ID               = 'case_id';
+    const WEBSITE_ID            = 'website_id';
+    const DEPARTMENT_ID         = 'department_id';
+    const PROTECT_CODE          = 'protect_code';
+    const CREATOR_CUSTOMER_ID   = 'creator_customer_id';
+    const CREATOR_ADMIN_ID      = 'creator_admin_id';
+    const CREATOR_NAME          = 'creator_name';
+    const CREATOR_EMAIL         = 'creator_email';
+    const CREATOR_LAST_READ     = 'creator_last_read';
+    const SUBJECT               = 'subject';
+    const STATUS_ID             = 'status_id';
+    const PRIORITY              = 'priority';
+    const REMOTE_IP             = 'remote_ip';
+    const HTTP_USER_AGENT       = 'http_user_agent';
+    const UPDATER_NAME          = 'updater_name';
+    const CREATED_AT            = 'created_at';
+    const UPDATED_AT            = 'updated_at';
+    const WEBSITE_NAME          = '_website_name';
+    const DEPARTMENT_NAME       = '_department_name';
+    const CASE_NUMBER           = '_case_number';
+    const CASE_MANAGER          = '_case_manager';
 
     /**
      * @var string
@@ -35,7 +58,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     protected $_eventObject = self::EVENT_PREFIX;
 
     /**
-     * @var ReplyInterface []
+     * @var Reply[]
      */
     protected $repliesToSave = [];
 
@@ -46,7 +69,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
 
     /**
      *
-     * @var FollowerInterface []
+     * @var Follower[]
      */
     protected $followersToSave = [];
 
@@ -55,18 +78,29 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\CaseItem::class);
+        $this->_init(Resource::class);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @throws LocalizedException
+     * @return Resource
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
      * Set id
      *
      * @param int $id
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setId($id)
     {
-        return $this->setData(CaseItemInterface::CASE_ID, $id);
+        return $this->setData(self::CASE_ID, $id);
     }
 
     /**
@@ -76,7 +110,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getId()
     {
-        return $this->getData(CaseItemInterface::CASE_ID);
+        return $this->getData(self::CASE_ID);
     }
 
     /**
@@ -86,7 +120,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * it cannot be set here
      *
      * @param string $caseNumber
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setCaseNumber($caseNumber)
     {
@@ -100,10 +134,10 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCaseNumber()
     {
-        if (!$this->hasData(\Dem\HelpDesk\Api\Data\CaseItemInterface::CASE_NUMBER)) {
-            $this->getResource()->setCaseNumber($this);
+        if (!$this->hasData(self::CASE_NUMBER)) {
+            $this->_getResource()->setCaseNumber($this);
         }
-        return $this->getData(CaseItemInterface::CASE_NUMBER);
+        return $this->getData(self::CASE_NUMBER);
     }
 
     /**
@@ -113,7 +147,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCaseManager()
     {
-        return $this->getData(CaseItemInterface::CASE_MANAGER);
+        return $this->getData(self::CASE_MANAGER);
     }
 
     /**
@@ -123,7 +157,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * it cannot be set here
      *
      * @param \Magento\Framework\DataObject $data
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setCaseManager(\Magento\Framework\DataObject $data)
     {
@@ -137,18 +171,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getWebsiteId()
     {
-        return $this->getData(CaseItemInterface::WEBSITE_ID);
+        return $this->getData(self::WEBSITE_ID);
     }
 
     /**
      * Set website id
      *
      * @param int $websiteId
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setWebsiteId($websiteId)
     {
-        return $this->setData(CaseItemInterface::WEBSITE_ID, $websiteId);
+        return $this->setData(self::WEBSITE_ID, $websiteId);
     }
 
     /**
@@ -158,18 +192,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getDepartmentId()
     {
-        return $this->getData(CaseItemInterface::DEPARTMENT_ID);
+        return $this->getData(self::DEPARTMENT_ID);
     }
 
     /**
      * Set department id
      *
      * @param int $departmentId
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setDepartmentId($departmentId)
     {
-        return $this->setData(CaseItemInterface::DEPARTMENT_ID, $departmentId);
+        return $this->setData(self::DEPARTMENT_ID, $departmentId);
     }
 
     /**
@@ -179,7 +213,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getDepartmentName()
     {
-        return $this->getData(CaseItemInterface::DEPARTMENT_NAME);
+        return $this->getData(self::DEPARTMENT_NAME);
     }
 
     /**
@@ -189,7 +223,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * it cannot be set here
      *
      * @param string $name
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setDepartmentName($name)
     {
@@ -204,7 +238,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getWebsiteName()
     {
-        return $this->getData(CaseItemInterface::WEBSITE_NAME);
+        return $this->getData(self::WEBSITE_NAME);
     }
 
     /**
@@ -214,7 +248,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      * it cannot be set here
      *
      * @param string $name
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setWebsiteName($name)
     {
@@ -229,18 +263,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getProtectCode()
     {
-        return $this->getData(CaseItemInterface::PROTECT_CODE);
+        return $this->getData(self::PROTECT_CODE);
     }
 
     /**
      * Set protect code
      *
      * @param string $protectCode
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setProtectCode($protectCode)
     {
-        return $this->setData(CaseItemInterface::PROTECT_CODE, $protectCode);
+        return $this->setData(self::PROTECT_CODE, $protectCode);
     }
 
     /**
@@ -250,18 +284,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCreatorCustomerId()
     {
-        return $this->getData(CaseItemInterface::CREATOR_CUSTOMER_ID);
+        return $this->getData(self::CREATOR_CUSTOMER_ID);
     }
 
     /**
      * Set creator customer id
      *
      * @param int $customerId
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setCreatorCustomerId($customerId)
     {
-        return $this->setData(CaseItemInterface::CREATOR_CUSTOMER_ID, $customerId);
+        return $this->setData(self::CREATOR_CUSTOMER_ID, $customerId);
     }
 
     /**
@@ -271,18 +305,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCreatorAdminId()
     {
-        return $this->getData(CaseItemInterface::CREATOR_ADMIN_ID);
+        return $this->getData(self::CREATOR_ADMIN_ID);
     }
 
     /**
      * Set creator admin id
      *
      * @param int $adminId
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setCreatorAdminId($adminId)
     {
-        return $this->setData(CaseItemInterface::CREATOR_ADMIN_ID, $adminId);
+        return $this->setData(self::CREATOR_ADMIN_ID, $adminId);
     }
 
     /**
@@ -292,18 +326,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCreatorName()
     {
-        return $this->getData(CaseItemInterface::CREATOR_NAME);
+        return $this->getData(self::CREATOR_NAME);
     }
 
     /**
      * Set creator name
      *
      * @param string $name
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setCreatorName($name)
     {
-        return $this->setData(CaseItemInterface::CREATOR_NAME, $name);
+        return $this->setData(self::CREATOR_NAME, $name);
     }
 
     /**
@@ -313,18 +347,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCreatorEmail()
     {
-        return $this->getData(CaseItemInterface::CREATOR_EMAIL);
+        return $this->getData(self::CREATOR_EMAIL);
     }
 
     /**
      * Set creator email
      *
      * @param string $email
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setCreatorEmail($email)
     {
-        return $this->setData(CaseItemInterface::CREATOR_EMAIL, $email);
+        return $this->setData(self::CREATOR_EMAIL, $email);
     }
 
     /**
@@ -334,18 +368,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCreatorLastRead()
     {
-        return $this->getData(CaseItemInterface::CREATOR_LAST_READ);
+        return $this->getData(self::CREATOR_LAST_READ);
     }
 
     /**
      * Set creator last read reply id
      *
      * @param int $replyId
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setCreatorLastRead($replyId)
     {
-        return $this->setData(CaseItemInterface::CREATOR_LAST_READ, $replyId);
+        return $this->setData(self::CREATOR_LAST_READ, $replyId);
     }
 
     /**
@@ -355,18 +389,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getSubject()
     {
-        return $this->getData(CaseItemInterface::SUBJECT);
+        return $this->getData(self::SUBJECT);
     }
 
     /**
      * Set subject
      *
      * @param string $subject
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setSubject($subject)
     {
-        return $this->setData(CaseItemInterface::SUBJECT, $subject);
+        return $this->setData(self::SUBJECT, $subject);
     }
 
     /**
@@ -376,18 +410,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getStatusId()
     {
-        return $this->getData(CaseItemInterface::STATUS_ID);
+        return $this->getData(self::STATUS_ID);
     }
 
     /**
      * Set status id
      *
      * @param int $statusId
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setStatusId($statusId)
     {
-        return $this->setData(CaseItemInterface::STATUS_ID, $statusId);
+        return $this->setData(self::STATUS_ID, $statusId);
     }
 
     /**
@@ -397,18 +431,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getPriority()
     {
-        return $this->getData(CaseItemInterface::PRIORITY);
+        return $this->getData(self::PRIORITY);
     }
 
     /**
      * Set priority
      *
      * @param int $priority
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setPriority($priority)
     {
-        return $this->setData(CaseItemInterface::PRIORITY, $priority);
+        return $this->setData(self::PRIORITY, $priority);
     }
 
     /**
@@ -418,18 +452,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getRemoteIp()
     {
-        return $this->getData(CaseItemInterface::REMOTE_IP);
+        return $this->getData(self::REMOTE_IP);
     }
 
     /**
      * Set remote ip address
      *
      * @param string $remoteIp
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setRemoteIp($remoteIp)
     {
-        return $this->setData(CaseItemInterface::REMOTE_IP, $remoteIp);
+        return $this->setData(self::REMOTE_IP, $remoteIp);
     }
 
     /**
@@ -439,18 +473,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getHttpUserAgent()
     {
-        return $this->getData(CaseItemInterface::HTTP_USER_AGENT);
+        return $this->getData(self::HTTP_USER_AGENT);
     }
 
     /**
      * Set http user agent
      *
      * @param string $userAgent
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setHttpUserAgent($userAgent)
     {
-        return $this->setData(CaseItemInterface::HTTP_USER_AGENT, $userAgent);
+        return $this->setData(self::HTTP_USER_AGENT, $userAgent);
     }
 
     /**
@@ -460,18 +494,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getUpdaterName()
     {
-        return $this->getData(CaseItemInterface::UPDATER_NAME);
+        return $this->getData(self::UPDATER_NAME);
     }
 
     /**
      * Set name of last updater
      *
      * @param string $userName
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setUpdaterName($userName)
     {
-        return $this->setData(CaseItemInterface::UPDATER_NAME, $userName);
+        return $this->setData(self::UPDATER_NAME, $userName);
     }
 
     /**
@@ -481,18 +515,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getCreatedAt()
     {
-        return $this->getData(CaseItemInterface::CREATED_AT);
+        return $this->getData(self::CREATED_AT);
     }
 
     /**
      * set created at
      *
      * @param $createdAt
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setCreatedAt($createdAt)
     {
-        return $this->setData(CaseItemInterface::CREATED_AT, $createdAt);
+        return $this->setData(self::CREATED_AT, $createdAt);
     }
 
     /**
@@ -502,18 +536,18 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getUpdatedAt()
     {
-        return $this->getData(CaseItemInterface::UPDATED_AT);
+        return $this->getData(self::UPDATED_AT);
     }
 
     /**
      * set updated at
      *
      * @param $updatedAt
-     * @return CaseItemInterface
+     * @return CaseItem
      */
     public function setUpdatedAt($updatedAt)
     {
-        return $this->setData(CaseItemInterface::UPDATED_AT, $updatedAt);
+        return $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
     /**************************************************************************/
@@ -526,19 +560,19 @@ class CaseItem extends AbstractModel implements CaseItemInterface
      */
     public function getDepartment()
     {
-        return $this->getResource()->getDepartment($this);
+        return $this->_getResource()->getDepartment($this);
     }
 
     /**
      * Get case replies
      *
-     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @return \Magento\Framework\Api\SearchResults
      * @since 1.0.0
      */
     public function getReplies()
     {
         if (!isset($this->replies)) {
-            $this->replies = $this->getResource()->getReplies($this);
+            $this->replies = $this->_getResource()->getReplies($this);
         }
         return $this->replies;
     }
@@ -546,12 +580,13 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**
      * Get initial case reply
      *
-     * @return ReplyInterface|bool
+     * @return Reply|bool
      * @since 1.0.0
      */
     public function getInitialReply()
     {
         $replies = $this->getReplies();
+        /** @var Reply $reply */
         foreach ($replies->getItems() as $reply) {
             if ($reply->getIsInitial()) {
                 return $reply;
@@ -570,7 +605,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     public function getFollowers()
     {
         if (!isset($this->followers)) {
-            $this->followers = $this->getResource()->getFollowers($this);
+            $this->followers = $this->_getResource()->getFollowers($this);
         }
         return $this->followers;
     }
@@ -581,7 +616,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**
      * Get repliesToSave array
      *
-     * @return array
+     * @return Reply[]
      * @since 1.0.0
      */
     public function getRepliesToSave()
@@ -592,11 +627,11 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**
      * Add data to repliesToSave array
      *
-     * @param ReplyInterface $reply
-     * @return CaseItemInterface
+     * @param Reply $reply
+     * @return CaseItem
      * @since 1.0.0
      */
-    public function addReplyToSave(ReplyInterface $reply)
+    public function addReplyToSave(Reply $reply)
     {
         $this->repliesToSave[] = $reply;
 
@@ -609,7 +644,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**
      * Reset replies
      *
-     * @return CaseItemInterface
+     * @return CaseItem
      * @since 1.0.0
      */
     public function clearRepliesToSave()
@@ -624,7 +659,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**
      * Get followers array
      *
-     * @return array
+     * @return Follower[]
      * @since 1.0.0
      */
     public function getFollowersToSave()
@@ -635,12 +670,12 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**
      * Add new follower or flag existing isDeleted
      *
-     * @param FollowerInterface $follower
+     * @param Follower $follower
      * @param bool $delete Flag existing for removal
-     * @return CaseItemInterface
+     * @return CaseItem
      * @since 1.0.0
      */
-    public function addFollowerToSave(FollowerInterface $follower, $delete = false)
+    public function addFollowerToSave(Follower $follower, $delete = false)
     {
         $follower->isDeleted($delete);
         $this->followersToSave[] = $follower;
@@ -654,7 +689,7 @@ class CaseItem extends AbstractModel implements CaseItemInterface
     /**
      * Reset followers
      *
-     * @return CaseItemInterface
+     * @return CaseItem
      * @since 1.0.0
      */
     public function clearFollowersToSave()

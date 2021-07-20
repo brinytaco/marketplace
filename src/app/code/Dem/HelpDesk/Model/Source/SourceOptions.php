@@ -3,8 +3,18 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Source;
 
+use Dem\HelpDesk\Model\DepartmentRepository;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\DataObject;
+use Magento\Store\Model\System\Store;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\Registry;
+
+use Dem\HelpDesk\Helper\Data as Helper;
 
 /**
  * HelpDesk Source Model - CaseItem Department
@@ -24,17 +34,17 @@ abstract class SourceOptions implements OptionSourceInterface
     const DEPT_OPTION_SOURCE_EMPTY_OPTION_TEXT = '-- Please Select --';
 
     /**
-     * @var \Dem\HelpDesk\Helper\Data
+     * @var Helper
      */
     protected $helper;
 
     /**
-     * @var \Magento\Store\Model\System\Store
+     * @var Store
      */
     protected $store;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface
+     * @var RequestInterface
      */
     protected $request;
 
@@ -44,57 +54,57 @@ abstract class SourceOptions implements OptionSourceInterface
     protected $optionArray = [];
 
     /**
-     * @var \Dem\HelpDesk\Api\DepartmentRepositoryInterface
+     * @var DepartmentRepository
      */
     protected $departmentRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Api\Search\FilterGroupBuilder
+     * @var FilterGroupBuilder
      */
     protected $filterGroupBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
     protected $filterBuilder;
 
     /**
-     * @var \Magento\Framework\Data\CollectionFactory
+     * @var CollectionFactory
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry = null;
 
     /**
-     * @param \Dem\HelpDesk\Helper\Data $helper
-     * @param \Magento\Store\Model\System\Store $store
-     * @param \Magento\Framework\App\RequestInterface $request
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Data\CollectionFactory $collectionFactory
+     * @param Helper $helper
+     * @param Store $store
+     * @param RequestInterface $request
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param DepartmentRepository $departmentRepository
+     * @param FilterBuilder $filterBuilder
+     * @param FilterGroupBuilder $filterGroupBuilder
+     * @param Registry $coreRegistry
+     * @param CollectionFactory $collectionFactory
      * @return void
      */
     public function __construct(
-        \Dem\HelpDesk\Helper\Data $helper,
-        \Magento\Store\Model\System\Store $store,
-        \Magento\Framework\App\RequestInterface $request,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Dem\HelpDesk\Api\DepartmentRepositoryInterface $departmentRepository,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Framework\Api\Search\FilterGroupBuilder $filterGroupBuilder,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Data\CollectionFactory $collectionFactory
+        Helper $helper,
+        Store $store,
+        RequestInterface $request,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        DepartmentRepository $departmentRepository,
+        FilterBuilder $filterBuilder,
+        FilterGroupBuilder $filterGroupBuilder,
+        Registry $coreRegistry,
+        CollectionFactory $collectionFactory
     ) {
         $this->helper = $helper;
         $this->store = $store;

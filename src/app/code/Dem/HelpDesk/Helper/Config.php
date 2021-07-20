@@ -6,7 +6,7 @@ namespace Dem\HelpDesk\Helper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Api\Data\WebsiteInterface;
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
+use Dem\HelpDesk\Model\Department;
 
 /**
  * HelpDesk Helper - Config
@@ -91,13 +91,13 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Check if website is admin
      *
-     * @param DepartmentInterface|int $department
+     * @param Department|int $department
      * @return boolean
      * @since 1.0.0
      */
     public static function isDefaultDepartment($department)
     {
-        if ($department instanceof DepartmentInterface) {
+        if ($department instanceof Department) {
             $department = $department->getId();
         }
         return ((int)$department === self::HELPDESK_DEPARTMENT_DEFAULT_ID);

@@ -5,9 +5,9 @@ namespace Dem\HelpDesk\Model\ResourceModel;
 
 use Dem\HelpDesk\Model\User;
 use Dem\HelpDesk\Model\Follower;
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
-use Dem\HelpDesk\Api\UserRepositoryInterface;
-use Dem\HelpDesk\Api\DepartmentUserRepositoryInterface;
+use Dem\HelpDesk\Model\Department as DepartmentModel;
+use Dem\HelpDesk\Model\UserRepository;
+use Dem\HelpDesk\Model\DepartmentUserRepository;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -32,12 +32,12 @@ class Department extends AbstractDb
     protected $date;
 
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepository
      */
     protected $userRepository;
 
     /**
-     * @var DepartmentUserRepositoryInterface
+     * @var DepartmentUserRepository
      */
     protected $deptUserRepository;
 
@@ -49,16 +49,16 @@ class Department extends AbstractDb
     /**
      * @param Context $context
      * @param DateTime $date
-     * @param UserRepositoryInterface $userRepository
-     * @param DepartmentUserRepositoryInterface $deptUserRepository
+     * @param UserRepository $userRepository
+     * @param DepartmentUserRepository $deptUserRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @return void
      */
     public function __construct(
         Context $context,
         DateTime $date,
-        UserRepositoryInterface $userRepository,
-        DepartmentUserRepositoryInterface $deptUserRepository,
+        UserRepository $userRepository,
+        DepartmentUserRepository $deptUserRepository,
         SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->date = $date;
@@ -79,7 +79,7 @@ class Department extends AbstractDb
     /**
      *  Set updated_at for saving
      *
-     * @param \Dem\HelpDesk\Model\Department $object
+     * @param DepartmentModel $object
      * @return $this
      * @since 1.0.0
      */
@@ -98,7 +98,7 @@ class Department extends AbstractDb
     /**
      * Perform actions after object load
      *
-     * @param \Dem\HelpDesk\Model\Department $object
+     * @param DepartmentModel $object
      * @return $this
      * @since 1.0.0
      */
@@ -110,8 +110,8 @@ class Department extends AbstractDb
         // Get case manager user
         /** @var User $user */
         $user = $this->userRepository->getById($object->getCaseManagerId());
-        $object->setData(DepartmentInterface::CASE_MANAGER_NAME, $user->getName());
-        $object->setData(DepartmentInterface::CASE_MANAGER_EMAIL, $user->getEmail());
+        $object->setData(DepartmentModel::CASE_MANAGER_NAME, $user->getName());
+        $object->setData(DepartmentModel::CASE_MANAGER_EMAIL, $user->getEmail());
 
         // Get default follower user ids
         $searchCriteria = $this->searchCriteriaBuilder
@@ -126,7 +126,7 @@ class Department extends AbstractDb
             $defaultFollowers[] = $follower->getUserId();
         }
 
-        $object->setData(DepartmentInterface::DEFAULT_FOLLOWERS, $defaultFollowers);
+        $object->setData(DepartmentModel::DEFAULT_FOLLOWERS, $defaultFollowers);
 
         return parent::_afterLoad($object);
     }

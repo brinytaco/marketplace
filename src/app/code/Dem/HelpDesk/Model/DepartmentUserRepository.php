@@ -8,8 +8,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
-use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
-use Dem\HelpDesk\Api\DepartmentUserRepositoryInterface;
+use Dem\HelpDesk\Model\DepartmentUser;
 use Dem\HelpDesk\Model\ResourceModel\DepartmentUser as Resource;
 use Dem\HelpDesk\Model\ResourceModel\DepartmentUser\CollectionFactory;
 use Dem\HelpDesk\Model\DepartmentUserFactory;
@@ -25,7 +24,7 @@ use Dem\HelpDesk\Model\DepartmentUserFactory;
  * @since      1.0.0
  *
  */
-class DepartmentUserRepository implements DepartmentUserRepositoryInterface
+class DepartmentUserRepository
 {
     /**
      * @var DepartmentUserFactory
@@ -68,7 +67,7 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
 
     /**
      * @param int $id
-     * @return DepartmentUserInterface|false
+     * @return DepartmentUser|false
      */
     public function getById($id)
     {
@@ -96,22 +95,22 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
     }
 
     /**
-     * @param DepartmentUserInterface $user
-     * @return DepartmentUserInterface
+     * @param DepartmentUser $user
+     * @return DepartmentUser
      * @throws LocalizedException
      */
-    public function save(DepartmentUserInterface $user)
+    public function save(DepartmentUser $user)
     {
         $this->resource->save($user);
         return $user;
     }
 
     /**
-     * @param DepartmentUserInterface $user
+     * @param DepartmentUser $user
      * @return bool true on success
      * @throws CouldNotDeleteException
      */
-    public function delete(DepartmentUserInterface $user)
+    public function delete(DepartmentUser $user)
     {
         try {
             $this->resource->delete($user);
@@ -127,7 +126,7 @@ class DepartmentUserRepository implements DepartmentUserRepositoryInterface
 
     /**
      * @param int $id
-     * @return DepartmentUserInterface
+     * @return DepartmentUser
      * @throws NoSuchEntityException
      */
     public function deleteById($id)

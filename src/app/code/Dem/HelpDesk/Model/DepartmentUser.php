@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
+use Dem\HelpDesk\Model\ResourceModel\DepartmentUser as Resource;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
 
 /**
  * HelpDesk Model - DepartmentUser
@@ -17,9 +18,16 @@ use Dem\HelpDesk\Api\Data\DepartmentUserInterface;
  * @since      1.0.0
  *
  */
-class DepartmentUser extends AbstractModel implements DepartmentUserInterface
+class DepartmentUser extends AbstractModel
 {
     const EVENT_PREFIX = 'helpdesk_department_user';
+
+    const DEPT_USER_ID          = 'dept_user_id';
+    const DEPARTMENT_ID         = 'department_id';
+    const USER_ID               = 'user_id';
+    const IS_FOLLOWER           = 'is_follower';
+    const CREATED_AT            = 'created_at';
+    const UPDATED_AT            = 'updated_at';
 
     /**
      * @var string
@@ -32,7 +40,18 @@ class DepartmentUser extends AbstractModel implements DepartmentUserInterface
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\DepartmentUser::class);
+        $this->_init(Resource::class);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @throws LocalizedException
+     * @return Resource
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -42,7 +61,7 @@ class DepartmentUser extends AbstractModel implements DepartmentUserInterface
      */
     public function getId()
     {
-        return $this->getData(DepartmentUserInterface::DEPT_USER_ID);
+        return $this->getData(self::DEPT_USER_ID);
     }
 
     /**
@@ -52,18 +71,18 @@ class DepartmentUser extends AbstractModel implements DepartmentUserInterface
      */
     public function getDepartmentId()
     {
-        return $this->getData(DepartmentUserInterface::DEPARTMENT_ID);
+        return $this->getData(self::DEPARTMENT_ID);
     }
 
     /**
      * Set Department id
      *
      * @param int $departmentId
-     * @return DepartmentUserInterface
+     * @return DepartmentUser
      */
     public function setDepartmentId($departmentId)
     {
-        return $this->setData(DepartmentUserInterface::DEPARTMENT_ID, $departmentId);
+        return $this->setData(self::DEPARTMENT_ID, $departmentId);
     }
 
     /**
@@ -73,18 +92,18 @@ class DepartmentUser extends AbstractModel implements DepartmentUserInterface
      */
     public function getUserId()
     {
-        return $this->getData(DepartmentUserInterface::USER_ID);
+        return $this->getData(self::USER_ID);
     }
 
     /**
      * Set User id
      *
      * @param int $userId
-     * @return DepartmentUserInterface
+     * @return DepartmentUser
      */
     public function setUserId($userId)
     {
-        return $this->setData(DepartmentUserInterface::USER_ID, $userId);
+        return $this->setData(self::USER_ID, $userId);
     }
 
     /**
@@ -94,18 +113,18 @@ class DepartmentUser extends AbstractModel implements DepartmentUserInterface
      */
     public function getIsFollower()
     {
-        return $this->getData(DepartmentUserInterface::IS_FOLLOWER);
+        return $this->getData(self::IS_FOLLOWER);
     }
 
     /**
      * Set is follower flag
      *
      * @param bool $isFollower
-     * @return DepartmentUserInterface
+     * @return DepartmentUser
      */
     public function setIsFollower($isFollower)
     {
-        return $this->setData(DepartmentUserInterface::IS_FOLLOWER, $isFollower);
+        return $this->setData(self::IS_FOLLOWER, $isFollower);
     }
 
     /**
@@ -115,18 +134,18 @@ class DepartmentUser extends AbstractModel implements DepartmentUserInterface
      */
     public function getCreatedAt()
     {
-        return $this->getData(DepartmentUserInterface::CREATED_AT);
+        return $this->getData(self::CREATED_AT);
     }
 
     /**
      * set created at
      *
      * @param $createdAt
-     * @return DepartmentUserInterface
+     * @return DepartmentUser
      */
     public function setCreatedAt($createdAt)
     {
-        return $this->setData(DepartmentUserInterface::CREATED_AT, $createdAt);
+        return $this->setData(self::CREATED_AT, $createdAt);
     }
 
     /**
@@ -136,18 +155,18 @@ class DepartmentUser extends AbstractModel implements DepartmentUserInterface
      */
     public function getUpdatedAt()
     {
-        return $this->getData(DepartmentUserInterface::UPDATED_AT);
+        return $this->getData(self::UPDATED_AT);
     }
 
     /**
      * set updated at
      *
      * @param $updatedAt
-     * @return DepartmentUserInterface
+     * @return DepartmentUser
      */
     public function setUpdatedAt($updatedAt)
     {
-        return $this->setData(DepartmentUserInterface::UPDATED_AT, $updatedAt);
+        return $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
 }

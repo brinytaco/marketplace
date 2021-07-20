@@ -8,8 +8,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
-use Dem\HelpDesk\Api\Data\FollowerInterface;
-use Dem\HelpDesk\Api\FollowerRepositoryInterface;
+use Dem\HelpDesk\Model\Follower;
 use Dem\HelpDesk\Model\ResourceModel\Follower as Resource;
 use Dem\HelpDesk\Model\ResourceModel\Follower\CollectionFactory;
 use Dem\HelpDesk\Model\FollowerFactory;
@@ -25,7 +24,7 @@ use Dem\HelpDesk\Model\FollowerFactory;
  * @since      1.0.0
  *
  */
-class FollowerRepository implements FollowerRepositoryInterface
+class FollowerRepository
 {
     /**
      * @var FollowerFactory
@@ -68,7 +67,7 @@ class FollowerRepository implements FollowerRepositoryInterface
 
     /**
      * @param int $id
-     * @return FollowerInterface|false
+     * @return Follower|false
      */
     public function getById($id)
     {
@@ -96,22 +95,22 @@ class FollowerRepository implements FollowerRepositoryInterface
     }
 
     /**
-     * @param FollowerInterface $follower
-     * @return FollowerInterface
+     * @param Follower $follower
+     * @return Follower
      * @throws LocalizedException
      */
-    public function save(FollowerInterface $follower)
+    public function save(Follower $follower)
     {
         $this->resource->save($follower);
         return $follower;
     }
 
     /**
-     * @param FollowerInterface $follower
+     * @param Follower $follower
      * @return bool true on success
      * @throws CouldNotDeleteException
      */
-    public function delete(FollowerInterface $follower)
+    public function delete(Follower $follower)
     {
         try {
             $this->resource->delete($follower);
@@ -127,7 +126,7 @@ class FollowerRepository implements FollowerRepositoryInterface
 
     /**
      * @param int $id
-     * @return FollowerInterface
+     * @return Follower
      * @throws NoSuchEntityException
      */
     public function deleteById($id)

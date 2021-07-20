@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml;
 
+use Dem\HelpDesk\Model\CaseItem as CaseModel;
 use Dem\Base\Controller\Adminhtml\AbstractAction;
-use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\CaseItemManagementInterface;
+use Dem\HelpDesk\Model\CaseItemRepository;
+use Dem\HelpDesk\Model\Service\CaseItemManagement;
+use Dem\HelpDesk\Model\Reply;
 use Dem\HelpDesk\Model\ReplyFactory;
-use Dem\HelpDesk\Api\ReplyManagementInterface;
+use Dem\HelpDesk\Model\Service\ReplyManagement;
 use Dem\HelpDesk\Model\FollowerFactory;
-use Dem\HelpDesk\Api\FollowerManagementInterface;
+use Dem\HelpDesk\Model\Service\FollowerManagement;
 use Dem\HelpDesk\Model\Service\Notifications;
 use Dem\HelpDesk\Helper\Data as Helper;
 
@@ -44,22 +45,17 @@ abstract class CaseItem extends AbstractAction
     const ACTION_RESOURCE = 'Dem_HelpDesk::helpdesk_cases';
 
     /**
-     * @var CaseItemRepositoryInterface
+     * @var CaseItemRepository
      */
     protected $caseItemRepository;
 
     /**
-     * @var DepartmentRepositoryInterface
+     * @var DepartmentRepository
      */
     protected $departmentRepository;
 
     /**
-     * @var Helper
-     */
-    protected $helper;
-
-    /**
-     * @var CaseItemManagementInterface
+     * @var CaseItemManagement
      */
     protected $caseItemManager;
 
@@ -69,7 +65,7 @@ abstract class CaseItem extends AbstractAction
     protected $caseItem;
 
     /**
-     * @var ReplyManagementInterface
+     * @var ReplyManagement
      */
     protected $replyManager;
 
@@ -79,7 +75,7 @@ abstract class CaseItem extends AbstractAction
     protected $replyFactory;
 
     /**
-     * @var FollowerManagementInterface
+     * @var FollowerManagement
      */
     protected $followerManager;
 
@@ -94,6 +90,11 @@ abstract class CaseItem extends AbstractAction
     protected $notificationService;
 
     /**
+     * @var Helper
+     */
+    protected $helper;
+
+    /**
      * Data constructor.
      *
      * @param Action\Context $context
@@ -103,13 +104,12 @@ abstract class CaseItem extends AbstractAction
      * @param PageFactory $pageFactory
      * @param JsonFactory $jsonFactory
      * @param LayoutFactory $layoutFactory
-     * @param RedirectFactory $redirectFactory
-     * @param CaseItemRepositoryInterface $caseItemRepository
-     * @param CaseItemManagementInterface $caseItemManager
+     * @param CaseItemRepository $caseItemRepository
+     * @param CaseItemManagement $caseItemManager
      * @param ReplyFactory $replyFactory
-     * @param ReplyManagementInterface $replyManager
+     * @param ReplyManagement $replyManager
      * @param FollowerFactory $followerFactory
-     * @param FollowerManagementInterface $followerManager
+     * @param FollowerManagement $followerManager
      * @param Notifications $notificationService
      * @param Helper $helper
      */
@@ -121,13 +121,12 @@ abstract class CaseItem extends AbstractAction
         PageFactory $pageFactory,
         JsonFactory $jsonFactory,
         LayoutFactory $layoutFactory,
-        RedirectFactory $redirectFactory,
-        CaseItemRepositoryInterface $caseItemRepository,
-        CaseItemManagementInterface $caseItemManager,
+        CaseItemRepository $caseItemRepository,
+        CaseItemManagement $caseItemManager,
         ReplyFactory $replyFactory,
-        ReplyManagementInterface $replyManager,
+        ReplyManagement $replyManager,
         FollowerFactory $followerFactory,
-        FollowerManagementInterface $followerManager,
+        FollowerManagement $followerManager,
         Notifications $notificationService,
         Helper $helper
     ) {
@@ -146,8 +145,7 @@ abstract class CaseItem extends AbstractAction
             $requestHttp,
             $pageFactory,
             $jsonFactory,
-            $layoutFactory,
-            $redirectFactory
+            $layoutFactory
         );
     }
 
@@ -167,24 +165,25 @@ abstract class CaseItem extends AbstractAction
     /**
      * Initialize case model instance
      *
-     * @return CaseItemInterface|false
+     * @return CaseModel|false
      * @since 1.0.0
      */
     protected function initCase()
     {
         $id = $this->getRequest()->getParam('case_id');
 
-        /** @var \Dem\HelpDesk\Model\CaseItem $case */
-        $case = $this->caseItemRepository->getById($id);
-        if (!$case) {
-            return false;
+        if (!isset($this->caseItem)) {
+            $this->caseItem = $this->caseItemRepository->getById($id);
+            if (!$this->caseItem) {
+                return false;
+            }
         }
 
-        /** @var \Dem\HelpDesk\Model\Reply $initialReply */
-        $initialReply = $case->getInitialReply();
+        /** @var Reply $initialReply */
+        $initialReply = $this->caseItem->getInitialReply();
 
-        $this->coreRegistry->register($case::CURRENT_KEY, $case);
-        $this->coreRegistry->register($case::INITIAL_REPLY_KEY, $initialReply);
-        return $case;
+        $this->coreRegistry->register(CaseModel::CURRENT_KEY, $this->caseItem);
+        $this->coreRegistry->register(CaseModel::INITIAL_REPLY_KEY, $initialReply);
+        return $this->caseItem;
     }
 }

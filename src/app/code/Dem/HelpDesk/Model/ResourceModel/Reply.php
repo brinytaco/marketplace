@@ -6,7 +6,7 @@ namespace Dem\HelpDesk\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Dem\HelpDesk\Api\UserRepositoryInterface;
+use Dem\HelpDesk\Model\UserRepository;
 use Magento\Framework\Model\AbstractModel;
 
 /**
@@ -28,19 +28,19 @@ class Reply extends AbstractDb
     protected $date;
 
     /**
-     * @var UserRepositoryInterface
+     * @var UserRepository
      */
     protected $userRepository;
 
     /**
      * @param Context $context
-     * @param UserRepositoryInterface $userRepository
+     * @param UserRepository $userRepository
      * @param DateTime $date
      * @return void
      */
     public function __construct(
         Context $context,
-        UserRepositoryInterface $userRepository,
+        UserRepository $userRepository,
         DateTime $date
     ) {
         $this->date = $date;

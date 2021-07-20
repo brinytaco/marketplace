@@ -3,10 +3,15 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
+use Dem\HelpDesk\Exception as HelpDeskException;
+use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\HelpDesk\Model\CaseItem;
+use Magento\Framework\Registry;
+use Magento\Framework\Event\ManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
- * HelpDesk Api Interface - Notifications
+ * HelpDesk Service Model - Notifications
  *
  * =============================================================================
  *
@@ -15,8 +20,49 @@ use Dem\HelpDesk\Api\Data\CaseItemInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Notifications implements \Dem\HelpDesk\Api\NotificationInterface
+class Notifications
 {
+    /**
+     * Core registry
+     *
+     * @var Registry
+     */
+    protected $coreRegistry;
+
+    /**
+     * @var ManagerInterface
+     */
+    protected $eventManager;
+
+    /**
+     * @var LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * @var Helper
+     */
+    protected $helper;
+
+    /**
+     * Data constructor.
+     *
+     * @param Registry $coreRegistry
+     * @param ManagerInterface $eventManager
+     * @param LoggerInterface $logger
+     * @param Helper $helper
+     */
+    public function __construct(
+        Registry $coreRegistry,
+        ManagerInterface $eventManager,
+        LoggerInterface $logger,
+        Helper $helper
+    ) {
+        $this->coreRegistry = $coreRegistry;
+        $this->eventManager = $eventManager;
+        $this->logger = $logger;
+        $this->helper = $helper;
+    }
 
     /**
      * Send new case notifications
@@ -26,12 +72,12 @@ class Notifications implements \Dem\HelpDesk\Api\NotificationInterface
      *   - case manager
      *   - followers (dept followers initially)
      *
-     * @param CaseItemInterface $case
+     * @param CaseItem $case
      * @return $this
      * @throws HelpDeskException
      * @since 1.0.0
      */
-    public function sendNewCaseNotifications(CaseItemInterface $case)
+    public function sendNewCaseNotifications(CaseItem $case)
     {
         /** @todo: Actually do something here */
         return $this;

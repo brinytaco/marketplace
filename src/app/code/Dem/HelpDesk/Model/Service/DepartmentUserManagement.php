@@ -3,12 +3,16 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Service;
 
-use Dem\HelpDesk\Api\DepartmentUserManagementInterface;
 use Dem\HelpDesk\Exception as HelpDeskException;
+use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\HelpDesk\Model\DepartmentUser;
+use Magento\Framework\Registry;
+use Magento\Framework\Event\ManagerInterface;
+use Psr\Log\LoggerInterface;
 
 
 /**
- * HelpDesk Model - DepartmentUser Management
+ * HelpDesk Service Model - DepartmentUser Management
  *
  * =============================================================================
  *
@@ -17,44 +21,56 @@ use Dem\HelpDesk\Exception as HelpDeskException;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentUserManagement implements DepartmentUserManagementInterface
+class DepartmentUserManagement
 {
-
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $eventManager;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Dem\HelpDesk\Helper\Data
+     *
+     * @var DepartmentUser
+     */
+    protected $departmentUser;
+
+    /**
+     * @var Helper
      */
     protected $helper;
 
     /**
+     * Phrase object name
+     * @var string
+     */
+    protected $objectName = 'department user';
+
+
+    /**
      * Data constructor.
      *
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Dem\HelpDesk\Helper\Data $helper
+     * @param Registry $coreRegistry
+     * @param ManagerInterface $eventManager
+     * @param LoggerInterface $logger
+     * @param Helper $helper
      */
     public function __construct(
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Psr\Log\LoggerInterface $logger,
-        \Dem\HelpDesk\Helper\Data $helper
+        Registry $coreRegistry,
+        ManagerInterface $eventManager,
+        LoggerInterface $logger,
+        Helper $helper
     ) {
         $this->coreRegistry = $coreRegistry;
         $this->eventManager = $eventManager;
@@ -67,7 +83,7 @@ class DepartmentUserManagement implements DepartmentUserManagementInterface
      *
      * @param array $data
      * @return void
-     * @throws \Dem\HelpDesk\Exception
+     * @throws HelpDeskException
      */
     public function validate(array $data)
     {
@@ -80,7 +96,7 @@ class DepartmentUserManagement implements DepartmentUserManagementInterface
         // Required fields not submitted?
         foreach ($requiredFields as $requiredField) {
             if (!array_key_exists($requiredField, $data)) {
-                throw new HelpDeskException(__('The reply `%1` cannot be empty', $requiredField));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $requiredField));
             }
         }
 
@@ -88,7 +104,7 @@ class DepartmentUserManagement implements DepartmentUserManagementInterface
         foreach ($data as $field => $value) {
             $isRequired = (in_array($field, $requiredFields));
             if ($isRequired && $value === '') {
-                throw new HelpDeskException(__('The reply `%1` cannot be empty', $field));
+                throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
 

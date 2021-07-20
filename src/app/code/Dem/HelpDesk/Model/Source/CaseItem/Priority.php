@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
 use Magento\Framework\DataObject;
+use Magento\Framework\Data\Collection;
 use Dem\HelpDesk\Model\Source\SourceOptions;
 
 /**
@@ -50,7 +51,7 @@ class Priority extends SourceOptions
     /**
      * Get available case priority options
      *
-     * @return array
+     * @return Collection
      * @since 1.0.0
      */
     public function getOptions()

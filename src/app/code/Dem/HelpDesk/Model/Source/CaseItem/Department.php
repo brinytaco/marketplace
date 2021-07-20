@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
+use Magento\Framework\Api\Search\FilterGroup;
 use Dem\HelpDesk\Model\Source\SourceOptions;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Dem\HelpDesk\Helper\Config;
 
 /**
  * HelpDesk Source Model - CaseItem Department
@@ -62,7 +65,7 @@ class Department extends SourceOptions
      */
     public function getCurrentWebsiteId()
     {
-        /* @var $website \Magento\Store\Api\Data\WebsiteInterface */
+        /** @var WebsiteInterface $website */
         if ($this->helper->getIsAdminArea()) {
             $website = $this->coreRegistry->registry('current_website');
         } else {
@@ -78,23 +81,23 @@ class Department extends SourceOptions
      * Create website filter group (OR condition)
      *
      * @param int $websiteId
-     * @return \Magento\Framework\Api\Search\FilterGroup
+     * @return FilterGroup
      * @since 1.0.0
      */
     protected function addWebsiteFilter($websiteId)
     {
         // Apply current website condition
         $filter1 = $this->filterBuilder
-            ->setField(\Dem\HelpDesk\Api\Data\DepartmentInterface::WEBSITE_ID)
+            ->setField(\Dem\HelpDesk\Model\Department::WEBSITE_ID)
             ->setConditionType("eq")
             ->setValue($websiteId)
             ->create();
 
         // Apply default department condition
         $filter2 = $this->filterBuilder
-            ->setField(\Dem\HelpDesk\Api\Data\DepartmentInterface::DEPARTMENT_ID)
+            ->setField(\Dem\HelpDesk\Model\Department::DEPARTMENT_ID)
             ->setConditionType("eq")
-            ->setValue(\Dem\HelpDesk\Helper\Config::HELPDESK_DEPARTMENT_DEFAULT_ID)
+            ->setValue(Config::HELPDESK_DEPARTMENT_DEFAULT_ID)
             ->create();
 
         // Filter group (OR)

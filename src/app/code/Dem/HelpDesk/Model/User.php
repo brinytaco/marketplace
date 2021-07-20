@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
+use Dem\HelpDesk\Model\ResourceModel\User as Resource;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Dem\HelpDesk\Api\Data\UserInterface;
 
 /**
  * HelpDesk Model - User
@@ -17,9 +18,19 @@ use Dem\HelpDesk\Api\Data\UserInterface;
  * @since      1.0.0
  *
  */
-class User extends AbstractModel implements UserInterface
+class User extends AbstractModel
 {
     const EVENT_PREFIX = 'helpdesk_user';
+
+    const USER_ID               = 'user_id';
+    const WEBSITE_ID            = 'website_id';
+    const CUSTOMER_ID           = 'customer_id';
+    const ADMIN_ID              = 'admin_id';
+    const EMAIL                 = 'email';
+    const NAME                  = 'name';
+    const SESSION_ID            = 'session_id';
+    const LAST_ACCESSED         = 'last_accessed';
+    const CREATED_AT            = 'created_at';
 
     /**
      * @var string
@@ -32,7 +43,18 @@ class User extends AbstractModel implements UserInterface
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\User::class);
+        $this->_init(Resource::class);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @throws LocalizedException
+     * @return Resource
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -42,7 +64,7 @@ class User extends AbstractModel implements UserInterface
      */
     public function getId()
     {
-        return $this->getData(UserInterface::USER_ID);
+        return $this->getData(self::USER_ID);
     }
 
     /**
@@ -52,18 +74,18 @@ class User extends AbstractModel implements UserInterface
      */
     public function getWebsiteId()
     {
-        return $this->getData(UserInterface::WEBSITE_ID);
+        return $this->getData(self::WEBSITE_ID);
     }
 
     /**
      * Set website id
      *
      * @param int $websiteId
-     * @return UserInterface
+     * @return User
      */
     public function setWebsiteId($websiteId)
     {
-        return $this->setData(UserInterface::WEBSITE_ID, $websiteId);
+        return $this->setData(self::WEBSITE_ID, $websiteId);
     }
 
     /**
@@ -73,18 +95,18 @@ class User extends AbstractModel implements UserInterface
      */
     public function getCustomerId()
     {
-        return $this->getData(UserInterface::CUSTOMER_ID);
+        return $this->getData(self::CUSTOMER_ID);
     }
 
     /**
      * Set customer id
      *
      * @param int $customerId
-     * @return UserInterface
+     * @return User
      */
     public function setCustomerId($customerId)
     {
-        return $this->setData(UserInterface::CUSTOMER_ID, $customerId);
+        return $this->setData(self::CUSTOMER_ID, $customerId);
     }
 
     /**
@@ -94,18 +116,18 @@ class User extends AbstractModel implements UserInterface
      */
     public function getAdminId()
     {
-        return $this->getData(UserInterface::ADMIN_ID);
+        return $this->getData(self::ADMIN_ID);
     }
 
     /**
      * Set admin id
      *
      * @param int $adminId
-     * @return UserInterface
+     * @return User
      */
     public function setAdminId($adminId)
     {
-        return $this->setData(UserInterface::ADMIN_ID, $adminId);
+        return $this->setData(self::ADMIN_ID, $adminId);
     }
 
     /**
@@ -115,18 +137,18 @@ class User extends AbstractModel implements UserInterface
      */
     public function getEmail()
     {
-        return $this->getData(UserInterface::EMAIL);
+        return $this->getData(self::EMAIL);
     }
 
     /**
      * Set user email
      *
      * @param string $email
-     * @return UserInterface
+     * @return User
      */
     public function setEmail($email)
     {
-        return $this->setData(UserInterface::EMAIL, $email);
+        return $this->setData(self::EMAIL, $email);
     }
 
     /**
@@ -136,18 +158,18 @@ class User extends AbstractModel implements UserInterface
      */
     public function getName()
     {
-        return $this->getData(UserInterface::NAME);
+        return $this->getData(self::NAME);
     }
 
     /**
      * Set user name
      *
      * @param string $name
-     * @return UserInterface
+     * @return User
      */
     public function setName($name)
     {
-        return $this->setData(UserInterface::NAME, $name);
+        return $this->setData(self::NAME, $name);
     }
 
     /**
@@ -157,18 +179,18 @@ class User extends AbstractModel implements UserInterface
      */
     public function getSessionId()
     {
-        return $this->getData(UserInterface::SESSION_ID);
+        return $this->getData(self::SESSION_ID);
     }
 
     /**
      * set session id
      *
      * @param $sessionId
-     * @return UserInterface
+     * @return User
      */
     public function setSessionId($sessionId)
     {
-        return $this->setData(UserInterface::SESSION_ID, $sessionId);
+        return $this->setData(self::SESSION_ID, $sessionId);
     }
 
     /**
@@ -178,18 +200,18 @@ class User extends AbstractModel implements UserInterface
      */
     public function getLastAccessed()
     {
-        return $this->getData(UserInterface::LAST_ACCESSED);
+        return $this->getData(self::LAST_ACCESSED);
     }
 
     /**
      * set last accessed
      *
      * @param $lastAccessed
-     * @return UserInterface
+     * @return User
      */
     public function setLastAccessed($lastAccessed)
     {
-        return $this->setData(UserInterface::LAST_ACCESSED, $lastAccessed);
+        return $this->setData(self::LAST_ACCESSED, $lastAccessed);
     }
 
     /**
@@ -199,18 +221,18 @@ class User extends AbstractModel implements UserInterface
      */
     public function getCreatedAt()
     {
-        return $this->getData(UserInterface::CREATED_AT);
+        return $this->getData(self::CREATED_AT);
     }
 
     /**
      * set created at
      *
      * @param $createdAt
-     * @return UserInterface
+     * @return User
      */
     public function setCreatedAt($createdAt)
     {
-        return $this->setData(UserInterface::CREATED_AT, $createdAt);
+        return $this->setData(self::CREATED_AT, $createdAt);
     }
 
 }

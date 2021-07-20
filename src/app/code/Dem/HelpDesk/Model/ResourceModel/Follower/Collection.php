@@ -19,8 +19,6 @@ use Dem\HelpDesk\Model\ResourceModel\Follower as Resource;
  */
 class Collection extends AbstractCollection
 {
-    const EVENT_PREFIX = 'helpdesk_follower_collection';
-
     /**
      * Identifier field name for collection items
      *
@@ -31,7 +29,7 @@ class Collection extends AbstractCollection
     /**
      * @var string
      */
-    protected $_eventPrefix = self::EVENT_PREFIX;
+    protected $_eventPrefix = 'helpdesk_follower_collection';
 
     /**
      * Name of event parameter

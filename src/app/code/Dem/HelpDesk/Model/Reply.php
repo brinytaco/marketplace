@@ -3,8 +3,9 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
+use Dem\HelpDesk\Model\ResourceModel\Reply as Resource;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
-use Dem\HelpDesk\Api\Data\ReplyInterface;
 
 /**
  * HelpDesk Model - Reply
@@ -17,9 +18,24 @@ use Dem\HelpDesk\Api\Data\ReplyInterface;
  * @since      1.0.0
  *
  */
-class Reply extends AbstractModel implements ReplyInterface
+class Reply extends AbstractModel
 {
     const EVENT_PREFIX = 'helpdesk_reply';
+
+    const REPLY_ID              = 'reply_id';
+    const CASE_ID               = 'case_id';
+    const AUTHOR_ID             = 'author_id';
+    const AUTHOR_TYPE           = 'author_type';
+    const REPLY_TEXT            = 'reply_text';
+    const REMOTE_IP             = 'remote_ip';
+    const STATUS_ID             = 'status_id';
+    const IS_INITIAL            = 'is_initial';
+    const CREATED_AT            = 'created_at';
+
+    const AUTHOR_TYPE_SYSTEM        = 'SYSTEM';
+    const AUTHOR_TYPE_HELPDESK_USER = 'HELPDESK_USER';
+    const AUTHOR_TYPE_CREATOR       = 'CREATOR';
+    const AUTHOR_TYPE_CASE_MANAGER  = 'CASE_MANAGER';
 
     /**
      * @var string
@@ -32,7 +48,18 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     protected function _construct()
     {
-        $this->_init(\Dem\HelpDesk\Model\ResourceModel\Reply::class);
+        $this->_init(Resource::class);
+    }
+
+    /**
+     * Get resource instance
+     *
+     * @throws LocalizedException
+     * @return Resource
+     */
+    protected function _getResource()
+    {
+        return parent::_getResource();
     }
 
     /**
@@ -42,7 +69,28 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getId()
     {
-        return $this->getData(ReplyInterface::REPLY_ID);
+        return $this->getData(self::REPLY_ID);
+    }
+
+    /**
+     * Get case id
+     *
+     * @return int|null
+     */
+    public function getCaseId()
+    {
+        return $this->getData(self::CASE_ID);
+    }
+
+    /**
+     * Set case id
+     *
+     * @param int $caseId
+     * @return Reply
+     */
+    public function setCaseId($caseId)
+    {
+        return $this->setData(self::CASE_ID, $caseId);
     }
 
     /**
@@ -52,18 +100,18 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getAuthorId()
     {
-        return $this->getData(ReplyInterface::AUTHOR_ID);
+        return $this->getData(self::AUTHOR_ID);
     }
 
     /**
      * Set author id
      *
      * @param int $authorId
-     * @return ReplyInterface
+     * @return Reply
      */
     public function setAuthorId($authorId)
     {
-        return $this->setData(ReplyInterface::AUTHOR_ID, $authorId);
+        return $this->setData(self::AUTHOR_ID, $authorId);
     }
 
     /**
@@ -73,18 +121,18 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getAuthorType()
     {
-        return $this->getData(ReplyInterface::AUTHOR_TYPE);
+        return $this->getData(self::AUTHOR_TYPE);
     }
 
     /**
      * Set author type
      *
      * @param string $authorType
-     * @return ReplyInterface
+     * @return Reply
      */
     public function setAuthorType($authorType)
     {
-        return $this->setData(ReplyInterface::AUTHOR_TYPE, $authorType);
+        return $this->setData(self::AUTHOR_TYPE, $authorType);
     }
 
     /**
@@ -94,18 +142,18 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getReplyText()
     {
-        return $this->getData(ReplyInterface::REPLY_TEXT);
+        return $this->getData(self::REPLY_TEXT);
     }
 
     /**
      * Set reply text
      *
      * @param string $replyText
-     * @return ReplyInterface
+     * @return Reply
      */
     public function setReplyText($replyText)
     {
-        return $this->setData(ReplyInterface::REPLY_TEXT, $replyText);
+        return $this->setData(self::REPLY_TEXT, $replyText);
     }
 
     /**
@@ -115,18 +163,18 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getRemoteIp()
     {
-        return $this->getData(ReplyInterface::REMOTE_IP);
+        return $this->getData(self::REMOTE_IP);
     }
 
     /**
      * Set remote ip address
      *
      * @param string $remoteIp
-     * @return ReplyInterface
+     * @return Reply
      */
     public function setRemoteIp($remoteIp)
     {
-        return $this->setData(ReplyInterface::REMOTE_IP, $remoteIp);
+        return $this->setData(self::REMOTE_IP, $remoteIp);
     }
 
     /**
@@ -136,39 +184,39 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getStatusId()
     {
-        return $this->getData(ReplyInterface::STATUS_ID);
+        return $this->getData(self::STATUS_ID);
     }
 
     /**
      * Set status id
      *
      * @param int $statusId
-     * @return ReplyInterface
+     * @return Reply
      */
     public function setStatusId($statusId)
     {
-        return $this->setData(ReplyInterface::STATUS_ID, $statusId);
+        return $this->setData(self::STATUS_ID, $statusId);
     }
 
     /**
-     * Get status id
+     * Get is_initial value
      *
-     * @return int
+     * @return bool
      */
     public function getIsInitial()
     {
-        return (bool) $this->getData(ReplyInterface::IS_INITIAL);
+        return (bool) $this->getData(self::IS_INITIAL);
     }
 
     /**
      * Set status id
      *
-     * @param int $isInitial
-     * @return ReplyInterface
+     * @param int|bool $isInitial
+     * @return Reply
      */
-    public function setIsInitial($isInitial)
+    public function setIsInitial($isInitial = false)
     {
-        return $this;
+        return $this->setData(self::IS_INITIAL, (bool) $isInitial);
     }
 
     /**
@@ -178,18 +226,18 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getCreatedAt()
     {
-        return $this->getData(ReplyInterface::CREATED_AT);
+        return $this->getData(self::CREATED_AT);
     }
 
     /**
      * set created at
      *
      * @param $createdAt
-     * @return ReplyInterface
+     * @return Reply
      */
     public function setCreatedAt($createdAt)
     {
-        return $this->setData(ReplyInterface::CREATED_AT, $createdAt);
+        return $this->setData(self::CREATED_AT, $createdAt);
     }
 
     /**************************************************************************/
@@ -202,7 +250,7 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getIsAuthorTypeSystem()
     {
-        return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_SYSTEM);
+        return ($this->getAuthorType() === self::AUTHOR_TYPE_SYSTEM);
     }
 
     /**
@@ -212,7 +260,7 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getIsAuthorTypeCreator()
     {
-        return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_CREATOR);
+        return ($this->getAuthorType() === self::AUTHOR_TYPE_CREATOR);
     }
 
     /**
@@ -222,7 +270,7 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getIsAuthorTypeUser()
     {
-        return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_HELPDESK_USER);
+        return ($this->getAuthorType() === self::AUTHOR_TYPE_HELPDESK_USER);
     }
 
     /**
@@ -232,7 +280,7 @@ class Reply extends AbstractModel implements ReplyInterface
      */
     public function getIsAuthorTypeCaseManager()
     {
-        return ($this->getAuthorType() === ReplyInterface::AUTHOR_TYPE_CASE_MANAGER);
+        return ($this->getAuthorType() === self::AUTHOR_TYPE_CASE_MANAGER);
     }
 
 }

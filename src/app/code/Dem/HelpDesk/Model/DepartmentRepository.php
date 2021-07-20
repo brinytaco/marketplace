@@ -8,9 +8,8 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
-use Dem\HelpDesk\Api\Data\DepartmentInterface;
-use Dem\HelpDesk\Api\DepartmentRepositoryInterface;
-use Dem\HelpDesk\Model\ResourceModel\Department;
+use Dem\HelpDesk\Model\Department;
+use Dem\HelpDesk\Model\ResourceModel\Department as Resource;
 use Dem\HelpDesk\Model\ResourceModel\Department\CollectionFactory;
 use Dem\HelpDesk\Model\DepartmentFactory;
 
@@ -25,7 +24,7 @@ use Dem\HelpDesk\Model\DepartmentFactory;
  * @since      1.0.0
  *
  */
-class DepartmentRepository implements DepartmentRepositoryInterface
+class DepartmentRepository
 {
     /**
      * @var DepartmentFactory
@@ -33,7 +32,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     private $factory;
 
     /**
-     * @var Department
+     * @var Resource
      */
     private $resource;
 
@@ -53,7 +52,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     public function __construct(
         DepartmentFactory $factory,
-        Department $resource,
+        Resource $resource,
         CollectionFactory $collectionFactory,
         SearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
@@ -67,7 +66,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     /**
      * @param int $id
-     * @return DepartmentInterface|false
+     * @return Department|false
      */
     public function getById($id)
     {
@@ -95,22 +94,22 @@ class DepartmentRepository implements DepartmentRepositoryInterface
     }
 
     /**
-     * @param DepartmentInterface $department
-     * @return DepartmentInterface
+     * @param Department $department
+     * @return Department
      * @throws LocalizedException
      */
-    public function save(DepartmentInterface $department)
+    public function save(Department $department)
     {
         $this->resource->save($department);
         return $department;
     }
 
     /**
-     * @param DepartmentInterface $department
+     * @param Department $department
      * @return bool true on success
      * @throws CouldNotDeleteException
      */
-    public function delete(DepartmentInterface $department)
+    public function delete(Department $department)
     {
         try {
             $this->resource->delete($department);
@@ -126,7 +125,7 @@ class DepartmentRepository implements DepartmentRepositoryInterface
 
     /**
      * @param int $id
-     * @return DepartmentInterface
+     * @return Department
      * @throws NoSuchEntityException
      */
     public function deleteById($id)

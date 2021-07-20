@@ -52,21 +52,18 @@ class SaveButton implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        /** @var \Dem\HelpDesk\Api\Data\CaseItemInterface $case */
-        $case = $this->coreRegistry->registry(Department::CURRENT_KEY);
+        /** @var Department $department */
+        $department = $this->coreRegistry->registry(Department::CURRENT_KEY);
 
-        // If is new case only
-        if (!$case) {
-            return [
-                'label' => __('Submit'),
-                'class' => 'save primary',
-                'data_attribute' => [
-                    'mage-init' => ['button' => ['event' => 'save']],
-                    'form-role' => 'save',
-                ],
-                'sort_order' => 30,
-            ];
-        }
+        return [
+            'label' => __('Submit'),
+            'class' => 'save primary',
+            'data_attribute' => [
+                'mage-init' => ['button' => ['event' => 'save']],
+                'form-role' => 'save',
+            ],
+            'sort_order' => 30,
+        ];
 
         return [];
     }

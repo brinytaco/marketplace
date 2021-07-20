@@ -14,34 +14,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
 
-    <!-- For each interface, we must define a preferred instance to be dynamically injected -->
-
-    <!-- CaseItem -->
-    <preference for="Dem\HelpDesk\Api\Data\CaseItemInterface" type="Dem\HelpDesk\Model\CaseItem" />
-    <preference for="Dem\HelpDesk\Api\CaseItemRepositoryInterface" type="Dem\HelpDesk\Model\CaseItemRepository" />
-    <preference for="Dem\HelpDesk\Api\CaseItemManagementInterface" type="Dem\HelpDesk\Model\Service\CaseItemManagement" />
-    <!-- Department -->
-    <preference for="Dem\HelpDesk\Api\Data\DepartmentInterface" type="Dem\HelpDesk\Model\Department" />
-    <preference for="Dem\HelpDesk\Api\DepartmentRepositoryInterface" type="Dem\HelpDesk\Model\DepartmentRepository" />
-    <preference for="Dem\HelpDesk\Api\DepartmentManagementInterface" type="Dem\HelpDesk\Model\Service\DepartmentManagement" />
-    <!-- Reply -->
-    <preference for="Dem\HelpDesk\Api\Data\ReplyInterface" type="Dem\HelpDesk\Model\Reply" />
-    <preference for="Dem\HelpDesk\Api\ReplyRepositoryInterface" type="Dem\HelpDesk\Model\ReplyRepository" />
-    <preference for="Dem\HelpDesk\Api\ReplyManagementInterface" type="Dem\HelpDesk\Model\Service\ReplyManagement" />
-    <!-- Follower -->
-    <preference for="Dem\HelpDesk\Api\Data\FollowerInterface" type="Dem\HelpDesk\Model\Follower" />
-    <preference for="Dem\HelpDesk\Api\FollowerRepositoryInterface" type="Dem\HelpDesk\Model\FollowerRepository" />
-    <preference for="Dem\HelpDesk\Api\FollowerManagementInterface" type="Dem\HelpDesk\Model\Service\FollowerManagement" />
-    <!-- User -->
-    <preference for="Dem\HelpDesk\Api\Data\UserInterface" type="Dem\HelpDesk\Model\User" />
-    <preference for="Dem\HelpDesk\Api\UserRepositoryInterface" type="Dem\HelpDesk\Model\UserRepository" />
-    <preference for="Dem\HelpDesk\Api\UserManagementInterface" type="Dem\HelpDesk\Model\Service\UserManagement" />
-    <!-- DepartmentUser -->
-    <preference for="Dem\HelpDesk\Api\Data\DepartmentUserInterface" type="Dem\HelpDesk\Model\DepartmentUser" />
-    <preference for="Dem\HelpDesk\Api\DepartmentUserRepositoryInterface" type="Dem\HelpDesk\Model\DepartmentUserRepository" />
-    <preference for="Dem\HelpDesk\Api\DepartmentUserManagementInterface" type="Dem\HelpDesk\Model\Service\DepartmentUserManagement" />
-
-
     <!-- CaseItem -->
     <virtualType name="DemHelpDeskCaseGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>

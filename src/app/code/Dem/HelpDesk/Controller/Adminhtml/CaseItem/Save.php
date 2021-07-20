@@ -8,7 +8,7 @@ use Dem\HelpDesk\Exception as HelpDeskException;
 use Magento\Backend\Model\View\Result\Redirect;
 use Magento\Framework\App\RequestInterface;
 use Dem\HelpDesk\Model\Service\CaseItemManagement;
-use Dem\HelpDesk\Model\CaseItem as CaseObject;
+use Dem\HelpDesk\Model\CaseItem as CaseModel;
 use Magento\User\Model\User;
 use Dem\HelpDesk\Model\Service\ReplyManagement;
 use Dem\HelpDesk\Model\Reply;
@@ -47,13 +47,12 @@ class Save extends CaseItem
             return $resultRedirect;
         }
 
-        $data = $this->getRequest()->getPostValue('case');
+        $data = $this->getParam('case');
 
         if ($data) {
             try {
 
-                /** @var CaseItemManagement $caseItemManager */
-                /** @var CaseObject $case */
+                /** @var CaseModel $case */
                 $case = $this->caseItemManager->createCase(
                     $this->caseItemFactory->create(),
                     $data
@@ -62,7 +61,6 @@ class Save extends CaseItem
                 /** @var User $creator */
                 $creator = $this->helper->getBackendSession()->getUser();
 
-                /** @var ReplyManagement $replyManager */
                 /** @var Reply $initialReply */
                 $initialReply = $this->replyManager->createInitialReply(
                     $this->replyFactory->create(),
@@ -93,14 +91,13 @@ class Save extends CaseItem
 
                 $this->prepareDefaultFollowers($case, $department);
 
-                /** @var CaseItemRepository $caseItemRepository */
                 $this->caseItemRepository->save($case);
 
                 // Send notifications
                 $this->notificationService->sendNewCaseNotifications($case);
 
                 // Done Saving customer, finish save action
-                $this->coreRegistry->register(\Dem\HelpDesk\Model\CaseItem::CURRENT_KEY, $case);
+                $this->coreRegistry->register(CaseModel::CURRENT_KEY, $case);
                 $this->messageManager->addSuccessMessage($systemMessage);
 
                 $resultRedirect->setPath('*/*/view', ['case_id' => $case->getId()]);

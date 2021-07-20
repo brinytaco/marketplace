@@ -3,10 +3,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
-use Dem\HelpDesk\Api\Data\CaseItemInterface;
-use Dem\HelpDesk\Api\CaseItemRepositoryInterface;
 use Dem\HelpDesk\Model\CaseItemFactory;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem as CaseItemResource;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
 
 use Magento\Framework\Exception\CouldNotSaveException;
@@ -29,7 +27,7 @@ use Magento\Framework\Api\SearchResultsInterfaceFactory;
  * @since      1.0.0
  *
  */
-class CaseItemRepository implements CaseItemRepositoryInterface
+class CaseItemRepository
 {
     /**
      * @var CaseItemFactory
@@ -37,7 +35,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     private $factory;
 
     /**
-     * @var CaseItemResource
+     * @var Resource
      */
     private $resource;
 
@@ -57,7 +55,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     public function __construct(
         CaseItemFactory $factory,
-        CaseItemResource $resource,
+        Resource $resource,
         CollectionFactory $collectionFactory,
         SearchResultsInterfaceFactory $searchResultsFactory,
         CollectionProcessorInterface $collectionProcessor
@@ -71,7 +69,7 @@ class CaseItemRepository implements CaseItemRepositoryInterface
 
     /**
      * @param int $id
-     * @return CaseItemInterface|false
+     * @return CaseItem|false
      */
     public function getById($id)
     {
@@ -99,22 +97,22 @@ class CaseItemRepository implements CaseItemRepositoryInterface
     }
 
     /**
-     * @param CaseItemInterface $caseItem
-     * @return CaseItemInterface
+     * @param CaseItem $caseItem
+     * @return CaseItem
      * @throws CouldNotSaveException
      */
-    public function save(CaseItemInterface $caseItem)
+    public function save(CaseItem $caseItem)
     {
         $this->resource->save($caseItem);
         return $caseItem;
     }
 
     /**
-     * @param CaseItemInterface $caseItem
+     * @param CaseItem $caseItem
      * @return bool true on success
      * @throws CouldNotDeleteException
      */
-    public function delete(CaseItemInterface $caseItem)
+    public function delete(CaseItem $caseItem)
     {
         try {
             $this->resource->delete($caseItem);

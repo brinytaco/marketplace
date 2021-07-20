@@ -8,8 +8,7 @@ use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
-use Dem\HelpDesk\Api\Data\UserInterface;
-use Dem\HelpDesk\Api\UserRepositoryInterface;
+use Dem\HelpDesk\Model\User;
 use Dem\HelpDesk\Model\ResourceModel\User as Resource;
 use Dem\HelpDesk\Model\ResourceModel\User\CollectionFactory;
 use Dem\HelpDesk\Model\UserFactory;
@@ -25,7 +24,7 @@ use Dem\HelpDesk\Model\UserFactory;
  * @since      1.0.0
  *
  */
-class UserRepository implements UserRepositoryInterface
+class UserRepository
 {
     /**
      * @var UserFactory
@@ -68,7 +67,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param int $id
-     * @return UserInterface|false
+     * @return User|false
      */
     public function getById($id)
     {
@@ -96,22 +95,22 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
-     * @param UserInterface $user
-     * @return UserInterface
+     * @param User $user
+     * @return User
      * @throws LocalizedException
      */
-    public function save(UserInterface $user)
+    public function save(User $user)
     {
         $this->resource->save($user);
         return $user;
     }
 
     /**
-     * @param UserInterface $user
+     * @param User $user
      * @return bool true on success
      * @throws CouldNotDeleteException
      */
-    public function delete(UserInterface $user)
+    public function delete(User $user)
     {
         try {
             $this->resource->delete($user);
@@ -127,7 +126,7 @@ class UserRepository implements UserRepositoryInterface
 
     /**
      * @param int $id
-     * @return UserInterface
+     * @return User
      * @throws NoSuchEntityException
      */
     public function deleteById($id)
