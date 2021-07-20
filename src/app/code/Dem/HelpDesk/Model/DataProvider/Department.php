@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\DataProvider;
 
 use Dem\HelpDesk\Model\Department as DeptModel;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * HelpDesk DataProvider - Department
@@ -16,8 +17,22 @@ use Dem\HelpDesk\Model\Department as DeptModel;
  * @since      1.0.0
  *
  */
-class Department extends AbstractProvider
+class Department extends \Dem\Base\Model\DataProvider\AbstractProvider
 {
+
+    /**
+     * Additional constructor
+     *
+     * @return $this
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    protected function _construct()
+    {
+        $this->collection = ObjectManager::getInstance()->get(\Dem\HelpDesk\Model\ResourceModel\Department\Collection::class);
+        return parent::_construct();
+    }
+
     /**
      * Populate form data by fieldset
      *
@@ -47,8 +62,8 @@ class Department extends AbstractProvider
     protected function formatDateValues(&$itemData)
     {
         // we're getting the raw string instead of the already calculated value from the model
-        $itemData[DeptModel::CREATED_AT] = $this->baseHelper->formatDate($itemData[DeptModel::CREATED_AT], \IntlDateFormatter::MEDIUM, true);
-        $itemData[DeptModel::UPDATED_AT] = $this->baseHelper->formatDate($itemData[DeptModel::UPDATED_AT], \IntlDateFormatter::MEDIUM, true);
+        $itemData[DeptModel::CREATED_AT] = $this->getBaseHelper()->formatDate($itemData[DeptModel::CREATED_AT], \IntlDateFormatter::MEDIUM, true);
+        $itemData[DeptModel::UPDATED_AT] = $this->getBaseHelper()->formatDate($itemData[DeptModel::UPDATED_AT], \IntlDateFormatter::MEDIUM, true);
         return $this;
     }
 }

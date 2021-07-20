@@ -29,11 +29,7 @@ class Edit extends Controller
 
         if ($department) {
             $resultPage = $this->initAction();
-            $this->getPageTitle()->prepend(sprintf(
-                '%s: %s',
-                __('Editing'),
-                $department->getName()
-            ));
+            $this->getPageTitle()->prepend($department->getName());
             return $resultPage;
         }
 

@@ -44,8 +44,8 @@ class AbstractProvider extends AbstractDataProvider
         array $data = []
     ) {
         $this->baseHelper = $baseHelper;
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
         $this->_construct();
+        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
     }
 
     /**
@@ -56,7 +56,10 @@ class AbstractProvider extends AbstractDataProvider
      * @since 1.0.0
      * @codeCoverageIgnore
      */
-    protected function _construct() {}
+    protected function _construct()
+    {
+        return $this;
+    }
 
     /**
      * Populate form data by fieldset

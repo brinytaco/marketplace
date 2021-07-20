@@ -240,6 +240,17 @@ abstract class AbstractAction extends Action
     }
 
     /**
+     * Get Layout instance
+     *
+     * @return \Magento\Framework\View\Result\LayoutFactory
+     * @since 1.0.0
+     */
+    protected function getLayoutFactory()
+    {
+        return $this->layoutFactory;
+    }
+
+    /**
      * Get Registry instance
      *
      * @return \Magento\Framework\Registry

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\DataProvider;
 
+use Magento\Framework\App\ObjectManager;
 /**
  * HelpDesk DataProvider - CaseItem
  *
@@ -14,17 +15,19 @@ namespace Dem\HelpDesk\Model\DataProvider;
  * @since      1.0.0
  *
  */
-class CaseItem extends AbstractProvider
+class CaseItem extends \Dem\Base\Model\DataProvider\AbstractProvider
 {
     /**
-     * Load object form data
+     * Additional constructor
      *
+     * @return $this
      * @since 1.0.0
-     * @return array
      * @codeCoverageIgnore
      */
-    public function getData()
+    protected function _construct()
     {
-        return [];
+        $this->collection = ObjectManager::getInstance()->get(\Dem\HelpDesk\Model\ResourceModel\CaseItem\Collection::class);
+        return parent::_construct();
     }
+
 }

@@ -212,25 +212,4 @@ abstract class Department extends AbstractAction
     {
         return $this->getHelper()->getBackendSession()->getUser();
     }
-
-    /**
-     * Provides an initialized Result object.
-     *
-     * @param string $path
-     * @param array $params
-     * @param array $response
-     * @return Json|Redirect
-     */
-    protected function returnResult($path = '', array $params = [], array $response = [])
-    {
-        if ($this->isAjax()) {
-            $layout = $this->getLayout();
-            $layout->initMessages();
-
-            $response['messages'] = [$layout->getMessagesBlock()->getGroupedHtml()];
-            $response['params'] = $params;
-            return $this->getResultJson()->setData($response);
-        }
-        return $this->getRedirect()->setPath($path, $params);
-    }
 }
