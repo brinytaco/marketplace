@@ -4,11 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Service;
 
 use Dem\HelpDesk\Exception as HelpDeskException;
-use Dem\HelpDesk\Helper\Data as Helper;
-use Magento\Framework\Registry;
-use Magento\Framework\Event\ManagerInterface;
-use Psr\Log\LoggerInterface;
-
+use Dem\HelpDesk\Model\User;
 
 /**
  * HelpDesk Service Model - User Management
@@ -20,30 +16,8 @@ use Psr\Log\LoggerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class UserManagement
+class UserManagement extends AbstractManagement
 {
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var Helper
-     */
-    protected $helper;
-
     /**
      * Phrase object name
      * @var string
@@ -51,31 +25,12 @@ class UserManagement
     protected $objectName = 'user';
 
     /**
-     * Data constructor.
-     *
-     * @param Registry $coreRegistry
-     * @param ManagerInterface $eventManager
-     * @param LoggerInterface $logger
-     * @param Helper $helper
-     */
-    public function __construct(
-        Registry $coreRegistry,
-        ManagerInterface $eventManager,
-        LoggerInterface $logger,
-        Helper $helper
-    ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->eventManager = $eventManager;
-        $this->logger = $logger;
-        $this->helper = $helper;
-    }
-
-    /**
      * Validate submitted data
      *
      * @param array $data
      * @return void
      * @throws HelpDeskException
+     * @since 1.0.0
      */
     public function validate(array $data)
     {
@@ -99,16 +54,30 @@ class UserManagement
                 throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
-
-        /** @todo Check for 10 word minimum in message body */
     }
 
     /**
      * Get required fields array
      *
      * @return array
+     * @since 1.0.0
      */
     public function getRequiredFields()
+    {
+        return [
+            User::WEBSITE_ID,
+            User::EMAIL,
+            User::NAME
+        ];
+    }
+
+    /**
+     * Get editable fields array
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getEditableFields()
     {
         return [];
     }

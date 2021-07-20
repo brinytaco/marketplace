@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
 use Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs;
-use Magento\Framework\Phrase;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Replies
@@ -19,7 +18,8 @@ use Magento\Framework\Phrase;
 class Replies extends Tabs
 {
     /**
-     * @return Phrase
+     * @return Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -27,7 +27,8 @@ class Replies extends Tabs
     }
 
     /**
-     * @return Phrase
+     * @return Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {

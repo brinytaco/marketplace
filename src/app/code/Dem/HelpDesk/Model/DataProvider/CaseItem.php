@@ -3,9 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\DataProvider;
 
-use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
-use Magento\Ui\DataProvider\AbstractDataProvider;
-
 /**
  * HelpDesk DataProvider - CaseItem
  *
@@ -17,36 +14,17 @@ use Magento\Ui\DataProvider\AbstractDataProvider;
  * @since      1.0.0
  *
  */
-class CaseItem extends AbstractDataProvider
+class CaseItem extends AbstractProvider
 {
     /**
-     * @param string $name
-     * @param string $primaryFieldName
-     * @param string $requestFieldName
-     * @param CollectionFactory $collectionFactory
-     * @param array $meta
-     * @param array $data
-     */
-    public function __construct(
-        $name,
-        $primaryFieldName,
-        $requestFieldName,
-        CollectionFactory $collectionFactory,
-        array $meta = [],
-        array $data = []
-    ) {
-        $this->collection = $collectionFactory->create();
-        parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data);
-    }
-
-    /**
-     * Get collection data
+     * Load object form data
      *
-     * @return array
      * @since 1.0.0
+     * @return array
+     * @codeCoverageIgnore
      */
     public function getData()
     {
-        return parent::getData();
+        return [];
     }
 }

@@ -3,18 +3,10 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model;
 
-use Dem\HelpDesk\Model\CaseItemFactory;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory;
-
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Framework\Exception\CouldNotDeleteException;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Api\SearchCriteriaInterface;
+use Dem\HelpDesk\Model\CaseItemFactory as ObjectFactory;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
-use Magento\Framework\Api\SearchResultsInterfaceFactory;
 
 /**
  * HelpDesk Model Repository - CaseItem
@@ -27,113 +19,36 @@ use Magento\Framework\Api\SearchResultsInterfaceFactory;
  * @since      1.0.0
  *
  */
-class CaseItemRepository
+class CaseItemRepository extends AbstractRepository
 {
     /**
-     * @var CaseItemFactory
+     * @var \Dem\HelpDesk\Model\CaseItemFactory
      */
-    private $factory;
+    protected $objectFactory;
 
     /**
-     * @var Resource
+     * @var \Dem\HelpDesk\Model\ResourceModel\CaseItem\CollectionFactory
      */
-    private $resource;
+    protected $collectionFactory;
 
     /**
-     * @var CaseItemCollectionFactory
+     * @param ObjectFactory $objectFactory
+     * @param CollectionFactory $collectionFactory
+     * @param CollectionProcessorInterface $collectionProcessor
+     * @param SearchResultsInterface $searchResultsInterface
+     * @codeCoverageIgnore
      */
-    private $collectionFactory;
-
-    /**
-     * @var SearchResultsInterfaceFactory
-     */
-    private $searchResultsFactory;
-    /**
-     * @var CollectionProcessorInterface
-     */
-    private $collectionProcessor;
-
     public function __construct(
-        CaseItemFactory $factory,
-        Resource $resource,
+        ObjectFactory $objectFactory,
         CollectionFactory $collectionFactory,
-        SearchResultsInterfaceFactory $searchResultsFactory,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
+        SearchResultsInterface $searchResultsInterface
     ) {
-        $this->factory = $factory;
-        $this->resource = $resource;
+        $this->objectFactory = $objectFactory;
         $this->collectionFactory = $collectionFactory;
-        $this->searchResultsFactory = $searchResultsFactory;
-        $this->collectionProcessor = $collectionProcessor;
-    }
-
-    /**
-     * @param int $id
-     * @return CaseItem|false
-     */
-    public function getById($id)
-    {
-        $object = $this->factory->create();
-        $this->resource->load($object, $id);
-        if (!$object->getId()) {
-            return false;
-        }
-        return $object;
-    }
-
-    /**
-     * @param SearchCriteriaInterface $searchCriteria
-     * @return SearchResultsInterface
-     * @throws LocalizedException
-     */
-    public function getList(SearchCriteriaInterface $searchCriteria)
-    {
-        $collection = $this->collectionFactory->create();
-        $this->collectionProcessor->process($searchCriteria, $collection);
-        $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($searchCriteria);
-        $searchResults->setItems($collection->getItems());
-        return $searchResults;
-    }
-
-    /**
-     * @param CaseItem $caseItem
-     * @return CaseItem
-     * @throws CouldNotSaveException
-     */
-    public function save(CaseItem $caseItem)
-    {
-        $this->resource->save($caseItem);
-        return $caseItem;
-    }
-
-    /**
-     * @param CaseItem $caseItem
-     * @return bool true on success
-     * @throws CouldNotDeleteException
-     */
-    public function delete(CaseItem $caseItem)
-    {
-        try {
-            $this->resource->delete($caseItem);
-        } catch (\Exception $exception) {
-            throw new CouldNotDeleteException(
-                __('Could not delete the entry: %1', $exception->getMessage())
-            );
-        }
-
-        return true;
-
-    }
-
-    /**
-     * @param int $id
-     * @return bool
-     * @throws NoSuchEntityException
-     */
-    public function deleteById($id)
-    {
-        $object = $this->getById($id);
-        return $this->delete($object);
+        parent::__construct(
+            $collectionProcessor,
+            $searchResultsInterface
+        );
     }
 }

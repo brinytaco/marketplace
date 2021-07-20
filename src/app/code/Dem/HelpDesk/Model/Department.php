@@ -6,6 +6,7 @@ namespace Dem\HelpDesk\Model;
 use Dem\HelpDesk\Model\ResourceModel\Department as Resource;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * HelpDesk Model - Department
@@ -47,6 +48,7 @@ class Department extends AbstractModel
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -56,12 +58,26 @@ class Department extends AbstractModel
     /**
      * Get resource instance
      *
+     * Added here for proper PHPDoc return of Resource class
+     *
      * @throws LocalizedException
-     * @return Resource
+     * @return \Dem\HelpDesk\Model\ResourceModel\Department
+     * @codeCoverageIgnore
      */
-    protected function _getResource()
+    public function getResource()
     {
-        return parent::_getResource();
+        return parent::getResource();
+    }
+
+    /**
+     * Set id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::DEPARTMENT_ID, $id);
     }
 
     /**
@@ -88,7 +104,7 @@ class Department extends AbstractModel
      * Set website id
      *
      * @param int $websiteId
-     * @return Department
+     * @return $this
      */
     public function setWebsiteId($websiteId)
     {
@@ -109,7 +125,7 @@ class Department extends AbstractModel
      * Set case manager id
      *
      * @param int $caseManagerId
-     * @return Department
+     * @return $this
      */
     public function setCaseManagerId($caseManagerId)
     {
@@ -151,7 +167,7 @@ class Department extends AbstractModel
      * Set description
      *
      * @param string $description
-     * @return Department
+     * @return $this
      */
     public function setDescription($description)
     {
@@ -172,7 +188,7 @@ class Department extends AbstractModel
      * Set is_internal flag
      *
      * @param int|bool $isInternal
-     * @return Department
+     * @return $this
      */
     public function setIsInternal($isInternal)
     {
@@ -193,7 +209,7 @@ class Department extends AbstractModel
      * Set is_active flag
      *
      * @param int|bool $isActive
-     * @return Department
+     * @return $this
      */
     public function setIsActive($isActive)
     {
@@ -214,7 +230,7 @@ class Department extends AbstractModel
      * Set sort_order
      *
      * @param int $sortOrder
-     * @return Department
+     * @return $this
      */
     public function setSortOrder($sortOrder)
     {
@@ -235,7 +251,7 @@ class Department extends AbstractModel
      * set created at
      *
      * @param $createdAt
-     * @return Department
+     * @return $this
      */
     public function setCreatedAt($createdAt)
     {
@@ -256,7 +272,7 @@ class Department extends AbstractModel
      * set updated at
      *
      * @param $updatedAt
-     * @return Department
+     * @return $this
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -266,10 +282,14 @@ class Department extends AbstractModel
     /**
      * Get default followers
      *
-     * @return [] int
+     * @return int[]
+     * @codeCoverageIgnore
      */
     public function getDefaultFollowers()
     {
+        if (!$this->hasData(self::DEFAULT_FOLLOWERS)) {
+            $this->getResource()->setDefaultFollowers($this);
+        }
         return $this->getData(self::DEFAULT_FOLLOWERS);
     }
 
@@ -281,7 +301,7 @@ class Department extends AbstractModel
      * it should not be set here
      *
      * @param $followerIds
-     * @return Department
+     * @return $this
      */
     public function setDefaultFollowers($followerIds)
     {
@@ -295,6 +315,9 @@ class Department extends AbstractModel
      */
     public function getCaseManagerName()
     {
+        if (!$this->hasData(self::CASE_MANAGER_NAME)) {
+            $this->getResource()->setCaseManagerData($this);
+        }
         return $this->getData(self::CASE_MANAGER_NAME);
     }
 
@@ -305,7 +328,7 @@ class Department extends AbstractModel
      * it should not be set here
      *
      * @param string $name
-     * @return Department
+     * @return $this
      */
     public function setCaseManagerName($name)
     {
@@ -329,7 +352,7 @@ class Department extends AbstractModel
      * it should not be set here
      *
      * @param string $name
-     * @return Department
+     * @return $this
      */
     public function setCaseManagerEmail($name)
     {

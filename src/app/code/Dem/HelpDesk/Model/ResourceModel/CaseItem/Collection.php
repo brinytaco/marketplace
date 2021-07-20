@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\ResourceModel\CaseItem;
 
-use Dem\HelpDesk\Controller\Adminhtml\CaseItem as AdminhtmlCaseItem;
 use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
 use Dem\HelpDesk\Model\CaseItem;
 use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
@@ -45,6 +44,7 @@ class Collection extends AbstractCollection
      * Define resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -61,6 +61,7 @@ class Collection extends AbstractCollection
      *
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _initSelect()
     {
@@ -95,6 +96,7 @@ class Collection extends AbstractCollection
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getCaseNumberExpressionSelect()
     {

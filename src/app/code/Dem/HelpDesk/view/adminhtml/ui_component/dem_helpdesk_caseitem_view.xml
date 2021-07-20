@@ -15,27 +15,27 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">dem_helpdesk_caseitem_view.dem_helpdesk_caseitem_view_data_source</item>
+            <item name="deps" xsi:type="string">dem_helpdesk_caseitem_view.dem_helpdesk_caseitem_view_data_source</item>
         </item>
-        <item name="label" xsi:type="string" translate="true">Case View</item>
+        <item name="label" xsi:type="string" translate="true">General</item>
+        <item name="layout" xsi:type="array">
+            <item name="type" xsi:type="string">tabs</item>
+            <item name="navContainerName" xsi:type="string">left</item>
+        </item>
+        <!-- Button set -->
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\CancelButton</item>
+            <!-- <item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\SaveButton</item> -->
+        </item>
+        <item name="ajaxSave" xsi:type="boolean">false</item>
     </argument>
-    <settings>
-        <buttons>
-            <button name="back" class="Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\BackButton"/>
-        </buttons>
-        <layout>
-            <navContainerName>left</navContainerName>
-            <type>tabs</type>
-        </layout>
-        <deps>
-            <dep>dem_helpdesk_caseitem_view.dem_helpdesk_caseitem_view_data_source</dep>
-        </deps>
-    </settings>
+
     <dataSource>
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Dem\HelpDesk\Model\DataProvider\CaseItem</argument>
             <argument name="name" xsi:type="string">dem_helpdesk_caseitem_view_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">case_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">case_id</argument>
         </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">

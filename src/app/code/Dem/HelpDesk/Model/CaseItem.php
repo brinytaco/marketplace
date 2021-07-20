@@ -10,7 +10,8 @@ use Dem\HelpDesk\Model\Reply;
 use Dem\HelpDesk\Model\Follower;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Exception\LocalizedException;
-
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Model\Context;
 /**
  * HelpDesk Model - Case
  *
@@ -58,7 +59,7 @@ class CaseItem extends AbstractModel
     protected $_eventObject = self::EVENT_PREFIX;
 
     /**
-     * @var Reply[]
+     * @var \Dem\HelpDesk\Model\Reply[]
      */
     protected $repliesToSave = [];
 
@@ -69,12 +70,13 @@ class CaseItem extends AbstractModel
 
     /**
      *
-     * @var Follower[]
+     * @var \Dem\HelpDesk\Model\Follower[]
      */
     protected $followersToSave = [];
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -84,19 +86,22 @@ class CaseItem extends AbstractModel
     /**
      * Get resource instance
      *
+     * Added here for proper PHPDoc return of Resource class
+     *
      * @throws LocalizedException
-     * @return Resource
+     * @return \Dem\HelpDesk\Model\ResourceModel\CaseItem
+     * @codeCoverageIgnore
      */
-    protected function _getResource()
+    public function getResource()
     {
-        return parent::_getResource();
+        return parent::getResource();
     }
 
     /**
      * Set id
      *
      * @param int $id
-     * @return CaseItem
+     * @return $this
      */
     public function setId($id)
     {
@@ -120,7 +125,7 @@ class CaseItem extends AbstractModel
      * it cannot be set here
      *
      * @param string $caseNumber
-     * @return CaseItem
+     * @return $this
      */
     public function setCaseNumber($caseNumber)
     {
@@ -135,7 +140,7 @@ class CaseItem extends AbstractModel
     public function getCaseNumber()
     {
         if (!$this->hasData(self::CASE_NUMBER)) {
-            $this->_getResource()->setCaseNumber($this);
+            $this->getResource()->setCaseNumber($this);
         }
         return $this->getData(self::CASE_NUMBER);
     }
@@ -143,10 +148,13 @@ class CaseItem extends AbstractModel
     /**
      * Get case manager data
      *
-     * @return \Magento\Framework\DataObject
+     * @return User
      */
     public function getCaseManager()
     {
+        if (!$this->hasData(self::CASE_MANAGER)) {
+            $this->getResource()->setCaseManager($this);
+        }
         return $this->getData(self::CASE_MANAGER);
     }
 
@@ -157,7 +165,7 @@ class CaseItem extends AbstractModel
      * it cannot be set here
      *
      * @param \Magento\Framework\DataObject $data
-     * @return CaseItem
+     * @return $this
      */
     public function setCaseManager(\Magento\Framework\DataObject $data)
     {
@@ -178,7 +186,7 @@ class CaseItem extends AbstractModel
      * Set website id
      *
      * @param int $websiteId
-     * @return CaseItem
+     * @return $this
      */
     public function setWebsiteId($websiteId)
     {
@@ -199,7 +207,7 @@ class CaseItem extends AbstractModel
      * Set department id
      *
      * @param int $departmentId
-     * @return CaseItem
+     * @return $this
      */
     public function setDepartmentId($departmentId)
     {
@@ -223,7 +231,7 @@ class CaseItem extends AbstractModel
      * it cannot be set here
      *
      * @param string $name
-     * @return CaseItem
+     * @return $this
      */
     public function setDepartmentName($name)
     {
@@ -248,7 +256,7 @@ class CaseItem extends AbstractModel
      * it cannot be set here
      *
      * @param string $name
-     * @return CaseItem
+     * @return $this
      */
     public function setWebsiteName($name)
     {
@@ -270,7 +278,7 @@ class CaseItem extends AbstractModel
      * Set protect code
      *
      * @param string $protectCode
-     * @return CaseItem
+     * @return $this
      */
     public function setProtectCode($protectCode)
     {
@@ -291,7 +299,7 @@ class CaseItem extends AbstractModel
      * Set creator customer id
      *
      * @param int $customerId
-     * @return CaseItem
+     * @return $this
      */
     public function setCreatorCustomerId($customerId)
     {
@@ -312,7 +320,7 @@ class CaseItem extends AbstractModel
      * Set creator admin id
      *
      * @param int $adminId
-     * @return CaseItem
+     * @return $this
      */
     public function setCreatorAdminId($adminId)
     {
@@ -333,7 +341,7 @@ class CaseItem extends AbstractModel
      * Set creator name
      *
      * @param string $name
-     * @return CaseItem
+     * @return $this
      */
     public function setCreatorName($name)
     {
@@ -354,7 +362,7 @@ class CaseItem extends AbstractModel
      * Set creator email
      *
      * @param string $email
-     * @return CaseItem
+     * @return $this
      */
     public function setCreatorEmail($email)
     {
@@ -375,7 +383,7 @@ class CaseItem extends AbstractModel
      * Set creator last read reply id
      *
      * @param int $replyId
-     * @return CaseItem
+     * @return $this
      */
     public function setCreatorLastRead($replyId)
     {
@@ -396,7 +404,7 @@ class CaseItem extends AbstractModel
      * Set subject
      *
      * @param string $subject
-     * @return CaseItem
+     * @return $this
      */
     public function setSubject($subject)
     {
@@ -417,7 +425,7 @@ class CaseItem extends AbstractModel
      * Set status id
      *
      * @param int $statusId
-     * @return CaseItem
+     * @return $this
      */
     public function setStatusId($statusId)
     {
@@ -438,7 +446,7 @@ class CaseItem extends AbstractModel
      * Set priority
      *
      * @param int $priority
-     * @return CaseItem
+     * @return $this
      */
     public function setPriority($priority)
     {
@@ -459,7 +467,7 @@ class CaseItem extends AbstractModel
      * Set remote ip address
      *
      * @param string $remoteIp
-     * @return CaseItem
+     * @return $this
      */
     public function setRemoteIp($remoteIp)
     {
@@ -480,7 +488,7 @@ class CaseItem extends AbstractModel
      * Set http user agent
      *
      * @param string $userAgent
-     * @return CaseItem
+     * @return $this
      */
     public function setHttpUserAgent($userAgent)
     {
@@ -501,7 +509,7 @@ class CaseItem extends AbstractModel
      * Set name of last updater
      *
      * @param string $userName
-     * @return CaseItem
+     * @return $this
      */
     public function setUpdaterName($userName)
     {
@@ -522,7 +530,7 @@ class CaseItem extends AbstractModel
      * set created at
      *
      * @param $createdAt
-     * @return CaseItem
+     * @return $this
      */
     public function setCreatedAt($createdAt)
     {
@@ -543,7 +551,7 @@ class CaseItem extends AbstractModel
      * set updated at
      *
      * @param $updatedAt
-     * @return CaseItem
+     * @return $this
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -556,11 +564,15 @@ class CaseItem extends AbstractModel
     /**
      * Get department object for current case
      *
-     * @return int
+     * @return \Dem\HelpDesk\Model\Department|null
+     * @codeCoverageIgnore
      */
     public function getDepartment()
     {
-        return $this->_getResource()->getDepartment($this);
+        if ($this->getId()) {
+            return $this->getResource()->getDepartment($this);
+        }
+        return null;
     }
 
     /**
@@ -568,11 +580,12 @@ class CaseItem extends AbstractModel
      *
      * @return \Magento\Framework\Api\SearchResults
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getReplies()
     {
         if (!isset($this->replies)) {
-            $this->replies = $this->_getResource()->getReplies($this);
+            $this->replies = $this->getResource()->getReplies($this);
         }
         return $this->replies;
     }
@@ -580,19 +593,23 @@ class CaseItem extends AbstractModel
     /**
      * Get initial case reply
      *
+     * @param \Magento\Framework\Api\SearchResults|array
      * @return Reply|bool
      * @since 1.0.0
      */
-    public function getInitialReply()
+    public function getInitialReply($replies = [])
     {
-        $replies = $this->getReplies();
-        /** @var Reply $reply */
-        foreach ($replies->getItems() as $reply) {
-            if ($reply->getIsInitial()) {
-                return $reply;
+        if (empty($replies)) {
+            $replies = $this->getReplies()->getItems();
+        }
+        if (count($replies)) {
+            /** @var Reply $reply */
+            foreach ($replies as $reply) {
+                if ($reply->getIsInitial()) {
+                    return $reply;
+                }
             }
         }
-
         return false;
     }
 
@@ -601,11 +618,12 @@ class CaseItem extends AbstractModel
      *
      * @return \Magento\Framework\Api\SearchResultsInterface
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getFollowers()
     {
         if (!isset($this->followers)) {
-            $this->followers = $this->_getResource()->getFollowers($this);
+            $this->followers = $this->getResource()->getReplies($this);
         }
         return $this->followers;
     }
@@ -616,7 +634,7 @@ class CaseItem extends AbstractModel
     /**
      * Get repliesToSave array
      *
-     * @return Reply[]
+     * @return \Dem\HelpDesk\Model\Reply[]
      * @since 1.0.0
      */
     public function getRepliesToSave()
@@ -628,7 +646,7 @@ class CaseItem extends AbstractModel
      * Add data to repliesToSave array
      *
      * @param Reply $reply
-     * @return CaseItem
+     * @return $this
      * @since 1.0.0
      */
     public function addReplyToSave(Reply $reply)
@@ -644,7 +662,7 @@ class CaseItem extends AbstractModel
     /**
      * Reset replies
      *
-     * @return CaseItem
+     * @return $this
      * @since 1.0.0
      */
     public function clearRepliesToSave()
@@ -659,7 +677,7 @@ class CaseItem extends AbstractModel
     /**
      * Get followers array
      *
-     * @return Follower[]
+     * @return \Dem\HelpDesk\Model\Follower[]
      * @since 1.0.0
      */
     public function getFollowersToSave()
@@ -672,7 +690,7 @@ class CaseItem extends AbstractModel
      *
      * @param Follower $follower
      * @param bool $delete Flag existing for removal
-     * @return CaseItem
+     * @return $this
      * @since 1.0.0
      */
     public function addFollowerToSave(Follower $follower, $delete = false)
@@ -689,7 +707,7 @@ class CaseItem extends AbstractModel
     /**
      * Reset followers
      *
-     * @return CaseItem
+     * @return $this
      * @since 1.0.0
      */
     public function clearFollowersToSave()

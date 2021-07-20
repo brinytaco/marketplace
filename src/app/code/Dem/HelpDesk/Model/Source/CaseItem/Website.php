@@ -33,31 +33,16 @@ class Website extends SourceOptions
         }
 
         // Adminhtml view, so include Admin website
-        $includeAdmin = $this->helper->getIsAdminArea();
+        $includeAdmin = $this->getHelper()->getIsAdminArea();
 
-        $websiteOptions = $this->store->getWebsiteValuesForForm(false, $includeAdmin);
+        $websiteOptions = $this->getStore()->getWebsiteValuesForForm(false, $includeAdmin);
 
         $this->optionArray = array_merge($this->optionArray, $websiteOptions);
 
-        $this->changeAdminWebsiteName();
-        $this->filterDefaultWebsite();
-        $this->filterDisabledWebsites();
-
+        $this->changeAdminWebsiteName($this->optionArray);
+        $this->filterDefaultWebsite($this->optionArray);
+        $this->filterDisabledWebsites($this->optionArray);
         return $this->optionArray;
-    }
-
-    /**
-     * Change default website display name
-     * @return void
-     * @since 1.0.0
-     */
-    protected function changeAdminWebsiteName()
-    {
-        foreach ($this->optionArray as $key => $option) {
-            if (Config::isAdminWebsite($option['value'])) {
-                $this->optionArray[$key]['label'] = __('DE INTERNAL');
-            }
-        }
     }
 
     /**
@@ -66,41 +51,58 @@ class Website extends SourceOptions
      * @return boolean
      * @since 1.0.0
      */
-    protected function getShouldAddEmptyOption()
+    public function getShouldAddEmptyOption()
     {
-        return ($this->request->getControllerName() == 'caseitem'
-                && $this->request->getActionName() == 'create');
+        return ($this->getRequest()->getControllerName() == 'caseitem'
+                && $this->getRequest()->getActionName() == 'create');
+    }
+
+    /**
+     * Change default website display name
+     * @return array
+     * @since 1.0.0
+     */
+    public function changeAdminWebsiteName(&$options = [])
+    {
+        foreach ($options as $key => $option) {
+            if ((string)$option['value'] !== '' && Config::isAdminWebsite($option['value'])) {
+                $options[$key]['label'] = __('DE INTERNAL');
+            }
+        }
+        return $options;
     }
 
     /**
      * Remove default website from optionArray
-     * @return void
+     * @return array
      * @since 1.0.0
      */
-    protected function filterDefaultWebsite()
+    public function filterDefaultWebsite(&$options = [])
     {
-        foreach ($this->optionArray as $key => $option) {
+        foreach ($options as $key => $option) {
             if (Config::isDefaultWebsite($option['value'])) {
-                unset($this->optionArray[$key]);
+                unset($options[$key]);
             }
         }
+        return $options;
     }
 
     /**
      * Remove non-helpdesk-enabled websites from optionArray
      *
-     * @return void
+     * @return array
      * @since 1.0.0
      */
-    protected function filterDisabledWebsites()
+    public function filterDisabledWebsites(&$options = [])
     {
-        foreach ($this->optionArray as $key => $option) {
+        foreach ($options as $key => $option) {
             if (Config::isAdminWebsite($option['value'])) {
                 continue;
             }
-            if (!$this->helper->isEnabled($option['value'])) {
-                unset($this->optionArray[$key]);
+            if (!$this->getHelper()->isEnabled($option['value'])) {
+                unset($options[$key]);
             }
         }
+        return $options;
     }
 }

@@ -4,12 +4,8 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Service;
 
 use Dem\HelpDesk\Exception as HelpDeskException;
-use Dem\HelpDesk\Helper\Data as Helper;
 use Dem\HelpDesk\Model\Follower;
 use Dem\HelpDesk\Model\CaseItem;
-use Magento\Framework\Registry;
-use Magento\Framework\Event\ManagerInterface;
-use Psr\Log\LoggerInterface;
 
 
 /**
@@ -22,30 +18,8 @@ use Psr\Log\LoggerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class FollowerManagement
+class FollowerManagement extends AbstractManagement
 {
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var Helper
-     */
-    protected $helper;
-
     /**
      * Phrase object name
      * @var string
@@ -53,36 +27,13 @@ class FollowerManagement
     protected $objectName = 'follower';
 
     /**
-     * Data constructor.
-     *
-     * @param Registry $coreRegistry
-     * @param ManagerInterface $eventManager
-     * @param LoggerInterface $logger
-     * @param Helper $helper
-     */
-    public function __construct(
-        Registry $coreRegistry,
-        ManagerInterface $eventManager,
-        LoggerInterface $logger,
-        Helper $helper
-    ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->eventManager = $eventManager;
-        $this->logger = $logger;
-        $this->helper = $helper;
-    }
-
-    /**
      * Create standard follower
      *
      * @param Follower $follower
      * @param CaseItem $case
-     * @param int $authorId
-     * @param string $authorType
-     * @param string $followerText
-     * @param int|null $statusId
-     * @param bool|null $isInitial
+     * @param int $userId
      * @return Follower
+     * @since 1.0.0
      */
     public function createFollower(
         Follower $follower,
@@ -90,8 +41,8 @@ class FollowerManagement
         $userId
     ) {
         $data = [
-            'case_id'     => $case->getId(),
-            'user_id'     => $userId,
+            Follower::CASE_ID => $case->getId(),
+            Follower::USER_ID => $userId,
         ];
         $this->validate($data);
 
@@ -104,6 +55,7 @@ class FollowerManagement
      * @param array $data
      * @return void
      * @throws HelpDeskException
+     * @since 1.0.0
      */
     public function validate(array $data)
     {
@@ -127,15 +79,29 @@ class FollowerManagement
                 throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
-
     }
 
     /**
      * Get required fields array
      *
      * @return array
+     * @since 1.0.0
      */
     public function getRequiredFields()
+    {
+        return [
+            Follower::CASE_ID,
+            Follower::USER_ID
+        ];
+    }
+
+    /**
+     * Get editable fields array
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getEditableFields()
     {
         return [];
     }

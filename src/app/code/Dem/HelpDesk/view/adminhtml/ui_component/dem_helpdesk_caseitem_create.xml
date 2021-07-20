@@ -17,14 +17,12 @@
             <item name="provider" xsi:type="string">dem_helpdesk_caseitem_create.dem_helpdesk_caseitem_create_data_source</item>
             <item name="deps" xsi:type="string">dem_helpdesk_caseitem_create.dem_helpdesk_caseitem_create_data_source</item>
         </item>
-        <!--<item name="label" xsi:type="string" translate="true">Open New Case</item>-->
-        <!-- ?? -->
         <item name="layout" xsi:type="array">
             <item name="type" xsi:type="string">tabs</item>
         </item>
         <!-- Button set -->
         <item name="buttons" xsi:type="array">
-            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\BackButton</item>
+            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\CancelButton</item>
             <item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\CaseItem\Buttons\SaveButton</item>
         </item>
         <item name="ajaxSave" xsi:type="boolean">false</item>
@@ -36,7 +34,7 @@
             <argument name="class" xsi:type="string">Dem\HelpDesk\Model\DataProvider\CaseItem</argument>
             <argument name="name" xsi:type="string">dem_helpdesk_caseitem_create_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">case_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">case_id</argument>
         </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
@@ -65,78 +63,6 @@
                 <item name="label" xsi:type="string" translate="true">Open a New Case</item>
             </item>
         </argument>
-
-        <!-- Case ID: Not used, here for field reference -->
-        <field name="case_id">
-            <argument name="data" xsi:type="array">
-                <!--
-                    Select options, if applicable. May be object (source class must
-                    have toOptionArray() method to draw from) or array of specific
-                    options. See example.
-                -->
-                <!--<item name="options" xsi:type="object">Dem\HelpDesk\Block\Grid\Column\Filter\CaseItem\Website</item>-->
-                <!--<item name="options" xsi:type="array">-->
-                    <!--<item name="1" xsi:type="array">-->
-                        <!--<item name="value" xsi:type="string">1</item>-->
-                        <!--<item name="label" xsi:type="string">Option #1</item>-->
-                    <!--</item>-->
-                    <!--<item name="2" xsi:type="array">-->
-                        <!--<item name="value" xsi:type="string">2</item>-->
-                        <!--<item name="label" xsi:type="string">Option #2</item>-->
-                    <!--</item>-->
-                    <!--<item name="3" xsi:type="array">-->
-                        <!--<item name="value" xsi:type="string">3</item>-->
-                        <!--<item name="label" xsi:type="string">Option #3</item>-->
-                    <!--</item>-->
-                <!--</item>-->
-                <item name="config" xsi:type="array">
-                    <!-- Object data field/column reference -->
-                    <item name="source" xsi:type="string">case_id</item>
-                    <!-- JS component if not default for formElement -->
-                    <!--<item name="component" xsi:type="string">Dem_HelpDesk/js/form/element/options</item>-->
-                    <!-- Element label, translatable -->
-                    <item name="label" xsi:type="string" translate="true">Case</item>
-                    <!-- Should render this element (defaults false -->
-                    <item name="visible" xsi:type="boolean">true</item>
-                    <!-- Object expected data type -->
-                    <item name="dataType" xsi:type="string">text</item>
-                    <!-- Form element type (input, hidden, checkbox, radio, select, multiselect, textarea) -->
-                    <item name="formElement" xsi:type="string">hidden</item>
-                    <!-- Default value, if any -->
-                    <item name="default" xsi:type="string">new</item>
-                    <!-- Set disabled property -->
-                    <item name="disabled" xsi:type="boolean">true</item>
-                    <!-- Set readonly property -->
-                    <item name="readonly" xsi:type="boolean">false</item>
-                    <!-- Text to render before element -->
-                    <item name="addbefore" xsi:type="string" translate="true"></item>
-                    <!-- Text to render after element -->
-                    <item name="addafter" xsi:type="string" translate="true"></item>
-                    <!-- Placeholder text -->
-                    <item name="placeholder" xsi:type="string" translate="true"></item>
-                    <!-- Description/note, text appears below input -->
-                    <item name="notice" xsi:type="string" translate="true"></item>
-                    <!-- Tooltip displays question-mark icon. Mouseover displays
-                         description text. If "link" is provided, clicking tooltip
-                         navigates to the specified url -->
-                    <item name="tooltip" xsi:type="array">
-                        <!--<item name="description" xsi:type="string" translate="true">A very nice tooltip for you!</item>-->
-                        <!--<item name="link" xsi:type="string">[url]</item>-->
-                    </item>
-                    <!-- Validation classes. Add each class as separate item.
-                         "required-entry" values will render a red asterisk -->
-                    <item name="validation" xsi:type="array">
-                        <!--<item name="required-entry" xsi:type="boolean">true</item>-->
-                    </item>
-                    <!-- Custom class(es) are applied to the element's container,
-                         not the actual input -->
-                    <item name="additionalClasses" xsi:type="array">
-                        <!--<item name="custom-css" xsi:type="boolean">true</item>-->
-                        <!--<item name="my-styles" xsi:type="boolean">true</item>-->
-                    </item>
-                </item>
-            </argument>
-        </field>
 
         <field name="website_id">
             <argument name="data" xsi:type="array">
@@ -252,7 +178,7 @@
             </argument>
         </field>
 
-        <field name="message">
+        <field name="reply_text">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">50</item>
@@ -266,6 +192,7 @@
                     <item name="notice" xsi:type="string" translate="true">10 words minimum. Please provide as much information as possible to allow for proper handling of your request.</item>
                     <item name="validation" xsi:type="array">
                         <item name="required-entry" xsi:type="boolean">true</item>
+                        <item name="min-words" xsi:type="number">10</item>
                     </item>
                 </item>
             </argument>

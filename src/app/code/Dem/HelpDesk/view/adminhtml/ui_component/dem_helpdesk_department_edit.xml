@@ -15,27 +15,32 @@
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">dem_helpdesk_department_edit.dem_helpdesk_department_edit_data_source</item>
+            <item name="deps" xsi:type="string">dem_helpdesk_department_edit.dem_helpdesk_department_edit_data_source</item>
         </item>
-        <item name="label" xsi:type="string" translate="true">Department View</item>
+        <item name="layout" xsi:type="array">
+            <item name="type" xsi:type="string">tabs</item>
+            <item name="navContainerName" xsi:type="string">left</item>
+        </item>
+        <!-- Button set -->
+        <item name="buttons" xsi:type="array">
+            <item name="back" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\Department\Buttons\BackButton</item>
+            <item name="save_and_continue" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\Department\Buttons\SaveAndContinueButton</item>
+            <item name="save" xsi:type="string">Dem\HelpDesk\Block\Adminhtml\Department\Buttons\SaveButton</item>
+        </item>
+        <item name="ajaxSave" xsi:type="boolean">false</item>
     </argument>
-    <settings>
-        <buttons>
-            <button name="back" class="Dem\HelpDesk\Block\Adminhtml\Department\Buttons\BackButton"/>
-        </buttons>
-        <layout>
-            <navContainerName>left</navContainerName>
-            <type>tabs</type>
-        </layout>
-        <deps>
-            <dep>dem_helpdesk_department_edit.dem_helpdesk_department_edit_data_source</dep>
-        </deps>
-    </settings>
+
     <dataSource>
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">Dem\HelpDesk\Model\DataProvider\Department</argument>
             <argument name="name" xsi:type="string">dem_helpdesk_department_edit_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">department_id</argument>
-            <argument name="requestFieldName" xsi:type="string">id</argument>
+            <argument name="requestFieldName" xsi:type="string">department_id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="submit_url" xsi:type="url" path="helpdesk/department/save"/>
+                </item>
+            </argument>
         </argument>
         <argument name="data" xsi:type="array">
             <item name="js_config" xsi:type="array">
@@ -44,12 +49,182 @@
         </argument>
     </dataSource>
 
-    <!-- Use <page layout="admin-2columns-left"> in layout file -->
+    <!-- Use <page layout="admin-2columns-left"> in layout file for tabs -->
 
-    <!-- Tab Content: See block class for label/settings -->
-<!--    <htmlContent name="dem_helpdesk_department_tab_info_content">
-        <block class="Dem\HelpDesk\Block\Adminhtml\Department\Edit\Tab\Info" name="department_tab_info" template="Dem_HelpDesk::department/edit/tab/cases.phtml"/>
-    </htmlContent>-->
+    <fieldset name="general">
+
+        <!-- Add fieldset header/label if desired -->
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">General</item>
+            </item>
+        </argument>
+
+        <field name="website_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\Department\Website</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="component" xsi:type="string">Dem_HelpDesk/js/create/element/website</item>
+                    <item name="label" xsi:type="string" translate="true">Website</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="formElement" xsi:type="string">select</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="label" xsi:type="string" translate="true">Name</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="placeholder" xsi:type="string" translate="true">Name is required</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="description">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="label" xsi:type="string" translate="true">Description</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="formElement" xsi:type="string">textarea</item>
+                    <item name="rows" xsi:type="number">5</item>
+                    <item name="placeholder" xsi:type="string" translate="true">Description</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="sort_order">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="label" xsi:type="string" translate="true">Sort Order</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">number</item>
+                    <item name="formElement" xsi:type="string">input</item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="numeric-input-short" xsi:type="boolean">true</item>
+                    </item>
+                    <item name="notice" xsi:type="string" translate="true">Set the display order of available departments in drop-down list (new cases).</item>
+                </item>
+            </argument>
+        </field>
+
+        <!--
+            /*
+             * Use on/off toggle instead of checkbox (visible)
+             * Bug requires that the component AND formElement definitions are added to the field as attributes,
+             * instead of config item values.
+             */
+        -->
+        <field name="is_active" component="Magento_Ui/js/form/element/single-checkbox-toggle-notice" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="label" xsi:type="string" translate="true">Active</item>
+                    <!-- <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox-toggle-notice</item> -->
+                    <!-- <item name="formElement" xsi:type="string">checkbox</item> -->
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="default" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <!-- Required for toggle display -->
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+
+        <field name="is_internal" component="Magento_Ui/js/form/element/single-checkbox-toggle-notice" formElement="checkbox">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="label" xsi:type="string" translate="true">Is Internal</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="default" xsi:type="number">0</item>
+                    <item name="notices" xsi:type="array">
+                        <item name="0" xsi:type="string" translate="true">This department will be available to all users of this website.</item>
+                        <item name="1" xsi:type="string" translate="true">This department will only be available to administrative users.</item>
+                    </item>
+                </item>
+            </argument>
+            <!-- Required for toggle display -->
+            <formElements>
+                <checkbox>
+                    <settings>
+                        <valueMap>
+                            <map name="false" xsi:type="number">0</map>
+                            <map name="true" xsi:type="number">1</map>
+                        </valueMap>
+                        <prefer>toggle</prefer>
+                    </settings>
+                </checkbox>
+            </formElements>
+        </field>
+
+        <field name="created_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="label" xsi:type="string" translate="true">Created At</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <!-- Use the text rendering template for this element -->
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/text</item>
+                    <!-- But still need to declare the form element that dictates the "format" for the rendered value -->
+                    <item name="formElement" xsi:type="string">input</item>
+                </item>
+            </argument>
+        </field>
+
+        <field name="updated_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">80</item>
+                    <item name="label" xsi:type="string" translate="true">Updated At</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <!-- Use the text rendering template for this element -->
+                    <item name="elementTmpl" xsi:type="string">ui/form/element/text</item>
+                    <!-- But still need to declare the form element that dictates the "format" for the rendered value -->
+                    <item name="formElement" xsi:type="string">input</item>
+                </item>
+            </argument>
+        </field>
+
+
+    </fieldset>
 
     <!-- Tab Content: See block class for label/settings -->
 <!--    <htmlContent name="dem_helpdesk_department_tab_info_content">

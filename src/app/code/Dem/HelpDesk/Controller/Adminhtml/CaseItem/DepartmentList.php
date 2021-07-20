@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
-use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
-use Dem\HelpDesk\Model\Source\CaseItem\Department;
-use Magento\Framework\App\ObjectManager;
+use Dem\HelpDesk\Controller\Adminhtml\CaseItem as Controller;
 use Magento\Framework\Phrase;
-use Magento\Framework\Controller\Result\Json;
 
 /**
  * HelpDesk Controller - Adminhtml Case View
@@ -23,7 +20,7 @@ use Magento\Framework\Controller\Result\Json;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentList extends CaseItem
+class DepartmentList extends Controller
 {
     /**
      * Retrieve department options and return as JSON data
@@ -32,30 +29,45 @@ class DepartmentList extends CaseItem
      */
     public function execute()
     {
-        /** @var Json $result */
-        $result = $this->resultJsonFactory->create();
-
-        $websiteId = $this->getRequest()->getParam('website_id');
-        if (!is_null($websiteId)) {
-            $website = $this->helper->getWebsite($websiteId);
-            $this->coreRegistry->register('current_website', $website);
+        $result = $this->getResultJson();
+        if (!$this->isAjax()) {
+            return $result;
         }
 
-        /** @var Department $departmentSource */
-        $objectManager = ObjectManager::getInstance();
-        $departmentSource = $objectManager->get('Dem\HelpDesk\Model\Source\CaseItem\Department');
-
-        $deptOptions = $departmentSource->toOptionArray(false);
-
+        $websiteId = $this->getParam('website_id');
         $options = [];
-        foreach ($deptOptions as $deptOption) {
-            // Convert phrase to string as needed
-            $label = ($deptOption['label'] instanceof Phrase) ? $deptOption['label']->render() : $deptOption['label'];
-            $options[] = ['label' => $label, 'value' => $deptOption['value']];
+
+        try {
+
+            if (!is_null($websiteId)) {
+                $website = $this->getWebsiteById($websiteId);
+                $this->getCoreRegistry()->register('current_website', $website);
+            }
+
+            $departmentSource = $this->getDepartmentSource();
+            $deptOptions = $departmentSource->toOptionArray(false);
+
+            foreach ($deptOptions as $deptOption) {
+                // Convert phrase to string as needed
+                $label = ($deptOption['label'] instanceof Phrase) ? $deptOption['label']->render() : $deptOption['label'];
+                $options[] = ['label' => $label, 'value' => $deptOption['value']];
+            }
+
+        } catch (\Exception $exception) {
+            $result->setHttpResponseCode(\Magento\Framework\Webapi\Exception::HTTP_INTERNAL_ERROR);
         }
 
-        if ($this->getRequest()->isAjax()) {
-            return $result->setData($options);
-        }
+        return $result->setData($options);
+    }
+
+    /**
+     * Get Website instance
+     *
+     * @return \Magento\Store\Api\Data\WebsiteInterface
+     * @codeCoverageIgnore
+     */
+    protected function getWebsiteById($websiteId)
+    {
+        return $this->getHelper()->getWebsite($websiteId);
     }
 }

@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
-use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
-use Magento\Backend\Model\View\Result\Page;
-use Magento\Backend\Model\View\Result\Redirect;
+use Dem\HelpDesk\Controller\Adminhtml\CaseItem as Controller;
 
 /**
  * HelpDesk Controller - Adminhtml Case View
@@ -20,20 +18,18 @@ use Magento\Backend\Model\View\Result\Redirect;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class View extends CaseItem
+class View extends Controller
 {
     /**
-     * @return Page|Redirect
+     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
     {
-        /** @var \Dem\HelpDesk\Model\CaseItem $case */
         $case = $this->initCase();
 
         if ($case) {
-            /** @var Page $resultPage */
             $resultPage = $this->initAction();
-            $resultPage->getConfig()->getTitle()->prepend(sprintf(
+            $this->getPageTitle()->prepend(sprintf(
                 '%s #%s',
                 __('Case'),
                 $case->getCaseNumber()
@@ -41,10 +37,9 @@ class View extends CaseItem
             return $resultPage;
         }
 
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->redirectFactory->create();
+        $resultRedirect = $this->getRedirect();
         $resultRedirect->setPath('helpdesk/caseitem');
-        $this->messageManager->addErrorMessage(__('This %1 no longer exists.', __('case')));
+        $this->getMessageManager()->addErrorMessage(__('This %1 no longer exists.', __('case')));
         return $resultRedirect;
     }
 }

@@ -40,7 +40,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
     const HELPDESK_DEPARTMENT_DEFAULT_ID        = 1;
 
     /**
-     * @var StoreManagerInterface
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     private $storeManager;
 
@@ -49,6 +49,7 @@ class Config extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @param Context $context
      * @param StoreManagerInterface $storeManager
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,

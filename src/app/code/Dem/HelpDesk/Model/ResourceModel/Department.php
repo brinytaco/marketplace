@@ -11,8 +11,11 @@ use Dem\HelpDesk\Model\DepartmentUserRepository;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * HelpDesk Resource Model - Department
@@ -27,22 +30,22 @@ use Magento\Framework\Model\AbstractModel;
 class Department extends AbstractDb
 {
     /**
-     * @var DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
 
     /**
-     * @var UserRepository
+     * @var Dem\HelpDesk\Model\UserRepository
      */
     protected $userRepository;
 
     /**
-     * @var DepartmentUserRepository
+     * @var Dem\HelpDesk\Model\DepartmentUserRepository
      */
     protected $deptUserRepository;
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -53,6 +56,7 @@ class Department extends AbstractDb
      * @param DepartmentUserRepository $deptUserRepository
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @return void
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
@@ -70,6 +74,7 @@ class Department extends AbstractDb
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -82,6 +87,7 @@ class Department extends AbstractDb
      * @param DepartmentModel $object
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _beforeSave(AbstractModel $object)
     {
@@ -101,6 +107,7 @@ class Department extends AbstractDb
      * @param DepartmentModel $object
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _afterLoad(AbstractModel $object)
     {
@@ -109,25 +116,93 @@ class Department extends AbstractDb
         }
         // Get case manager user
         /** @var User $user */
-        $user = $this->userRepository->getById($object->getCaseManagerId());
+        if ($this->userRepository) {
+            $this->setCaseManagerData($object);
+        }
+
+        $this->setDefaultFollowers($object);
+
+        return parent::_afterLoad($object);
+    }
+
+    /**
+     * Get SearchCriteriaBuilder instance
+     *
+     * @return \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function getSearchCriteriaBuilder()
+    {
+        return $this->searchCriteriaBuilder;
+    }
+
+    /**
+     * Retrieve and set case manager data values
+     *
+     * @param DepartmentModel $object
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setCaseManagerData(AbstractModel $object)
+    {
+        $user = $this->getUserByCaseManagerId($object->getCaseManagerId());
         $object->setData(DepartmentModel::CASE_MANAGER_NAME, $user->getName());
         $object->setData(DepartmentModel::CASE_MANAGER_EMAIL, $user->getEmail());
+        return $this;
+    }
 
+    /**
+     * Retrieve User by case manager id
+     *
+     * @param int $userId
+     * @return \Dem\HelpDesk\Model\User
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    protected function getUserByCaseManagerId($userId)
+    {
+        return $this->userRepository->getById($userId);
+    }
+
+    /**
+     * Retrieve and set default followers array values
+     *
+     * @param DepartmentModel $object
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setDefaultFollowers(AbstractModel $object)
+    {
+        $searchCriteriaBuilder = $this->getSearchCriteriaBuilder();
+
+        $defaultFollowers = [];
         // Get default follower user ids
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteria = $searchCriteriaBuilder
             ->addFilter('department_id', $object->getId())
             ->addFilter('is_follower', 1)
             ->create();
 
-        $deptFollowers = $this->deptUserRepository->getList($searchCriteria);
-        $defaultFollowers = [];
+        $deptFollowers = $this->getDefaultFollowersList($searchCriteria);
         /** @var Follower $follower */
         foreach ($deptFollowers->getItems() as $follower) {
             $defaultFollowers[] = $follower->getUserId();
         }
 
         $object->setData(DepartmentModel::DEFAULT_FOLLOWERS, $defaultFollowers);
+        return $this;
+    }
 
-        return parent::_afterLoad($object);
+    /**
+     * Retrieve default followers list
+     *
+     * @param SearchCriteria $searchCriteria
+     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    protected function getDefaultFollowersList($searchCriteria)
+    {
+        return $this->deptUserRepository->getList($searchCriteria);
     }
 }

@@ -3,21 +3,21 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Source;
 
-use Dem\HelpDesk\Model\DepartmentRepository;
 use Magento\Framework\Data\OptionSourceInterface;
-use Magento\Framework\DataObject;
-use Magento\Store\Model\System\Store;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Framework\Api\FilterBuilder;
-use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\Api\Search\FilterGroup;
+use Magento\Framework\Api\Filter;
 use Magento\Framework\Registry;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection;
+use Magento\Store\Model\System\Store;
+use Magento\Framework\App\Request\Http as RequestHttp;
 
 use Dem\HelpDesk\Helper\Data as Helper;
 
 /**
- * HelpDesk Source Model - CaseItem Department
+ * HelpDesk Source Model - Source Model Options
  *
  * =============================================================================
  *
@@ -34,87 +34,68 @@ abstract class SourceOptions implements OptionSourceInterface
     const DEPT_OPTION_SOURCE_EMPTY_OPTION_TEXT = '-- Please Select --';
 
     /**
-     * @var Helper
-     */
-    protected $helper;
-
-    /**
-     * @var Store
-     */
-    protected $store;
-
-    /**
-     * @var RequestInterface
-     */
-    protected $request;
-
-    /**
      * @var array
      */
     protected $optionArray = [];
 
     /**
-     * @var DepartmentRepository
+     * @var \Dem\HelpDesk\Helper\Data
      */
-    protected $departmentRepository;
+    protected $helper;
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var \Magento\Store\Model\System\Store
      */
-    protected $searchCriteriaBuilder;
+    protected $store;
 
     /**
-     * @var FilterGroupBuilder
+     * @var \Magento\Framework\App\Request\Http
+     */
+    protected $request;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria
+     */
+    protected $searchCriteria;
+
+    /**
+     * @var \Magento\Framework\Api\Search\FilterGroupBuilder
      */
     protected $filterGroupBuilder;
 
     /**
-     * @var FilterBuilder
+     * @var \Magento\Framework\Data\Collection
      */
-    protected $filterBuilder;
+    protected $collection;
 
     /**
-     * @var CollectionFactory
+     * @var \Magento\Framework\Registry
      */
-    protected $collectionFactory;
+    protected $coreRegistry;
 
     /**
-     * @var Registry
-     */
-    protected $coreRegistry = null;
-
-    /**
-     * @param Helper $helper
+     * @param RequestHttp $request
      * @param Store $store
-     * @param RequestInterface $request
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param DepartmentRepository $departmentRepository
-     * @param FilterBuilder $filterBuilder
+     * @param Helper $helper
+     * @param SearchCriteria $searchCriteria
      * @param FilterGroupBuilder $filterGroupBuilder
      * @param Registry $coreRegistry
-     * @param CollectionFactory $collectionFactory
-     * @return void
+     * @codeCoverageIgnore
      */
     public function __construct(
-        Helper $helper,
+        RequestHttp $request,
         Store $store,
-        RequestInterface $request,
-        SearchCriteriaBuilder $searchCriteriaBuilder,
-        DepartmentRepository $departmentRepository,
-        FilterBuilder $filterBuilder,
+        Helper $helper,
+        SearchCriteria $searchCriteria,
         FilterGroupBuilder $filterGroupBuilder,
-        Registry $coreRegistry,
-        CollectionFactory $collectionFactory
+        Registry $coreRegistry
     ) {
-        $this->helper = $helper;
-        $this->store = $store;
         $this->request = $request;
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
-        $this->filterBuilder = $filterBuilder;
+        $this->store = $store;
+        $this->helper = $helper;
+        $this->searchCriteria = $searchCriteria;
         $this->filterGroupBuilder = $filterGroupBuilder;
-        $this->departmentRepository = $departmentRepository;
         $this->coreRegistry = $coreRegistry;
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -137,7 +118,106 @@ abstract class SourceOptions implements OptionSourceInterface
     public function toOptionArray()
     {
         $this->optionArray[] = ['label' => self::getEmptySelectOptionText(), 'value' => ''];
-        return $this;
+        return $this->optionArray;
     }
 
+    /**
+     * Get RequestHttp instance
+     *
+     * @return \Magento\Framework\App\Request\Http
+     * @codeCoverageIgnore
+     */
+    public function getRequest()
+    {
+        return $this->request;
+    }
+
+    /**
+     * Get Store instance
+     *
+     * @return \Magento\Store\Model\System\Store
+     * @codeCoverageIgnore
+     */
+    public function getStore()
+    {
+        return $this->store;
+    }
+
+    /**
+     * Get Helpdesk helper instance
+     *
+     * @return \Dem\HelpDesk\Helper\Data
+     * @codeCoverageIgnore
+     */
+    public function getHelper()
+    {
+        return $this->helper;
+    }
+
+    /**
+     * Get SearchCriteria instance
+     *
+     * @return \Magento\Framework\Api\SearchCriteria
+     * @codeCoverageIgnore
+     */
+    public function getSearchCriteria()
+    {
+        return $this->searchCriteria;
+    }
+
+    /**
+     * Get FilterGroup instance
+     *
+     * @return \Magento\Framework\Api\Search\FilterGroupBuilder
+     * @codeCoverageIgnore
+     */
+    public function getFilterGroupBuilder()
+    {
+        return $this->filterGroupBuilder;
+    }
+
+    /**
+     * Get new FilterGroup instance
+     *
+     * @return \Magento\Framework\Api\Search\FilterGroup
+     * @codeCoverageIgnore
+     */
+    public function getFilterGroup()
+    {
+        return ObjectManager::getInstance()->create(FilterGroup::class);
+    }
+
+    /**
+     * Get new Filter instance
+     *
+     * @return \Magento\Framework\Api\Filter
+     * @codeCoverageIgnore
+     */
+    public function getFilter()
+    {
+        return ObjectManager::getInstance()->create(Filter::class);
+    }
+
+    /**
+     * Get Registry instance
+     *
+     * @return \Magento\Framework\Registry
+     * @codeCoverageIgnore
+     */
+    public function getRegistry()
+    {
+        return $this->coreRegistry;
+    }
+
+    /**
+     * Get new Collection instance
+     *
+     * @return \Magento\Framework\Data\Collection
+     * @codeCoverageIgnore
+     */
+    public function getCollection()
+    {
+        // Use create() to get new Collection instance each time
+        return ObjectManager::getInstance()->create(Collection::class);
+    }
 }

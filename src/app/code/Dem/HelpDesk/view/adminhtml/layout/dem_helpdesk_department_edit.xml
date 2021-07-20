@@ -11,11 +11,13 @@
  * @since      1.0.0
  */
 -->
-<!-- 2column layout needed for tab structure -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left"
-      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  layout="admin-2columns-left"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <update handle="editor"/>
     <head>
         <css src="Dem_HelpDesk::css/default.css" />
+        <css src="Dem_HelpDesk::css/department.css" />
    </head>
     <body>
         <referenceContainer name="content">

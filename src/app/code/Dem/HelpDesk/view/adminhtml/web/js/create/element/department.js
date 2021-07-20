@@ -26,7 +26,7 @@ define([
 
             var subjectField = registry.get('index = subject');
             var priorityField = registry.get('index = priority');
-            var messageField = registry.get('index = message');
+            var messageField = registry.get('index = reply_text');
 
             if (value !== '' && typeof value !== 'undefined') {
                 subjectField.disabled(false);

@@ -10,8 +10,9 @@
  * @since      1.0.0
  */
 
-/* @var $block \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Info */
-/* @var $replyItems \Dem\HelpDesk\Api\Data\ReplyInterface [] */
+/** @var \Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab\Info $block */
+/** @var \Dem\HelpDesk\Model\Reply[] $replyItems */
+/** @var \Dem\HelpDesk\Model\CaseItem $case */
 $replyItems = $block->getVisibleReplies(3);
 $case = $block->getCase();
 ?>
@@ -129,7 +130,7 @@ $case = $block->getCase();
                 <th><?= $block->escapeHtml(__('Total Replies')) ?>:</th>
                 <td>
                     <span class="total-replies">
-                        <?= $block->escapeHtml($block->getOtherUserReplies()); ?>
+                        <?= $block->escapeHtml($block->getOtherUserRepliesCount()); ?>
                     </span>
                 </td>
             </tr>
@@ -166,7 +167,7 @@ $case = $block->getCase();
         <span class="title"><?= $block->escapeHtml(__('Recent Activity')) ?></span>
     </div>
 
-    <?php /* @var $reply \Dem\HelpDesk\Api\Data\ReplyInterface */ ?>
+    <?php /** @var \Dem\HelpDesk\Model\Reply $reply */ ?>
     <?php foreach ($replyItems as $reply): ?>
         <?= $block->renderReplyBlock($reply) ?>
     <?php endforeach; ?>

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\Department\Buttons;
 
-use Dem\HelpDesk\Model\Department;
 use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Registry;
@@ -35,6 +34,7 @@ class SaveButton implements ButtonProviderInterface
     /**
      * @param UrlInterface $urlBuilder
      * @param Registry $coreRegistry
+     * @codeCoverageIgnore
      */
     public function __construct(
         UrlInterface $urlBuilder,
@@ -52,11 +52,8 @@ class SaveButton implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        /** @var Department $department */
-        $department = $this->coreRegistry->registry(Department::CURRENT_KEY);
-
         return [
-            'label' => __('Submit'),
+            'label' => __('Save'),
             'class' => 'save primary',
             'data_attribute' => [
                 'mage-init' => ['button' => ['event' => 'save']],
@@ -64,7 +61,5 @@ class SaveButton implements ButtonProviderInterface
             ],
             'sort_order' => 30,
         ];
-
-        return [];
     }
 }

@@ -35,6 +35,7 @@ class SaveButton implements ButtonProviderInterface
     /**
      * @param UrlInterface $urlBuilder
      * @param Registry $coreRegistry
+     * @codeCoverageIgnore
      */
     public function __construct(
         UrlInterface $urlBuilder,
@@ -53,7 +54,7 @@ class SaveButton implements ButtonProviderInterface
     public function getButtonData()
     {
         // If is new case only
-        $case = $this->coreRegistry->registry(CaseItem::CURRENT_KEY);
+        $case = $this->getCurrentCase();
 
         if (!$case) {
             return [
@@ -68,5 +69,16 @@ class SaveButton implements ButtonProviderInterface
         }
 
         return [];
+    }
+
+    /**
+     * Get current case from registry
+     *
+     * @return \Dem\HelpDesk\Model\CaseItem|null
+     * @codeCoverageIgnore
+     */
+    protected  function getCurrentCase()
+    {
+        return $this->coreRegistry->registry(CaseItem::CURRENT_KEY);
     }
 }

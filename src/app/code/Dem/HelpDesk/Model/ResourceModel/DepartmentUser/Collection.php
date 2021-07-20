@@ -44,6 +44,7 @@ class Collection extends AbstractCollection
      * Define resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {

@@ -23,48 +23,6 @@ use Psr\Log\LoggerInterface;
 class Notifications
 {
     /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var Helper
-     */
-    protected $helper;
-
-    /**
-     * Data constructor.
-     *
-     * @param Registry $coreRegistry
-     * @param ManagerInterface $eventManager
-     * @param LoggerInterface $logger
-     * @param Helper $helper
-     */
-    public function __construct(
-        Registry $coreRegistry,
-        ManagerInterface $eventManager,
-        LoggerInterface $logger,
-        Helper $helper
-    ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->eventManager = $eventManager;
-        $this->logger = $logger;
-        $this->helper = $helper;
-    }
-
-    /**
      * Send new case notifications
      *
      * Send notifications (emails) to:
@@ -76,6 +34,7 @@ class Notifications
      * @return $this
      * @throws HelpDeskException
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function sendNewCaseNotifications(CaseItem $case)
     {

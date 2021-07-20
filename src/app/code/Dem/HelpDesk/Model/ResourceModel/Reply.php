@@ -8,6 +8,8 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 use Dem\HelpDesk\Model\UserRepository;
 use Magento\Framework\Model\AbstractModel;
+use Dem\HelpDesk\Model\Reply as ReplyModel;
+use Dem\HelpDesk\Model\User;
 
 /**
  * HelpDesk Resource Model - Reply
@@ -23,12 +25,12 @@ class Reply extends AbstractDb
 {
 
     /**
-     * @var DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
 
     /**
-     * @var UserRepository
+     * @var \Dem\HelpDesk\Model\UserRepository
      */
     protected $userRepository;
 
@@ -37,6 +39,7 @@ class Reply extends AbstractDb
      * @param UserRepository $userRepository
      * @param DateTime $date
      * @return void
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
@@ -50,6 +53,7 @@ class Reply extends AbstractDb
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -59,13 +63,42 @@ class Reply extends AbstractDb
     /**
      *  Set created_at for saving
      *
-     * @param \Dem\HelpDesk\Model\Reply $object
+     * @param ReplyModel $object
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _beforeSave(AbstractModel $object)
     {
         $object->setCreatedAt($this->date->gmtDate());
         return parent::_beforeSave($object);
+    }
+
+    /**
+     * Set Author name
+     *
+     * @param ReplyModel $object
+     * @return $this
+     * @since 1.0.0
+     */
+    public function setAuthorName(AbstractModel $object)
+    {
+        if ($object->getAuthorId()) {
+            $user = $this->getUserById($object->getAuthorId());
+        }
+        $object->setData(ReplyModel::AUTHOR_NAME, $user->getName());
+        return $this;
+    }
+
+    /**
+     * Get User by id
+     *
+     * @param int $userId
+     * @return \Dem\HelpDesk\Model\User
+     * @codeCoverageIgnore
+     */
+    protected function getUserById($userId)
+    {
+        return $this->userRepository->getById($userId);
     }
 }

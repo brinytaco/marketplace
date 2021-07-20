@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml\Department;
 
-use Dem\HelpDesk\Controller\Adminhtml\Department;
-use Magento\Backend\Model\View\Result\Page;
+use Dem\HelpDesk\Controller\Adminhtml\Department as Controller;
 
 /**
  * HelpDesk Controller - Adminhtml Department Grid (Index)
@@ -19,16 +18,15 @@ use Magento\Backend\Model\View\Result\Page;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Index extends Department
+class Index extends Controller
 {
     /**
-     * @return Page
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        /** @var Page $resultPage */
-        $resultPage = $this->_initAction();
-        $resultPage->getConfig()->getTitle()->prepend(__('Manage Departments'));
+        $resultPage = $this->initAction();
+        $this->getPageTitle()->prepend(__('Manage Departments'));
         return $resultPage;
     }
 }

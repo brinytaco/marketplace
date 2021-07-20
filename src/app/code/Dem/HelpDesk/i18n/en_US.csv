@@ -29,6 +29,8 @@
 "DE INTERNAL", "DE INTERNAL"
 "How Can We Help You?","How Can We Help You?"
 "Configuration","Configuration"
+"created successfully","created successfully"
+"saved successfully","saved successfully"
 
 # Case Create/View Form
 "Case Manager","Case Manager"
@@ -80,6 +82,9 @@
 
 # Department Create/Edit
 "Unable to find department with ID `%1`","Unable to find department with ID `%1`"
+"Create New Department","Create New Department"
+"Department Information","Department Information"
+"Users","Users"
 
 # Case statuses
 "New","New"
@@ -94,4 +99,3 @@
 "Normal","Normal"
 "Urgent","Urgent"
 "Critical","Critical"
-

@@ -13,6 +13,7 @@ use Magento\Framework\Component\ComponentRegistrar;
  * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
  * @author     Toby Crain
  * @since      1.0.0
+ * @codeCoverageIgnore
  */
 
 ComponentRegistrar::register(ComponentRegistrar::MODULE, 'Dem_HelpDesk', __DIR__);

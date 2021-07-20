@@ -4,15 +4,13 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Service;
 
 use Dem\HelpDesk\Model\CaseItem;
+use Dem\HelpDesk\Model\Reply;
 use Dem\HelpDesk\Exception as HelpDeskException;
-use Dem\HelpDesk\Helper\Data as Helper;
 use Dem\HelpDesk\Model\DepartmentRepository;
 use Dem\HelpDesk\Model\Department;
 use Dem\HelpDesk\Helper\Config;
-use Magento\Framework\Registry;
-use Magento\Framework\Event\ManagerInterface;
-use Psr\Log\LoggerInterface;
 use Magento\User\Model\User;
+use Magento\Customer\Model\Customer;
 
 /**
  * HelpDesk Service Model - CaseItem Management
@@ -24,45 +22,22 @@ use Magento\User\Model\User;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class CaseItemManagement
+class CaseItemManagement extends AbstractManagement
 {
-
     /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var Helper
-     */
-    protected $helper;
-
-    /**
-     * @var DepartmentRepository
+     * @var \Dem\HelpDesk\Model\DepartmentRepository
      */
     protected $departmentRepository;
 
     /**
      *
-     * @var Case
+     * @var \Dem\HelpDesk\Model\CaseItem
      */
     protected $caseItem;
 
     /**
      *
-     * @var Department
+     * @var \Dem\HelpDesk\Model\Department
      */
     protected $department;
 
@@ -73,59 +48,58 @@ class CaseItemManagement
     protected $objectName = 'case';
 
     /**
-     * Data constructor.
-     *
-     * @param Registry $coreRegistry
-     * @param ManagerInterface $eventManager
-     * @param LoggerInterface $logger
-     * @param Helper $helper
-     * @param DepartmentRepository $departmentRepository
+     * Get DepartmentRepository instance
+     * @return \Dem\HelpDesk\Model\DepartmentRepository
+     * @since 1.0.0
+     * @codeCoverageIgnore
      */
-    public function __construct(
-        Registry $coreRegistry,
-        ManagerInterface $eventManager,
-        LoggerInterface $logger,
-        Helper $helper,
-        DepartmentRepository $departmentRepository
-    ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->eventManager = $eventManager;
-        $this->logger = $logger;
-        $this->helper = $helper;
-        $this->departmentRepository = $departmentRepository;
+    public function getDepartmentRepository()
+    {
+        return $this->departmentRepository;
     }
 
     /**
      * Create a new case
      *
      * @param CaseItem $case
+     * @param User|Customer $creator
      * @param array $data
-     * @return CaseItem
+     * @return \Dem\HelpDesk\Model\CaseItem
      * @throws HelpDeskException
      * @since 1.0.0
      */
-    public function createCase(CaseItem $case, array $data)
+    public function createCase(CaseItem $case, $creator, array $data)
     {
         $this->validate($data);
-        $this->validateHelpDeskWebsiteById($data['website_id']);
-        $this->validateDepartmentByWebsiteId($data['website_id'], $data['department_id']);
-
-        /** @var User $creator */
-        $creator = $this->helper->getBackendSession()->getUser();
-
         $case->addData($data);
+
+        $this->validateHelpDeskWebsiteById($case);
+        $this->validateDepartmentByWebsiteId($case);
+
         $case->addData([
-            'creator_customer_id' => null,
-            'creator_admin_id' => $creator->getId(),
-            'creator_name' => sprintf('%s %s', $creator->getFirstname(), $creator->getLastname()),
-            'creator_email' => $creator->getEmail(),
-            'status_id' => 0,
-            'remote_ip' => $_SERVER['REMOTE_ADDR'],
-            'http_user_agent' => $_SERVER['HTTP_USER_AGENT']
+            CaseItem::CASE_ID               => null,
+            CaseItem::CREATOR_CUSTOMER_ID   => $this->getIsCreatorTypeAdmin($creator) ? null : $creator->getId(),
+            CaseItem::CREATOR_ADMIN_ID      => $this->getIsCreatorTypeAdmin($creator) ? $creator->getId() : null,
+            CaseItem::CREATOR_NAME          => sprintf('%s %s', $creator->getFirstname(), $creator->getLastname()),
+            CaseItem::CREATOR_EMAIL         => $creator->getEmail(),
+            CaseItem::STATUS_ID             => 0,
+            CaseItem::REMOTE_IP             => @$_SERVER['REMOTE_ADDR'],
+            CaseItem::HTTP_USER_AGENT       => @$_SERVER['HTTP_USER_AGENT']
         ]);
 
-        $case->setId(null);
         return $case;
+    }
+
+    /**
+     * Test if creator object is of type User (Backend)
+     *
+     * @param User|Customer $creator
+     * @return bool
+     * @since 1.0.0
+     */
+    public function getIsCreatorTypeAdmin($creator)
+    {
+        return ($creator instanceof User);
     }
 
     /**
@@ -169,77 +143,86 @@ class CaseItemManagement
     public function getRequiredFields()
     {
         return [
-            'website_id',
-            'department_id',
-            'subject',
-            'message',
-            'priority'
+            CaseItem::WEBSITE_ID,
+            CaseItem::DEPARTMENT_ID,
+            CaseItem::SUBJECT,
+            CaseItem::PRIORITY,
+            Reply::REPLY_TEXT
         ];
     }
 
     /**
-     * Validate selected website and is helpdesk enabled
+     * Get editable fields array
      *
-     * @param int|string $websiteId
-     * @return void
-     * @throws HelpDeskException
+     * @return array
      * @since 1.0.0
      */
-    protected function validateHelpDeskWebsiteById($websiteId)
+    public function getEditableFields()
     {
-        if (
-            Config::isDefaultWebsite($websiteId)
-            || !$this->helper->isEnabled($websiteId)
-        ) {
-            throw new HelpDeskException(__('Invalid website selected'));
-        }
-    }
-
-    /**
-     * Validate selected department is allowed for website
-     *
-     * @param int|string $websiteId
-     * @param int|string $departmentId
-     * @return void
-     * @throws HelpDeskException
-     * @since 1.0.0
-     */
-    protected function validateDepartmentByWebsiteId($websiteId, $departmentId)
-    {
-        $this->loadDepartmentById($departmentId);
-
-        // Default department selection is always valid
-        if (!Config::isDefaultDepartment($departmentId)) {
-            if ($this->department->getWebsiteId() != $websiteId) {
-                throw new HelpDeskException(__('Invalid department selected'));
-            }
-        }
-    }
-
-    /**
-     * Get loaded department model
-     *
-     * @return Department
-     * @since 1.0.0
-     */
-    public function getDepartment()
-    {
-        return $this->department;
+        return [];
     }
 
     /**
      * Load department model by id
      *
      * @param int|string $departmentId
-     * @return void
+     * @return Department
      * @throws HelpDeskException
      * @since 1.0.0
      */
-    protected function loadDepartmentById($departmentId)
+    public function getDepartmentById($departmentId)
     {
-        $this->department = $this->departmentRepository->getById($departmentId);
-        if (!$this->department) {
+        if (!isset($this->department)) {
+            $this->department = $this->getDepartmentRepository()->getById($departmentId);
+            if (!$this->department->getId()) {
+                throw new HelpDeskException(__('Invalid department selected'));
+            }
+        }
+        return $this->department;
+    }
+
+    /**
+     * Validate selected website and is helpdesk enabled
+     *
+     * @param \Dem\HelpDesk\Model\CaseItem
+     * @return $this
+     * @throws HelpDeskException
+     * @since 1.0.0
+     */
+    public function validateHelpDeskWebsiteById(CaseItem $case)
+    {
+        $websiteId = $case->getWebsiteId();
+
+        if (
+            Config::isDefaultWebsite($websiteId)
+            || !$this->getHelper()->isEnabled($websiteId)
+        ) {
+            throw new HelpDeskException(__('Invalid website selected: %1', $websiteId));
+        }
+        return $this;
+    }
+
+    /**
+     * Validate selected department is allowed for website
+     *
+     * @param \Dem\HelpDesk\Model\CaseItem
+     * @return $this
+     * @throws HelpDeskException
+     * @since 1.0.0
+     */
+    public function validateDepartmentByWebsiteId(CaseItem $case)
+    {
+        $this->department = $this->getDepartmentById($case->getDepartmentId());
+
+        if (!$this->department->getId()) {
             throw new HelpDeskException(__('Invalid department selected'));
         }
+        // Default department selection is always valid
+        if (!Config::isDefaultDepartment($this->department->getId())) {
+            if ($this->department->getWebsiteId() != $case->getWebsiteId()) {
+                throw new HelpDeskException(__('Invalid department selected'));
+            }
+        }
+        return $this;
     }
 }

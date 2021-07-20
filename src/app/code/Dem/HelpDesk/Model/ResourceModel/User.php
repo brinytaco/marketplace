@@ -22,7 +22,7 @@ class User extends AbstractDb
 {
 
     /**
-     * @var DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
 
@@ -30,6 +30,7 @@ class User extends AbstractDb
      * @param Context $context
      * @param DateTime $date
      * @return void
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
@@ -41,6 +42,7 @@ class User extends AbstractDb
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -53,6 +55,7 @@ class User extends AbstractDb
      * @param \Dem\HelpDesk\Model\User $object
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _beforeSave(AbstractModel $object)
     {

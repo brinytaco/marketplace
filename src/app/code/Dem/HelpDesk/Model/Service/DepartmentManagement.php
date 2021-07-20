@@ -4,11 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Service;
 
 use Dem\HelpDesk\Exception as HelpDeskException;
-use Dem\HelpDesk\Helper\Data as Helper;
 use Dem\HelpDesk\Model\Department;
-use Magento\Framework\Registry;
-use Magento\Framework\Event\ManagerInterface;
-use Psr\Log\LoggerInterface;
 
 
 /**
@@ -21,62 +17,43 @@ use Psr\Log\LoggerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentManagement
+class DepartmentManagement extends AbstractManagement
 {
-
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     *
-     * @var Department
-     */
-    protected $department;
-
-    /**
-     * @var Helper
-     */
-    protected $helper;
-
     /**
      * Phrase object name
      * @var string
      */
     protected $objectName = 'department';
 
+    /**
+     * createDepartment.
+     *
+     * @author    Toby Crain
+     * @since    1.0.0
+     * @param    int    $test
+     * @return    boolean
+     */
+    public function createDepartment(int $test)
+    {
+        return false;
+    }
 
     /**
-     * Data constructor.
+     * Unset submitted data that's not editable
      *
-     * @param Registry $coreRegistry
-     * @param ManagerInterface $eventManager
-     * @param LoggerInterface $logger
-     * @param Helper $helper
+     * @param array &$data
+     * @return $data
+     * @since 1.0.0
      */
-    public function __construct(
-        Registry $coreRegistry,
-        ManagerInterface $eventManager,
-        LoggerInterface $logger,
-        Helper $helper
-    ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->eventManager = $eventManager;
-        $this->logger = $logger;
-        $this->helper = $helper;
+    public function filterEditableData(&$data)
+    {
+        $editableFields = $this->getEditableFields();
+        foreach ($data as $field => $value) {
+            if (!in_array($field, $editableFields)) {
+                unset($data[$field]);
+            }
+        }
+        return $data;
     }
 
     /**
@@ -85,6 +62,7 @@ class DepartmentManagement
      * @param array $data
      * @return void
      * @throws HelpDeskException
+     * @since 1.0.0
      */
     public function validate(array $data)
     {
@@ -108,21 +86,38 @@ class DepartmentManagement
                 throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
-
-        /** @todo Check for 10 word minimum in message body */
     }
 
     /**
      * Get required fields array
      *
      * @return array
+     * @since 1.0.0
      */
     public function getRequiredFields()
     {
         return [
-            'website_id',
-            'case_manager_id',
-            'name'
+            Department::WEBSITE_ID,
+            Department::CASE_MANAGER_ID,
+            Department::NAME
+        ];
+    }
+
+    /**
+     * Get editable fields array
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getEditableFields()
+    {
+        return [
+            Department::NAME,
+            Department::DESCRIPTION,
+            Department::IS_ACTIVE,
+            Department::IS_INTERNAL,
+            Department::SORT_ORDER,
+            Department::CASE_MANAGER_ID
         ];
     }
 

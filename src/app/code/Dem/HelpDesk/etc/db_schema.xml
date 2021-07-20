@@ -21,7 +21,7 @@
                 comment="User ID"/>
         <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false"
                 default="0" comment="Website ID, admin/user = 0"/>
-        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true" comment="Created At"/>
         <column xsi:type="int" name="customer_id" unsigned="true" nullable="true"
                 comment="Customer ID"/>
         <column xsi:type="int" name="admin_id" unsigned="true" nullable="true"
@@ -74,7 +74,7 @@
                 default="1" comment="Active/Inactive"/>
         <column xsi:type="smallint" name="sort_order" unsigned="true" nullable="false"
                 default="1" comment="Sort Order"/>
-        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="department_id"/>
@@ -97,7 +97,7 @@
                 comment="HelpDesk User ID"/>
         <column xsi:type="tinyint" name="is_follower" unsigned="true" nullable="false"
                 default="0" comment="Is user a default dept follower"/>
-        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="dept_user_id"/>
@@ -146,7 +146,7 @@
                 comment="Client browser information"/>
         <column xsi:type="varchar" name="updater_name" nullable="true" length="50"
                 comment="Full name of last user edit reply"/>
-        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="case_id"/>
@@ -183,7 +183,7 @@
                 default="0" comment="Status ID"/>
         <column xsi:type="tinyint" name="is_initial" unsigned="true" nullable="false"
                 default="0" comment="Is initial author reply?"/>
-        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true" comment="Created At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="reply_id"/>
         </constraint>
@@ -205,7 +205,7 @@
                 comment="HelpDesk User ID"/>
         <column xsi:type="int" name="last_read" unsigned="true" nullable="true"
                 comment="Reply ID of last read"/>
-        <column xsi:type="timestamp" name="created_at" nullable="false" comment="Created At"/>
+        <column xsi:type="timestamp" name="created_at" nullable="true" comment="Created At"/>
         <column xsi:type="timestamp" name="updated_at" nullable="true" comment="Updated At"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="follower_id"/>

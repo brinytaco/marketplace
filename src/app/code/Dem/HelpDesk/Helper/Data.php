@@ -11,6 +11,7 @@ use Magento\Store\Api\Data\WebsiteInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Area;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\State;
 
 /**
@@ -28,24 +29,43 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     /**
      * Current app state
      *
-     * @var State
+     * @var \Magento\Framework\App\State
      */
-    private $currentState;
+    protected $currentState;
 
     /**
-     * @var Session
+     * @var \Magento\Backend\Model\Auth\Session
      */
-    private $authSession;
+    protected $authSession;
+
+    /**
+     * @var \Magento\Store\Model\StoreManagerInterface
+     */
+    protected $storeManager;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $scopeConfig;
 
     /**
      * @param Context $context
      * @param Session $authSession
+     * @param StoreManagerInterface $storeManager
+     * @param State $currentState
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
-        Session $authSession
+        Session $authSession,
+        StoreManagerInterface $storeManager,
+        State $currentState,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->authSession = $authSession;
+        $this->storeManager = $storeManager;
+        $this->currentState = $currentState;
+        $this->scopeConfig = $scopeConfig;
         parent::__construct($context);
     }
 
@@ -80,60 +100,83 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public static function getServerRemoteIp()
     {
-        return $_SERVER['REMOTE_ADDR'];
+        return @$_SERVER['REMOTE_ADDR'];
     }
 
     /**
      * Fetch current backend session user
      *
-     * @return Session
+     * @return \Magento\Backend\Model\Auth\Session
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
-    public static function getBackendSession()
+    public function getBackendSession()
     {
-        $objectManager = ObjectManager::getInstance();
-        return $objectManager->get('Magento\Backend\Model\Auth\Session');
+        return $this->authSession;
     }
 
     /**
      * Fetch instance of StoreManagerInterface
-     * @return StoreManagerInterface
+     *
+     * @return \Magento\Store\Model\StoreManagerInterface
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
-    public static function getStoreManager()
+    public function getStoreManager()
     {
-        $objectManager = ObjectManager::getInstance();
-        return $objectManager->get('Magento\Store\Model\StoreManagerInterface');
+        return $this->storeManager;
+    }
+    /**
+     * Get ScopeConfigInterface instance
+     *
+     * @return \Magento\Framework\App\Config\ScopeConfigInterface
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function getScopeConfig()
+    {
+        return $this->scopeConfig;
     }
 
     /**
      * Get selected or current website by id
      *
      * @param int $websiteId
-     * @return WebsiteInterface
+     * @return \Magento\Store\Api\Data\WebsiteInterface
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
-    public static function getWebsite($websiteId = null)
+    public function getWebsite($websiteId = null)
     {
-        if (!is_null($websiteId)) {
-            return self::getStoreManager()->getWebsite($websiteId);
-        }
-
-        return self::getStoreManager()->getWebsite();
+        return $this->getStoreManager()->getWebsite($websiteId);
     }
 
     /**
      * Get list of websites (excluding default)
      *
-     * @return WebsiteInterface[]
+     * @return \Magento\Store\Api\Data\WebsiteInterface[]
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
-    public static function getWebsites()
+    public function getWebsites()
     {
-        return self::getStoreManager()->getWebsites();
+        return $this->getStoreManager()->getWebsites();
+    }
+
+    /**
+     * Get current state
+     *
+     * @return \Magento\Framework\App\State
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    protected function getCurrentState()
+    {
+        return $this->currentState;
     }
 
     /**
@@ -141,14 +184,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
-    public function getCurrentArea()
+    protected function getCurrentArea()
     {
-        if (!isset($this->currentState)) {
-            $objectManager = ObjectManager::getInstance();
-            $this->currentState = $objectManager->get('Magento\Framework\App\State');
+        try {
+            $areaCode = $this->getCurrentState()->getAreaCode();
+        } catch (\Exception $e) {
+            return false;
         }
-        return $this->currentState->getAreaCode();
+        return $areaCode;
     }
 
     /**
@@ -188,7 +233,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfiguredEnabledFlag($websiteId = null)
     {
-        return $this->scopeConfig->isSetFlag(
+        return $this->getScopeConfig()->isSetFlag(
             Config::XML_PATH_HELPDESK_STATUS_ENABLED,
             ScopeInterface::SCOPE_WEBSITE,
             $websiteId
@@ -201,12 +246,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * If websiteId is empty, will check current website
      *
      * @param null|int|string $websiteId
-     * @return bool
+     * @return string
      * @since 1.0.0
      */
     public function getConfiguredFrontendLabel($websiteId = null)
     {
-        return $this->scopeConfig->getValue(
+        return $this->getScopeConfig()->getValue(
             Config::XML_PATH_HELPDESK_FRONTEND_LABEL,
             ScopeInterface::SCOPE_WEBSITE,
             $websiteId
@@ -219,12 +264,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * If websiteId is empty, will check current website
      *
      * @param null|int|string $websiteId
-     * @return bool
+     * @return string
      * @since 1.0.0
      */
     public function getConfiguredSenderEmail($websiteId = null)
     {
-        return $this->scopeConfig->getValue(
+        return $this->getScopeConfig()->getValue(
             Config::XML_PATH_HELPDESK_SENDER_EMAIL,
             ScopeInterface::SCOPE_WEBSITE,
             $websiteId
@@ -237,12 +282,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * If websiteId is empty, will check current website
      *
      * @param null|int|string $websiteId
-     * @return bool
+     * @return string
      * @since 1.0.0
      */
     public function getConfiguredDepartmentLabel($websiteId = null)
     {
-        return $this->scopeConfig->getValue(
+        return $this->getScopeConfig()->getValue(
             Config::XML_PATH_HELPDESK_DEFAULT_DEPT_LABEL,
             ScopeInterface::SCOPE_WEBSITE,
             $websiteId
@@ -260,7 +305,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfiguredNotifyActiveFlag($websiteId = null)
     {
-        return $this->scopeConfig->isSetFlag(
+        return $this->getScopeConfig()->isSetFlag(
             Config::XML_PATH_HELPDESK_NOTIFY_ACTIVE,
             ScopeInterface::SCOPE_WEBSITE,
             $websiteId
@@ -273,12 +318,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * If websiteId is empty, will check current website
      *
      * @param null|int|string $websiteId
-     * @return bool
+     * @return int
      * @since 1.0.0
      */
     public function getConfiguredSessionTimeoutMinutes($websiteId = null)
     {
-        return (int) $this->scopeConfig->getValue(
+        return (int) $this->getScopeConfig()->getValue(
             Config::XML_PATH_HELPDESK_SESSION_TIMEOUT,
             ScopeInterface::SCOPE_WEBSITE,
             $websiteId
@@ -291,12 +336,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * If websiteId is empty, will check current website
      *
      * @param null|int|string $websiteId
-     * @return bool
+     * @return int
      * @since 1.0.0
      */
     public function getConfiguredInactiveIntervalDays($websiteId = null)
     {
-        return (int) $this->scopeConfig->getValue(
+        return (int) $this->getScopeConfig()->getValue(
             Config::XML_PATH_HELPDESK_INACTIVE_INTERVAL,
             ScopeInterface::SCOPE_WEBSITE,
             $websiteId
@@ -309,12 +354,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * If websiteId is empty, will check current website
      *
      * @param null|int|string $websiteId
-     * @return bool
+     * @return int
      * @since 1.0.0
      */
     public function getConfiguredArchiveIntervalDays($websiteId = null)
     {
-        return (int) $this->scopeConfig->getValue(
+        return (int) $this->getScopeConfig()->getValue(
             Config::XML_PATH_HELPDESK_ARCHIVE_INTERVAL,
             ScopeInterface::SCOPE_WEBSITE,
             $websiteId

@@ -3,10 +3,14 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Model\Source\CaseItem;
 
-use Magento\Framework\Api\Search\FilterGroup;
+use Dem\HelpDesk\Model\DepartmentRepository;
+use Dem\HelpDesk\Model\Department as DeptModel;
 use Dem\HelpDesk\Model\Source\SourceOptions;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Dem\HelpDesk\Helper\Config;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\Search\FilterGroup;
 
 /**
  * HelpDesk Source Model - CaseItem Department
@@ -21,6 +25,16 @@ use Dem\HelpDesk\Helper\Config;
 class Department extends SourceOptions
 {
     /**
+     * @var \Dem\HelpDesk\Model\DepartmentRepository
+     */
+    protected $departmentRepository;
+
+    /**
+     * @var \Magento\Framework\Api\SearchCriteria
+     */
+    protected $searchCriteria;
+
+    /**
      * Return array of available departments for all websites
      *
      * @return array
@@ -32,20 +46,14 @@ class Department extends SourceOptions
             parent::toOptionArray();
         }
 
-        $websiteId = $this->getCurrentWebsiteId();
+        $searchCriteria = $this->getSearchCriteria();
+        $this->addWebsiteFilter($searchCriteria);
+        $this->addActiveFilter($searchCriteria);
 
-        // Website must be set
-        if ($websiteId !== false) {
+        $departmentList = $this->getDepartmentRepository()->getList($searchCriteria);
 
-            // Add website filters
-            $websiteFilter = $this->addWebsiteFilter($websiteId);
-
-            $searchCriteria = $this->searchCriteriaBuilder
-                ->setFilterGroups([$websiteFilter])
-                ->create();
-
-            $departmentList = $this->departmentRepository->getList($searchCriteria);
-
+        if ($departmentList->getItems()) {
+            /** @var DeptModel $department */
             foreach ($departmentList->getItems() as $department) {
                 $this->optionArray[] = [
                     'label' => $department->getName(),
@@ -65,48 +73,101 @@ class Department extends SourceOptions
      */
     public function getCurrentWebsiteId()
     {
-        /** @var WebsiteInterface $website */
-        if ($this->helper->getIsAdminArea()) {
-            $website = $this->coreRegistry->registry('current_website');
-        } else {
-            $website = $this->helper::getWebsite();
+        if (!isset($this->currentWebsite)) {
+
+            /** @var WebsiteInterface $website */
+            if ($this->getHelper()->getIsAdminArea()) {
+                $this->currentWebsite = $this->getRegistry()->registry('current_website');
+            } else {
+                $this->currentWebsite = $this->getHelper()->getWebsite();
+            }
         }
-        if ($website) {
-            return $website->getId();
+        if (!$this->currentWebsite) {
+            return false;
         }
-        return false;
+        return $this->currentWebsite->getId();
     }
 
     /**
      * Create website filter group (OR condition)
      *
+     * @param SearchCriteria $searchCriteria
      * @param int $websiteId
-     * @return FilterGroup
+     * @return $this
      * @since 1.0.0
      */
-    protected function addWebsiteFilter($websiteId)
+    public function addWebsiteFilter(&$searchCriteria)
     {
-        // Apply current website condition
-        $filter1 = $this->filterBuilder
-            ->setField(\Dem\HelpDesk\Model\Department::WEBSITE_ID)
-            ->setConditionType("eq")
-            ->setValue($websiteId)
-            ->create();
+        $websiteId = $this->getCurrentWebsiteId();
 
-        // Apply default department condition
-        $filter2 = $this->filterBuilder
-            ->setField(\Dem\HelpDesk\Model\Department::DEPARTMENT_ID)
-            ->setConditionType("eq")
-            ->setValue(Config::HELPDESK_DEPARTMENT_DEFAULT_ID)
-            ->create();
+        if ($websiteId !== false) {
 
-        // Filter group (OR)
-        $websiteFilterGroup = $this->filterGroupBuilder
-            ->addFilter($filter1)
-            ->addFilter($filter2)
-            ->create();
+            // Apply current website condition
+            $filter1 = $this->getFilter()
+                ->setField('main_table.' . DeptModel::WEBSITE_ID)
+                ->setConditionType("eq")
+                ->setValue((int) $websiteId);
 
-        return $websiteFilterGroup;
+            // Apply default department condition
+            $filter2 = $this->getFilter()
+                ->setField('main_table.' . DeptModel::DEPARTMENT_ID)
+                ->setConditionType("eq")
+                ->setValue(Config::HELPDESK_DEPARTMENT_DEFAULT_ID);
+
+            // Filter group (OR)
+            /** @var FilterGroup $filterGroup */
+            $filterGroup = $this->getFilterGroup()
+                ->setFilters([$filter1, $filter2]);
+
+            $searchCriteria->setFilterGroups([$filterGroup]);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set active filter
+     *
+     * @param SearchCriteria $searchCriteria
+     * @return $this
+     * @since 1.0.0
+     */
+    public function addActiveFilter(&$searchCriteria)
+    {
+        $websiteId = $this->getCurrentWebsiteId();
+
+        if ($websiteId !== false) {
+
+            $filterGroups = $searchCriteria->getFilterGroups();
+            $activeFilter = $this->getFilter()
+                ->setField('main_table.' . DeptModel::IS_ACTIVE)
+                ->setConditionType("eq")
+                ->setValue((int) 1);
+
+            // Filter group (AND)
+            /** @var FilterGroup $filterGroup */
+            $activeFilterGroup = $this->getFilterGroup()
+                ->setFilters([$activeFilter]);
+
+            $filterGroups[] = $activeFilterGroup;
+
+            $searchCriteria->setFilterGroups($filterGroups);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get DepartmentRepository instance
+     * @return \Dem\HelpDesk\Model\DepartmentRepository
+     * @codeCoverageIgnore
+     */
+    public function getDepartmentRepository()
+    {
+        if (!$this->departmentRepository) {
+            $this->departmentRepository = ObjectManager::getInstance()->get(DepartmentRepository::class);
+        }
+        return $this->departmentRepository;
     }
 
 }

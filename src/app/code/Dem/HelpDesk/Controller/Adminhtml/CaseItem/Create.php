@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
-use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
-use Magento\Backend\Model\View\Result\Page;
+use Dem\HelpDesk\Controller\Adminhtml\CaseItem as Controller;
 
 /**
  * HelpDesk Controller - Adminhtml Case View
@@ -19,16 +18,15 @@ use Magento\Backend\Model\View\Result\Page;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Create extends CaseItem
+class Create extends Controller
 {
     /**
-     * @return Page
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        /** @var Page $resultPage */
         $resultPage = $this->initAction();
-        $resultPage->getConfig()->getTitle()->prepend(__('Open a New Case'));
+        $this->getPageTitle()->prepend(__('Open a New Case'));
         return $resultPage;
     }
 }

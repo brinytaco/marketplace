@@ -6,6 +6,7 @@ namespace Dem\HelpDesk\Model;
 use Dem\HelpDesk\Model\ResourceModel\DepartmentUser as Resource;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * HelpDesk Model - DepartmentUser
@@ -37,6 +38,7 @@ class DepartmentUser extends AbstractModel
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -46,18 +48,32 @@ class DepartmentUser extends AbstractModel
     /**
      * Get resource instance
      *
+     * Added here for proper PHPDoc return of Resource class
+     *
      * @throws LocalizedException
-     * @return Resource
+     * @return \Dem\HelpDesk\Model\ResourceModel\DepartmentUser
+     * @codeCoverageIgnore
      */
-    protected function _getResource()
+    public function getResource()
     {
-        return parent::_getResource();
+        return parent::getResource();
+    }
+
+    /**
+     * Set id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::DEPT_USER_ID, $id);
     }
 
     /**
      * Get ID
      *
-     * @return int
+     * @return int|null
      */
     public function getId()
     {
@@ -78,7 +94,7 @@ class DepartmentUser extends AbstractModel
      * Set Department id
      *
      * @param int $departmentId
-     * @return DepartmentUser
+     * @return $this
      */
     public function setDepartmentId($departmentId)
     {
@@ -99,7 +115,7 @@ class DepartmentUser extends AbstractModel
      * Set User id
      *
      * @param int $userId
-     * @return DepartmentUser
+     * @return $this
      */
     public function setUserId($userId)
     {
@@ -120,7 +136,7 @@ class DepartmentUser extends AbstractModel
      * Set is follower flag
      *
      * @param bool $isFollower
-     * @return DepartmentUser
+     * @return $this
      */
     public function setIsFollower($isFollower)
     {
@@ -141,7 +157,7 @@ class DepartmentUser extends AbstractModel
      * set created at
      *
      * @param $createdAt
-     * @return DepartmentUser
+     * @return $this
      */
     public function setCreatedAt($createdAt)
     {
@@ -162,7 +178,7 @@ class DepartmentUser extends AbstractModel
      * set updated at
      *
      * @param $updatedAt
-     * @return DepartmentUser
+     * @return $this
      */
     public function setUpdatedAt($updatedAt)
     {

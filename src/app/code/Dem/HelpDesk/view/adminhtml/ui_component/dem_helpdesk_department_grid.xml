@@ -55,12 +55,12 @@
             </item>
         </argument>
         <!-- Adds support for "bookmarking" or "saving" the current view -->
-	<bookmark name="bookmarks"/>
+    <bookmark name="bookmarks"/>
         <!-- Include controls for "column" visibility on/off -->
-	<columnsControls name="columns_controls"/>
-	<filterSearch name="fulltext"/>
+    <columnsControls name="columns_controls"/>
+    <filterSearch name="fulltext"/>
         <!-- Include "templates" config argument to show select lists as multiple checkboxes -->
-	<filters name="listing_filters">
+    <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="templates" xsi:type="array">
@@ -75,9 +75,9 @@
             </argument>
         </filters>
         <!-- Include paging for results -->
-	<paging name="listing_paging"/>
+    <paging name="listing_paging"/>
         <!-- Add default export button -->
-	<exportButton name="export_button"/>
+    <exportButton name="export_button"/>
     </listingToolbar>
 
     <!-- Grid column definition -->
@@ -196,7 +196,8 @@
             </argument>
         </column>
 
-        <column name="updated_at">
+        <!-- Must apply the class property shown to allow for proper tz conversion -->
+        <column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">50</item>
@@ -300,4 +301,3 @@
 
     </columns>
 </listing>
-

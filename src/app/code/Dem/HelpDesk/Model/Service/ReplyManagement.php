@@ -4,12 +4,8 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Service;
 
 use Dem\HelpDesk\Exception as HelpDeskException;
-use Dem\HelpDesk\Helper\Data as Helper;
 use Dem\HelpDesk\Model\Reply;
 use Dem\HelpDesk\Model\CaseItem;
-use Magento\Framework\Registry;
-use Magento\Framework\Event\ManagerInterface;
-use Psr\Log\LoggerInterface;
 
 
 /**
@@ -22,55 +18,13 @@ use Psr\Log\LoggerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class ReplyManagement
+class ReplyManagement extends AbstractManagement
 {
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     * @var Helper
-     */
-    protected $helper;
-
     /**
      * Phrase object name
      * @var string
      */
     protected $objectName = 'reply';
-
-    /**
-     * Data constructor.
-     *
-     * @param Registry $coreRegistry
-     * @param ManagerInterface $eventManager
-     * @param LoggerInterface $logger
-     * @param Helper $helper
-     */
-    public function __construct(
-        Registry $coreRegistry,
-        ManagerInterface $eventManager,
-        LoggerInterface $logger,
-        Helper $helper
-    ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->eventManager = $eventManager;
-        $this->logger = $logger;
-        $this->helper = $helper;
-    }
 
     /**
      * Create standard reply
@@ -83,6 +37,7 @@ class ReplyManagement
      * @param int|null $statusId
      * @param bool|null $isInitial
      * @return Reply
+     * @since 1.0.0
      */
     public function createReply(
         Reply $reply,
@@ -93,14 +48,14 @@ class ReplyManagement
         $isInitial = false
     ) {
         $data = [
-            'case_id'     => $case->getId(),
-            'author_id'   => $authorId,
-            'author_type' => $authorType,
-            'reply_text'  => $replyText,
-            'remote_ip'   => ($authorType == Reply::AUTHOR_TYPE_SYSTEM)
-                ? null : $this->helper::getServerRemoteIp(),
-            'status_id'   => $case->getStatusId(),
-            'is_initial'  => (int) $isInitial
+            Reply::CASE_ID     => $case->getId(),
+            Reply::AUTHOR_ID   => $authorId,
+            Reply::AUTHOR_TYPE => $authorType,
+            Reply::REPLY_TEXT  => $replyText,
+            Reply::REMOTE_IP   => ($authorType == Reply::AUTHOR_TYPE_SYSTEM)
+                ? null : \Dem\HelpDesk\Helper\Data::getServerRemoteIp(),
+            Reply::STATUS_ID   => $case->getStatusId(),
+            Reply::IS_INITIAL  => (int) $isInitial
         ];
         $this->validate($data);
 
@@ -115,6 +70,7 @@ class ReplyManagement
      * @param int $authorId
      * @param string $replyText
      * @return Reply
+     * @since 1.0.0
      */
     public function createInitialReply(
         Reply $reply,
@@ -139,6 +95,7 @@ class ReplyManagement
      * @param CaseItem $case
      * @param string $replyText
      * @return Reply
+     * @since 1.0.0
      */
     public function createSystemReply(
         Reply $reply,
@@ -160,6 +117,7 @@ class ReplyManagement
      * @param array $data
      * @return void
      * @throws HelpDeskException
+     * @since 1.0.0
      */
     public function validate(array $data)
     {
@@ -183,21 +141,31 @@ class ReplyManagement
                 throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
-
-        /** @todo Check for 10 word minimum in message body */
     }
 
     /**
      * Get required fields array
      *
      * @return array
+     * @since 1.0.0
      */
     public function getRequiredFields()
     {
         return [
-            'reply_text',
-            'author_type'
+            Reply::REPLY_TEXT,
+            REPLY::AUTHOR_TYPE
         ];
+    }
+
+    /**
+     * Get editable fields array
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getEditableFields()
+    {
+        return [];
     }
 
 }

@@ -51,7 +51,7 @@ class Priority extends SourceOptions
     /**
      * Get available case priority options
      *
-     * @return Collection
+     * @return \Magento\Framework\Data\Collection
      * @since 1.0.0
      */
     public function getOptions()
@@ -77,7 +77,7 @@ class Priority extends SourceOptions
             ]),
         ];
 
-        $casePriorities = $this->collectionFactory->create();
+        $casePriorities = $this->getCollection();
         foreach ($priorities as $priority) {
             $casePriorities->addItem($priority);
         }

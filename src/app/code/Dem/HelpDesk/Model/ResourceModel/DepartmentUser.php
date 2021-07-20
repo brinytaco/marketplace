@@ -22,12 +22,12 @@ use Dem\HelpDesk\Model\UserRepository;
 class DepartmentUser extends AbstractDb
 {
     /**
-     * @var DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
 
     /**
-     * @var UserRepository
+     * @var Dem\HelpDesk\Model\UserRepository
      */
     protected $userRepository;
 
@@ -36,6 +36,7 @@ class DepartmentUser extends AbstractDb
      * @param DateTime $date
      * @param UserRepository $userRepository
      * @return void
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
@@ -49,6 +50,7 @@ class DepartmentUser extends AbstractDb
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -61,6 +63,7 @@ class DepartmentUser extends AbstractDb
      * @param \Dem\HelpDesk\Model\DepartmentUser $object
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _beforeSave(AbstractModel $object)
     {

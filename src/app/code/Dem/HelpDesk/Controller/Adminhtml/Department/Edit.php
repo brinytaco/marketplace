@@ -3,8 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml\Department;
 
-use Dem\HelpDesk\Controller\Adminhtml\Department;
-use Magento\Backend\Model\View\Result\Page;
+use Dem\HelpDesk\Controller\Adminhtml\Department as Controller;
 
 /**
  * HelpDesk Controller - Adminhtml Department Edit
@@ -19,31 +18,28 @@ use Magento\Backend\Model\View\Result\Page;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Edit extends Department
+class Edit extends Controller
 {
     /**
-     * @return Page
+     * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()
     {
-        /** @var \Dem\HelpDesk\Model\Department $department */
         $department = $this->initDepartment();
 
         if ($department) {
-            /** @var Page $resultPage */
             $resultPage = $this->initAction();
-            $resultPage->getConfig()->getTitle()->prepend(sprintf(
-                '%s #%s',
+            $this->getPageTitle()->prepend(sprintf(
+                '%s: %s',
                 __('Editing'),
                 $department->getName()
             ));
             return $resultPage;
         }
 
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->redirectFactory->create();
+        $resultRedirect = $this->getRedirect();
         $resultRedirect->setPath('helpdesk/department');
-        $this->messageManager->addErrorMessage(__('This %1 no longer exists.', __('department')));
+        $this->getMessageManager()->addErrorMessage(__('This %1 no longer exists.', __('department')));
         return $resultRedirect;
     }
 }

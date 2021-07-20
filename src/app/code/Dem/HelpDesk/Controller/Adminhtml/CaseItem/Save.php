@@ -3,19 +3,15 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Controller\Adminhtml\CaseItem;
 
-use Dem\HelpDesk\Controller\Adminhtml\CaseItem;
+use Magento\Framework\App\ObjectManager;
+use Dem\HelpDesk\Controller\Adminhtml\CaseItem as Controller;
 use Dem\HelpDesk\Exception as HelpDeskException;
-use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Framework\App\RequestInterface;
-use Dem\HelpDesk\Model\Service\CaseItemManagement;
 use Dem\HelpDesk\Model\CaseItem as CaseModel;
 use Magento\User\Model\User;
-use Dem\HelpDesk\Model\Service\ReplyManagement;
 use Dem\HelpDesk\Model\Reply;
 use Dem\HelpDesk\Model\Department;
-use Dem\HelpDesk\Model\CaseItemRepository;
-use Dem\HelpDesk\Model\Service\FollowerManagement;
 use Dem\HelpDesk\Model\Follower;
+use Magento\Backend\Model\View\Result\Redirect;
 
 /**
  * HelpDesk Controller - Adminhtml Case Create New (Save)
@@ -27,119 +23,143 @@ use Dem\HelpDesk\Model\Follower;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class Save extends CaseItem
+class Save extends Controller
 {
     /**
      * Save new case action
      *
-     * @todo Refactor for fewer lines/more methods
-     *       Should be using $this->caseItemManager
-     *
-     * @return Redirect
+     * @return \Magento\Backend\Model\View\Result\Redirect
+     * @throws \Dem\HelpDesk\Exception
      */
     public function execute()
     {
-        /** @var Redirect $resultRedirect */
-        $resultRedirect = $this->resultRedirectFactory->create();
+        $resultRedirect = $this->getRedirect();
+        $resultRedirect->setPath('*/*/');
 
         if (!$this->isValidPostRequest()) {
-            $resultRedirect->setPath('*/*/');
             return $resultRedirect;
         }
 
         $data = $this->getParam('case');
 
-        if ($data) {
-            try {
+        try {
 
-                /** @var CaseModel $case */
-                $case = $this->caseItemManager->createCase(
-                    $this->caseItemFactory->create(),
-                    $data
-                );
+            $creator = $this->getAdminUser();
 
-                /** @var User $creator */
-                $creator = $this->helper->getBackendSession()->getUser();
+            $case = $this->buildCase($creator, $data);
+            $caseManagerName = $case->getCaseManager()->getName();
 
-                /** @var Reply $initialReply */
-                $initialReply = $this->replyManager->createInitialReply(
-                    $this->replyFactory->create(),
-                    $case,
-                    $creator->getId(),
-                    $data['message']
-                );
+            // Translate immediately for saving
+            $systemMessage = __('New case created and assigned to `%1`', $caseManagerName)->render();
+            $systemReply = $this->buildSystemReply($case, $systemMessage);
+            $initialReply = $this->buildInitialReply($case, $creator, $data);
+            $case->addReplyToSave($initialReply);
+            $case->addReplyToSave($systemReply);
 
-                $case->addReplyToSave($initialReply);
+            /** @var Department $department */
+            $department = $this->getCaseItemManager()->getDepartment();
 
-                /** @var Department $department */
-                $department = $this->caseItemManager->getDepartment();
+            $this->prepareDefaultFollowers($case, $department);
 
-                /** @var string $caseManagerName */
-                $caseManagerName = $department->getCaseManagerName();
+            $this->getCaseItemRepository()->save($case);
+            $this->getNotificationService()->sendNewCaseNotifications($case);
 
-                // Translate immediately for saving
-                $systemMessage = __('New case created and assigned to `%1`', $caseManagerName)->render();
+            $this->getCoreRegistry()->register(CaseModel::CURRENT_KEY, $case);
+            $this->getMessageManager()->addSuccessMessage($systemMessage);
 
-                /** @var Reply $systemReply */
-                $systemReply = $this->replyManager->createSystemReply(
-                    $this->replyFactory->create(),
-                    $case,
-                    $systemMessage
-                );
+            $resultRedirect->setPath('*/*/view', ['case_id' => $case->getId()]);
 
-                $case->addReplyToSave($systemReply);
-
-                $this->prepareDefaultFollowers($case, $department);
-
-                $this->caseItemRepository->save($case);
-
-                // Send notifications
-                $this->notificationService->sendNewCaseNotifications($case);
-
-                // Done Saving customer, finish save action
-                $this->coreRegistry->register(CaseModel::CURRENT_KEY, $case);
-                $this->messageManager->addSuccessMessage($systemMessage);
-
-                $resultRedirect->setPath('*/*/view', ['case_id' => $case->getId()]);
-
-            } catch (HelpDeskException $exception) {
-                $this->messageManager->addExceptionMessage(
-                    $exception,
-                    $exception->getMessage()
-                );
-                $resultRedirect->setPath('*/*/');
-            } catch (\Exception $exception) {
-                $this->messageManager->addExceptionMessage(
-                    $exception,
-                    $exception->getMessage()//__('Something went wrong while saving the case')
-                );
-                $resultRedirect->setPath('*/*/');
-            }
+        } catch (HelpDeskException $exception) {
+            $this->getMessageManager()->addExceptionMessage(
+                $exception,
+                $exception->getMessage()
+            );
+            $resultRedirect->setPath('*/*/');
+        } catch (\Exception $exception) {
+            $this->getMessageManager()->addExceptionMessage(
+                $exception,
+                $exception->getMessage()
+            );
+            $resultRedirect->setPath('*/*/');
         }
 
         return $resultRedirect;
     }
 
     /**
+     * Get new case instance with provided data
+     *
+     * @param \Magento\User\Model\User $creator
+     * @param array $data
+     * @return \Dem\HelpDesk\Model\CaseItem
+     */
+    public function buildCase(User $creator, $data = [])
+    {
+        return $this->getCaseItemManager()->createCase(
+            $this->getCaseItemFactory()->create(),
+            $creator,
+            $data
+        );
+    }
+
+    /**
+     * Get new reply instance with provided data
+     *
+     * @param \Dem\HelpDesk\Model\CaseItem $case
+     * @param \Magento\User\Model\User $creator
+     * @param array $data
+     * @return \Dem\HelpDesk\Model\Reply
+     */
+    public function buildInitialReply(CaseModel $case, User $creator, $data = [])
+    {
+        return $this->getReplyManager()->createInitialReply(
+            $this->getReplyFactory()->create(),
+            $case,
+            $creator->getId(),
+            $data['reply_text']
+        );
+    }
+
+
+    /**
+     * Get new reply instance with provided data
+     *
+     * @param \Dem\HelpDesk\Model\CaseItem $case
+     * @param string $message
+     * @return \Dem\HelpDesk\Model\Reply
+     */
+    public function buildSystemReply(CaseModel $case, $message)
+    {
+        return $this->getReplyManager()->createSystemReply(
+            $this->getReplyFactory()->create(),
+            $case,
+            $message
+        );
+    }
+
+    /**
      * Prepare default followers (if any) for saving
      *
-     * @param CaseObject $case
-     * @param Department $department
-     * @return void
+     * @param \Dem\HelpDesk\Model\CaseItem $case
+     * @param \Dem\HelpDesk\Model\Department $department
+     * @return \Dem\HelpDesk\Model\CaseItem
      */
-    protected function prepareDefaultFollowers(CaseObject $case, Department $department)
+    public function prepareDefaultFollowers(CaseModel $case, Department $department)
     {
         $defaultFollowers = $department->getDefaultFollowers();
+        $followerFactory = $this->getFollowerFactory();
+        $followerManager = $this->getFollowerManager();
 
-        /** @var FollowerManagement $followerManager */
         /** @var Follower $follower */
         foreach ($defaultFollowers as $userId) {
-            $follower = $this->followerManager->createFollower(
-                $this->followerFactory->create(),
+            $follower = $followerManager->createFollower(
+                $followerFactory->create(),
                 $case,
                 $userId
             );
             $case->addFollowerToSave($follower);
         }
+
+        return $case;
     }
 }

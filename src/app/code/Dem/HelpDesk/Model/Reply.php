@@ -6,6 +6,7 @@ namespace Dem\HelpDesk\Model;
 use Dem\HelpDesk\Model\ResourceModel\Reply as Resource;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * HelpDesk Model - Reply
@@ -31,6 +32,7 @@ class Reply extends AbstractModel
     const STATUS_ID             = 'status_id';
     const IS_INITIAL            = 'is_initial';
     const CREATED_AT            = 'created_at';
+    const AUTHOR_NAME           = 'author_name';
 
     const AUTHOR_TYPE_SYSTEM        = 'SYSTEM';
     const AUTHOR_TYPE_HELPDESK_USER = 'HELPDESK_USER';
@@ -45,6 +47,7 @@ class Reply extends AbstractModel
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -54,12 +57,15 @@ class Reply extends AbstractModel
     /**
      * Get resource instance
      *
+     * Added here for proper PHPDoc return of Resource class
+     *
      * @throws LocalizedException
-     * @return Resource
+     * @return \Dem\HelpDesk\Model\ResourceModel\Reply
+     * @codeCoverageIgnore
      */
-    protected function _getResource()
+    public function getResource()
     {
-        return parent::_getResource();
+        return parent::getResource();
     }
 
     /**
@@ -70,6 +76,17 @@ class Reply extends AbstractModel
     public function getId()
     {
         return $this->getData(self::REPLY_ID);
+    }
+
+    /**
+     * Set id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::REPLY_ID, $id);
     }
 
     /**
@@ -86,7 +103,7 @@ class Reply extends AbstractModel
      * Set case id
      *
      * @param int $caseId
-     * @return Reply
+     * @return $this
      */
     public function setCaseId($caseId)
     {
@@ -107,7 +124,7 @@ class Reply extends AbstractModel
      * Set author id
      *
      * @param int $authorId
-     * @return Reply
+     * @return $this
      */
     public function setAuthorId($authorId)
     {
@@ -128,11 +145,38 @@ class Reply extends AbstractModel
      * Set author type
      *
      * @param string $authorType
-     * @return Reply
+     * @return $this
      */
     public function setAuthorType($authorType)
     {
         return $this->setData(self::AUTHOR_TYPE, $authorType);
+    }
+
+    /**
+     * Set author name
+     *
+     * This value is set dynamically on load,
+     * it cannot be set here
+     *
+     * @param string $authorName
+     * @return $this
+     */
+    public function setAuthorName($authorName)
+    {
+        return $this;
+    }
+
+    /**
+     * Get case number
+     *
+     * @return string
+     */
+    public function getAuthorName()
+    {
+        if (!$this->hasData(self::AUTHOR_NAME)) {
+            $this->getResource()->setAuthorName($this);
+        }
+        return $this->getData(self::AUTHOR_NAME);
     }
 
     /**
@@ -149,7 +193,7 @@ class Reply extends AbstractModel
      * Set reply text
      *
      * @param string $replyText
-     * @return Reply
+     * @return $this
      */
     public function setReplyText($replyText)
     {
@@ -170,7 +214,7 @@ class Reply extends AbstractModel
      * Set remote ip address
      *
      * @param string $remoteIp
-     * @return Reply
+     * @return $this
      */
     public function setRemoteIp($remoteIp)
     {
@@ -191,7 +235,7 @@ class Reply extends AbstractModel
      * Set status id
      *
      * @param int $statusId
-     * @return Reply
+     * @return $this
      */
     public function setStatusId($statusId)
     {
@@ -210,13 +254,14 @@ class Reply extends AbstractModel
 
     /**
      * Set status id
+     * This value is only set programatically.
      *
      * @param int|bool $isInitial
-     * @return Reply
+     * @return $this
      */
     public function setIsInitial($isInitial = false)
     {
-        return $this->setData(self::IS_INITIAL, (bool) $isInitial);
+        return $this;
     }
 
     /**
@@ -233,7 +278,7 @@ class Reply extends AbstractModel
      * set created at
      *
      * @param $createdAt
-     * @return Reply
+     * @return $this
      */
     public function setCreatedAt($createdAt)
     {

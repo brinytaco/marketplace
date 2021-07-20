@@ -24,12 +24,12 @@ use Dem\HelpDesk\Model\ResourceModel\CaseItem;
 class Collection extends CaseItemCollection implements SearchResultInterface
 {
     /**
-     * @var AggregationInterface
+     * @var Magento\Framework\Api\Search\AggregationInterface
      */
     protected $aggregations;
 
     /**
-     * @var SearchCriteriaInterface
+     * @var \Magento\Framework\Api\SearchCriteriaInterface
      */
     protected $searchCriteria;
 
@@ -39,7 +39,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     protected $totalCount;
 
     /**
-     * @var ExtensibleDataInterface[]
+     * @var \Magento\Framework\Api\ExtensibleDataInterface[]
      */
     protected $items;
 
@@ -62,6 +62,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      * Define resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     public function _construct()
     {
@@ -81,6 +82,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
     /**
      * @return AggregationInterface
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getAggregations()
     {
@@ -91,6 +93,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      * @param AggregationInterface $aggregations
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function setAggregations($aggregations)
     {
@@ -103,6 +106,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      *
      * @return SearchCriteriaInterface|null
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getSearchCriteria()
     {
@@ -115,6 +119,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function setSearchCriteria(SearchCriteriaInterface $searchCriteria = null)
     {
@@ -127,6 +132,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      *
      * @return int
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getTotalCount()
     {
@@ -142,6 +148,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      * @param int $totalCount
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function setTotalCount($totalCount)
     {
@@ -155,6 +162,7 @@ class Collection extends CaseItemCollection implements SearchResultInterface
      * @param ExtensibleDataInterface[] $items
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function setItems(array $items = null)
     {

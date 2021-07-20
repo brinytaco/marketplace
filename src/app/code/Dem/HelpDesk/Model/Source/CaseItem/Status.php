@@ -56,7 +56,7 @@ class Status extends SourceOptions
      * Get available case statuses as \Magento\Framework\Data\Collection
      *
      * @param boolean $auto Option to include automatic status types
-     * @return Collection
+     * @return \Magento\Framework\Data\Collection
      * @since 1.0.0
      */
     public function getOptions($auto = true)
@@ -106,9 +106,9 @@ class Status extends SourceOptions
             ]),
         ];
 
-        $caseStatuses = $this->collectionFactory->create();
+        $caseStatuses = $this->getCollection();
         foreach ($statuses as $status) {
-            if (!$auto && (int)$status->getAutomatic()) {
+            if (!$auto && $status->getAutomatic()) {
                 continue;
             }
             $caseStatuses->addItem($status);

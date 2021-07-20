@@ -1,0 +1,121 @@
+{
+    "dem_helpdesk_user": {
+        "column": {
+            "user_id": true,
+            "website_id": true,
+            "created_at": true,
+            "customer_id": true,
+            "admin_id": true,
+            "email": true,
+            "name": true,
+            "session_id": true,
+            "last_accessed": true
+        },
+        "index": {
+            "DEM_HELPDESK_USER_CREATED_AT": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DEM_HELPDESK_USER_ADMIN_ID_CUSTOMER_ID": true,
+            "DEM_HELPDESK_USER_ADMIN_ID_ADMIN_USER_USER_ID": true,
+            "DEM_HELPDESK_USER_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "DEM_HELPDESK_USER_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    },
+    "dem_helpdesk_department": {
+        "column": {
+            "department_id": true,
+            "website_id": true,
+            "case_manager_id": true,
+            "name": true,
+            "description": true,
+            "is_internal": true,
+            "is_active": true,
+            "sort_order": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DEM_HELPDESK_DEPARTMENT_CASE_MANAGER_ID_DEM_HELPDESK_USR_USR_ID": true,
+            "DEM_HELPDESK_DEPARTMENT_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    },
+    "dem_helpdesk_department_user": {
+        "column": {
+            "dept_user_id": true,
+            "department_id": true,
+            "user_id": true,
+            "is_follower": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DEM_HELPDESK_DEPARTMENT_USER_USER_ID_DEM_HELPDESK_USER_USER_ID": true,
+            "FK_76957FA9BECE1C0BD98F5E6A92CD947A": true,
+            "DEM_HELPDESK_DEPARTMENT_USER_DEPARTMENT_ID_USER_ID": true
+        }
+    },
+    "dem_helpdesk_case": {
+        "column": {
+            "case_id": true,
+            "website_id": true,
+            "department_id": true,
+            "protect_code": true,
+            "creator_customer_id": true,
+            "creator_admin_id": true,
+            "creator_name": true,
+            "creator_email": true,
+            "creator_last_read": true,
+            "subject": true,
+            "status_id": true,
+            "priority": true,
+            "remote_ip": true,
+            "http_user_agent": true,
+            "updater_name": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_CD777ED8926793D87FE3254202A853B4": true,
+            "DEM_HELPDESK_CASE_CREATOR_ADMIN_ID_ADMIN_USER_USER_ID": true,
+            "DEM_HELPDESK_CASE_CREATOR_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID": true,
+            "DEM_HELPDESK_CASE_WEBSITE_ID_STORE_WEBSITE_WEBSITE_ID": true
+        }
+    },
+    "dem_helpdesk_case_reply": {
+        "column": {
+            "reply_id": true,
+            "case_id": true,
+            "author_id": true,
+            "author_type": true,
+            "reply_text": true,
+            "remote_ip": true,
+            "status_id": true,
+            "is_initial": true,
+            "created_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DEM_HELPDESK_CASE_REPLY_CASE_ID_DEM_HELPDESK_CASE_CASE_ID": true,
+            "DEM_HELPDESK_CASE_REPLY_AUTHOR_ID_DEM_HELPDESK_USER_USER_ID": true
+        }
+    },
+    "dem_helpdesk_case_follower": {
+        "column": {
+            "follower_id": true,
+            "case_id": true,
+            "user_id": true,
+            "last_read": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "DEM_HELPDESK_CASE_FOLLOWER_CASE_ID_DEM_HELPDESK_CASE_CASE_ID": true,
+            "DEM_HELPDESK_CASE_FOLLOWER_USER_ID_DEM_HELPDESK_USER_USER_ID": true
+        }
+    }
+}

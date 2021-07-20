@@ -3,25 +3,22 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View;
 
-use Dem\HelpDesk\Model\CaseItem;
-use Dem\HelpDesk\Model\Reply;
-use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
-use Dem\HelpDesk\Model\Follower;
-use Dem\HelpDesk\Model\ReplyRepository;
-use Dem\HelpDesk\Model\UserRepository;
-use Dem\HelpDesk\Model\Source\CaseItem\Status;
-use Dem\HelpDesk\Helper\Data as Helper;
 use Dem\Base\Data\SearchResultsProcessor;
-
-use Magento\Backend\Block\Template\Context;
-use Magento\Ui\Component\Layout\Tabs\TabInterface;
-use Magento\Framework\Phrase;
+use Dem\HelpDesk\Helper\Data as Helper;
+use Dem\HelpDesk\Model\CaseItem;
+use Dem\HelpDesk\Model\Follower;
+use Dem\HelpDesk\Model\Reply;
+use Dem\HelpDesk\Model\ReplyRepository;
+use Dem\HelpDesk\Model\ResourceModel\CaseItem as Resource;
+use Dem\HelpDesk\Model\Source\CaseItem\Priority;
+use Dem\HelpDesk\Model\Source\CaseItem\Status;
+use Dem\HelpDesk\Model\User as HelpDeskUser;
+use Dem\HelpDesk\Model\UserRepository;
 use Magento\Backend\Block\Template;
-use Magento\Framework\Module\Dir;
-use Magento\Framework\Registry;
-use Magento\Framework\Data\Collection;
+use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Model\AbstractModel;
-use Magento\User\Model\User;
+use Magento\Framework\Registry;
+use Magento\Ui\Component\Layout\Tabs\TabInterface;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Info
@@ -42,88 +39,95 @@ class Tabs extends Template implements TabInterface
     const ADMIN_REPLY_TEMPLATE_PATH_USER   = 'case/view/tab/replies/user.phtml';
 
     /**
-     * @var Dir
-     */
-    protected $moduleDir;
-
-    /**
      * Core registry
      *
-     * @var Registry
+     * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
-     * @var Resource
+     * @var \Dem\HelpDesk\Model\ResourceModel\CaseItem
      */
     protected $caseResource;
 
     /**
-     * @var ReplyRepository
+     * @var \Dem\HelpDesk\Model\ReplyRepository
      */
     protected $replyRepository;
 
     /**
-     * @var UserRepository
+     * @var \Dem\HelpDesk\Model\UserRepository
      */
     protected $userRepository;
 
     /**
-     * @var Status
+     * @var \Dem\HelpDesk\Model\Source\CaseItem\Status
      */
     protected $statusSource;
 
     /**
-     * @var Collection
+     * @var \Magento\Framework\Data\Collection
      */
     protected $statusOptions;
 
     /**
-     * @var Reply[]
+     * @var \Dem\HelpDesk\Model\Source\CaseItem\Priority
+     */
+    protected $prioritySource;
+
+    /**
+     * @var \Magento\Framework\Data\Collection
+     */
+    protected $priorityOptions;
+
+    /**
+     * @var \Dem\HelpDesk\Model\Reply[]
      */
     protected $replies;
 
     /**
-     * @var Helper
+     * @var \Dem\HelpDesk\Helper\Data
      */
     protected $helper;
 
 
     /**
      * @param Context $context
-     * @param Dir $moduleDir
      * @param Registry $registry
-     * @param CaseItem $caseResource
+     * @param Resource $caseResource
      * @param ReplyRepository $replyRepository
      * @param UserRepository $userRepository
      * @param Status $statusSource
+     * @param Priority $prioritySource
      * @param Helper $helper
      * @param array $data
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
-        Dir $moduleDir,
         Registry $registry,
-        CaseItem $caseResource,
+        Resource $caseResource,
         ReplyRepository $replyRepository,
         UserRepository $userRepository,
         Status $statusSource,
+        Priority $prioritySource,
         Helper $helper,
         array $data = []
     ) {
         $this->coreRegistry = $registry;
-        $this->moduleDir = $moduleDir;
         $this->caseResource = $caseResource;
         $this->replyRepository = $replyRepository;
         $this->userRepository = $userRepository;
         $this->statusSource = $statusSource;
+        $this->prioritySource = $prioritySource;
         $this->helper = $helper;
         parent::__construct($context, $data);
     }
 
 
     /**
-     * @return Phrase
+     * @return \Magento\Framework\Phrase|string
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -131,7 +135,8 @@ class Tabs extends Template implements TabInterface
     }
 
     /**
-     * @return Phrase
+     * @return \Magento\Framework\Phrase|string
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -140,6 +145,7 @@ class Tabs extends Template implements TabInterface
 
     /**
      * @return bool
+     * @codeCoverageIgnore
      */
     public function canShowTab()
     {
@@ -148,6 +154,7 @@ class Tabs extends Template implements TabInterface
 
     /**
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isHidden()
     {
@@ -158,6 +165,7 @@ class Tabs extends Template implements TabInterface
      * Tab class getter
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTabClass()
     {
@@ -168,6 +176,7 @@ class Tabs extends Template implements TabInterface
      * Return URL link to Tab content
      *
      * @return string
+     * @codeCoverageIgnore
      */
     public function getTabUrl()
     {
@@ -178,6 +187,7 @@ class Tabs extends Template implements TabInterface
      * Tab should be loaded through Ajax call
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public function isAjaxLoaded()
     {
@@ -187,8 +197,9 @@ class Tabs extends Template implements TabInterface
     /**
      * Retrieve registered Case model
      *
-     * @return CaseItem
+     * @return \Dem\HelpDesk\Model\CaseItem
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getCase()
     {
@@ -196,10 +207,44 @@ class Tabs extends Template implements TabInterface
     }
 
     /**
+     * Get Status instance
+     *
+     * @return \Dem\HelpDesk\Model\Source\CaseItem\Status
+     * @codeCoverageIgnore
+     */
+    public function getStatusSource()
+    {
+        return $this->statusSource;
+    }
+
+    /**
+     * Get Priority instance
+     *
+     * @return \Dem\HelpDesk\Model\Source\CaseItem\Priority
+     * @codeCoverageIgnore
+     */
+    public function getPrioritySource()
+    {
+        return $this->prioritySource;
+    }
+
+    /**
+     * Get Admin User instance
+     *
+     * @return \Magento\User\Model\User
+     * @codeCoverageIgnore
+     */
+    public function getAdminUser()
+    {
+        return $this->helper->getBackendSession()->getUser();
+    }
+
+    /**
      * Get initial reply message
      *
-     * @return Reply|bool
+     * @return \Dem\HelpDesk\Model\Reply|bool
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getInitialReply()
     {
@@ -212,7 +257,7 @@ class Tabs extends Template implements TabInterface
      * @param int $limit Limit results value (0 = no limit)
      * @param bool $includeInitial
      * @param bool $includeSystem
-     * @return Reply[]
+     * @return \Dem\HelpDesk\Model\Reply[]
      * @since 1.0.0
      */
     public function getVisibleReplies($limit = 0, $includeInitial = true, $includeSystem = true)
@@ -239,12 +284,13 @@ class Tabs extends Template implements TabInterface
     }
 
     /**
-         * Get created at as formatted string
-         *
-         * @param CaseItem|Reply $object
-         * @return string
-         * @since 1.0.0
-         */
+     * Get created at as formatted string
+     *
+     * @param \Dem\HelpDesk\Model\CaseItem|\Dem\HelpDesk\Model\Reply $object
+     * @return string
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
     public function getCreatedDate(AbstractModel $object)
     {
         return $this->formatDate(
@@ -259,9 +305,10 @@ class Tabs extends Template implements TabInterface
      *
      * If null, do not return current date
      *
-     * @param CaseItem|Reply $object
+     * @param \Dem\HelpDesk\Model\CaseItem|\Dem\HelpDesk\Model\Reply $object
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getUpdatedDate(AbstractModel $object)
     {
@@ -278,14 +325,14 @@ class Tabs extends Template implements TabInterface
     /**
      * Get status as object
      *
-     * @param CaseItem|Reply $object
-     * @return DataObject
+     * @param \Dem\HelpDesk\Model\CaseItem|\Dem\HelpDesk\Model\Reply $object
+     * @return \Magento\Framework\DataObject
      * @since 1.0.0
      */
     public function getStatusItem(AbstractModel $object)
     {
         if (!isset($this->statusOptions)) {
-            $this->statusOptions = $this->statusSource->getOptions();
+            $this->statusOptions = $this->getStatusSource()->getOptions();
         }
 
         return $this->statusOptions
@@ -293,9 +340,26 @@ class Tabs extends Template implements TabInterface
     }
 
     /**
+     * Get priority as object
+     *
+     * @param \Dem\HelpDesk\Model\CaseItem $object
+     * @return \Magento\Framework\DataObject
+     * @since 1.0.0
+     */
+    public function getPriorityItem()
+    {
+        if (!isset($this->priorityOptions)) {
+            $this->priorityOptions = $this->getPrioritySource()->getOptions();
+        }
+
+        return $this->priorityOptions
+            ->getItemByColumnValue('id', $this->getCase()->getPriority());
+    }
+
+    /**
      * Get lowercase author_type for use as class name
      *
-     * @param Reply $reply
+     * @param \Dem\HelpDesk\Model\Reply $reply
      * @return string
      * @since 1.0.0
      */
@@ -309,18 +373,18 @@ class Tabs extends Template implements TabInterface
      *
      * If author is creator, get case creator_name
      *
-     * @param Reply $reply
+     * @param \Dem\HelpDesk\Model\Reply $reply
      * @return string
      * @since 1.0.0
      */
     public function getAuthorName(Reply $reply)
     {
-        if ($reply->getAuthorName()) {
-            return $reply->getAuthorName();
-        }
-
         if ($reply->getIsAuthorTypeCreator()) {
             return $this->getCase()->getCreatorName();
+        }
+
+        if ($reply->getAuthorId()) {
+            return $reply->getAuthorName();
         }
 
         return '';
@@ -329,7 +393,7 @@ class Tabs extends Template implements TabInterface
     /**
      * Render reply from specified template
      *
-     * @param Reply $reply
+     * @param \Dem\HelpDesk\Model\Reply $reply
      * @return string
      */
     public function renderReplyBlock(Reply $reply)
@@ -344,32 +408,32 @@ class Tabs extends Template implements TabInterface
         $content = $this->fetchView($templateFile);
         $content = str_ireplace(
             '{{reply-class}}',
-            $this->escapeHtml($this->getReplyClass($reply)),
+            $this->getReplyClass($reply),
             $content
         );
         $content = str_ireplace(
             '{{reply-date}}',
-            $this->escapeHtml($this->getCreatedDate($reply)),
+            $this->getCreatedDate($reply),
             $content
         );
         $content = str_ireplace(
             '{{reply-text}}',
-            nl2br($this->escapeHtml($reply->getReplyText())),
+            nl2br($reply->getReplyText()),
             $content
         );
         $content = str_ireplace(
             '{{reply-author}}',
-            $this->escapeHtml($this->getAuthorName($reply)),
+            $this->getAuthorName($reply),
             $content
         );
         $content = str_ireplace(
             '{{reply-status}}',
-            $this->escapeHtml($this->getStatusItem($reply)->getLabel()),
+            $this->getStatusItem($reply)->getLabel(),
             $content
         );
         $content = str_ireplace(
             '{{status-label}}',
-            $this->escapeHtml(__('Current Status')),
+            __('Current Status')->render(),
             $content
         );
 
@@ -386,22 +450,48 @@ class Tabs extends Template implements TabInterface
      */
     public function getCanRenderFollowerBlock()
     {
-        /** @var User $user */
-        $user = $this->helper->getBackendSession()->getUser();
+        $user = $this->getAdminUser();
 
         // User is the case creator
         if ($user->getId() == $this->getCase()->getCreatorAdminId()) {
             return false;
         }
         // User is the department case manager
-        if ($user->getId() == $this->getCase()->getCaseManager()->getId()) {
+        if ($user->getId() == $this->getCaseManagerId()) {
             return false;
         }
+
+        /** @var HelpDeskUser $helpDeskUser */
+        $helpDeskUser = $this->getHelpDeskUserById($user->getId());
+
         // User must be a helpdesk user
-        if (!$this->userRepository->getById($user->getId())) {
+        if (!$helpDeskUser->getId()) {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Get Case manager id
+     *
+     * @return int
+     * @codeCoverageIgnore
+     */
+    protected function getCaseManagerId()
+    {
+        return $this->getCase()->getCaseManager()->getId();
+    }
+
+    /**
+     * Get HelpDesk User by id
+     *
+     * @param int $userId
+     * @return \Dem\HelpDesk\Model\User
+     * @codeCoverageIgnore
+     */
+    protected function getHelpDeskUserById($userId)
+    {
+        return $this->userRepository->getByField($userId, HelpDeskUser::ADMIN_ID);
     }
 
     /**
@@ -411,8 +501,7 @@ class Tabs extends Template implements TabInterface
      */
     public function getIsUserFollower()
     {
-        /** @var User $user */
-        $user = $this->helper->getBackendSession()->getUser();
+        $user = $this->getAdminUser();
 
         $followers = $this->getCase()->getFollowers();
 
@@ -423,6 +512,6 @@ class Tabs extends Template implements TabInterface
         /** @var Follower|null $follower */
         $follower = $followerCollection->getItemByColumnValue('user_id', $user->getId());
 
-        return ($follower);
+        return (bool) $follower;
     }
 }

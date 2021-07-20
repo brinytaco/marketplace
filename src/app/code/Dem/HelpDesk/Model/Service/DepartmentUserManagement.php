@@ -4,12 +4,7 @@ declare(strict_types=1);
 namespace Dem\HelpDesk\Model\Service;
 
 use Dem\HelpDesk\Exception as HelpDeskException;
-use Dem\HelpDesk\Helper\Data as Helper;
 use Dem\HelpDesk\Model\DepartmentUser;
-use Magento\Framework\Registry;
-use Magento\Framework\Event\ManagerInterface;
-use Psr\Log\LoggerInterface;
-
 
 /**
  * HelpDesk Service Model - DepartmentUser Management
@@ -21,62 +16,13 @@ use Psr\Log\LoggerInterface;
  * @author     Toby Crain
  * @since      1.0.0
  */
-class DepartmentUserManagement
+class DepartmentUserManagement extends AbstractManagement
 {
-    /**
-     * Core registry
-     *
-     * @var Registry
-     */
-    protected $coreRegistry;
-
-    /**
-     * @var ManagerInterface
-     */
-    protected $eventManager;
-
-    /**
-     * @var LoggerInterface
-     */
-    protected $logger;
-
-    /**
-     *
-     * @var DepartmentUser
-     */
-    protected $departmentUser;
-
-    /**
-     * @var Helper
-     */
-    protected $helper;
-
     /**
      * Phrase object name
      * @var string
      */
     protected $objectName = 'department user';
-
-
-    /**
-     * Data constructor.
-     *
-     * @param Registry $coreRegistry
-     * @param ManagerInterface $eventManager
-     * @param LoggerInterface $logger
-     * @param Helper $helper
-     */
-    public function __construct(
-        Registry $coreRegistry,
-        ManagerInterface $eventManager,
-        LoggerInterface $logger,
-        Helper $helper
-    ) {
-        $this->coreRegistry = $coreRegistry;
-        $this->eventManager = $eventManager;
-        $this->logger = $logger;
-        $this->helper = $helper;
-    }
 
     /**
      * Validate submitted data
@@ -84,6 +30,7 @@ class DepartmentUserManagement
      * @param array $data
      * @return void
      * @throws HelpDeskException
+     * @since 1.0.0
      */
     public function validate(array $data)
     {
@@ -107,21 +54,31 @@ class DepartmentUserManagement
                 throw new HelpDeskException(__('The %1 `%2` cannot be empty', $this->objectName, $field));
             }
         }
-
-        /** @todo Check for 10 word minimum in message body */
     }
 
     /**
      * Get required fields array
      *
      * @return array
+     * @since 1.0.0
      */
     public function getRequiredFields()
     {
         return [
-            'department_id',
-            'user_id'
+            DepartmentUser::DEPARTMENT_ID,
+            DepartmentUser::USER_ID
         ];
+    }
+
+    /**
+     * Get editable fields array
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getEditableFields()
+    {
+        return [];
     }
 
 }

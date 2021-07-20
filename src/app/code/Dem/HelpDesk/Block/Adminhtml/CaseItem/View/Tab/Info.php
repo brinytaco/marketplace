@@ -3,11 +3,7 @@ declare(strict_types=1);
 
 namespace Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tab;
 
-use Dem\HelpDesk\Model\Source\CaseItem\Priority;
 use Dem\HelpDesk\Block\Adminhtml\CaseItem\View\Tabs;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\Phrase;
-use Magento\Framework\Data\Collection;
 
 /**
  * HelpDesk Block - Adminhtml CaseItem View Tab Info
@@ -22,7 +18,8 @@ use Magento\Framework\Data\Collection;
 class Info extends Tabs
 {
     /**
-     * @return Phrase
+     * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabLabel()
     {
@@ -30,7 +27,8 @@ class Info extends Tabs
     }
 
     /**
-     * @return Phrase
+     * @return \Magento\Framework\Phrase
+     * @codeCoverageIgnore
      */
     public function getTabTitle()
     {
@@ -42,6 +40,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getCaseNumber()
     {
@@ -53,6 +52,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getWebsiteName()
     {
@@ -64,6 +64,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getDepartmentName()
     {
@@ -75,6 +76,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getSubject()
     {
@@ -86,6 +88,7 @@ class Info extends Tabs
      *
      * @return bool
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function isCustomerCreator()
     {
@@ -97,6 +100,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getCreatorName()
     {
@@ -108,6 +112,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getCustomerCreatorUrl()
     {
@@ -119,6 +124,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getUpdaterName()
     {
@@ -130,29 +136,23 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getCaseManagerName()
     {
-        return $this->getCase()->getCaseManager()->getName();
+        return $this->getCaseManager()->getName();
     }
 
     /**
-     * Get case priority option label
+     * Get case manager (User)
      *
-     * @return string
+     * @return \Dem\HelpDesk\Model\User
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
-    public function getPriorityItem()
+    public function getCaseManager()
     {
-        $objectManager = ObjectManager::getInstance();
-        /** @var Priority $source */
-        $source = $objectManager->get('Dem\HelpDesk\Model\Source\CaseItem\Priority');
-
-        /** @var Collection $statusOptions */
-        $statusOptions = $source->getOptions();
-
-        return $statusOptions
-            ->getItemByColumnValue('id', $this->getCase()->getPriority());
+        return $this->getCase()->getCaseManager();
     }
 
     /**
@@ -160,6 +160,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getRemoteIp()
     {
@@ -171,6 +172,7 @@ class Info extends Tabs
      *
      * @return string
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     public function getHttpUserAgent()
     {
@@ -183,7 +185,7 @@ class Info extends Tabs
      * @return int
      * @since 1.0.0
      */
-    public function getOtherUserReplies()
+    public function getOtherUserRepliesCount()
     {
         return count($this->getVisibleReplies(0, false, false));
     }

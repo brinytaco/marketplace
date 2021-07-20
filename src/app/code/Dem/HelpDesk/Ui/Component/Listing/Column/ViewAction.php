@@ -32,6 +32,7 @@ class ViewAction extends Column
      * @param array $components
      * @param array $data
      * @return void
+     * @codeCoverageIgnore
      */
     public function __construct(
         ContextInterface $context,
@@ -62,7 +63,7 @@ class ViewAction extends Column
                     $actionLabel = $this->getData('config/actionLabel') ?: 'View';
                     $item[$this->getData('name')] = [
                         'view' => [
-                            'href' => $this->urlBuilder->getUrl(
+                            'href' => $this->getUrlBuilder()->getUrl(
                                 $viewUrlPath,
                                 [
                                     $urlEntityParamName => $item[$indexField]
@@ -76,5 +77,16 @@ class ViewAction extends Column
             }
         }
         return $dataSource;
+    }
+
+    /**
+     * Get UrlBuilder instance
+     *
+     * @return UrlInterface
+     * @codeCoverageIgnore
+     */
+    protected function getUrlBuilder()
+    {
+        return $this->urlBuilder;
     }
 }

@@ -6,6 +6,7 @@ namespace Dem\HelpDesk\Model;
 use Dem\HelpDesk\Model\ResourceModel\User as Resource;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * HelpDesk Model - User
@@ -40,6 +41,7 @@ class User extends AbstractModel
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -49,12 +51,15 @@ class User extends AbstractModel
     /**
      * Get resource instance
      *
+     * Added here for proper PHPDoc return of Resource class
+     *
      * @throws LocalizedException
-     * @return Resource
+     * @return \Dem\HelpDesk\Model\ResourceModel\User
+     * @codeCoverageIgnore
      */
-    protected function _getResource()
+    public function getResource()
     {
-        return parent::_getResource();
+        return parent::getResource();
     }
 
     /**
@@ -65,6 +70,17 @@ class User extends AbstractModel
     public function getId()
     {
         return $this->getData(self::USER_ID);
+    }
+
+    /**
+     * Set id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::USER_ID, $id);
     }
 
     /**
@@ -81,7 +97,7 @@ class User extends AbstractModel
      * Set website id
      *
      * @param int $websiteId
-     * @return User
+     * @return $this
      */
     public function setWebsiteId($websiteId)
     {
@@ -102,7 +118,7 @@ class User extends AbstractModel
      * Set customer id
      *
      * @param int $customerId
-     * @return User
+     * @return $this
      */
     public function setCustomerId($customerId)
     {
@@ -123,7 +139,7 @@ class User extends AbstractModel
      * Set admin id
      *
      * @param int $adminId
-     * @return User
+     * @return $this
      */
     public function setAdminId($adminId)
     {
@@ -144,7 +160,7 @@ class User extends AbstractModel
      * Set user email
      *
      * @param string $email
-     * @return User
+     * @return $this
      */
     public function setEmail($email)
     {
@@ -165,7 +181,7 @@ class User extends AbstractModel
      * Set user name
      *
      * @param string $name
-     * @return User
+     * @return $this
      */
     public function setName($name)
     {
@@ -186,7 +202,7 @@ class User extends AbstractModel
      * set session id
      *
      * @param $sessionId
-     * @return User
+     * @return $this
      */
     public function setSessionId($sessionId)
     {
@@ -207,7 +223,7 @@ class User extends AbstractModel
      * set last accessed
      *
      * @param $lastAccessed
-     * @return User
+     * @return $this
      */
     public function setLastAccessed($lastAccessed)
     {
@@ -228,7 +244,7 @@ class User extends AbstractModel
      * set created at
      *
      * @param $createdAt
-     * @return User
+     * @return $this
      */
     public function setCreatedAt($createdAt)
     {

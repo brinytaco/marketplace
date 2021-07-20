@@ -21,12 +21,13 @@ class BackButton implements ButtonProviderInterface
     /**
      * URL builder
      *
-     * @var UrlInterface
+     * @var \Magento\Framework\UrlInterface
      */
     private $urlBuilder;
 
     /**
      * @param UrlInterface $urlBuilder
+     * @codeCoverageIgnore
      */
     public function __construct(
         UrlInterface $urlBuilder
@@ -44,9 +45,20 @@ class BackButton implements ButtonProviderInterface
     {
         return [
             'label' => __('Back'),
-            'on_click' => sprintf("location.href = '%s';", $this->urlBuilder->getUrl('*/department/')),
+            'on_click' => sprintf("location.href = '%s';", $this->getButtonUrl()),
             'class' => 'back',
             'sort_order' => 10
         ];
+    }
+
+    /**
+     * Get button url
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getButtonUrl()
+    {
+        return $this->urlBuilder->getUrl('*/department/');
     }
 }

@@ -8,7 +8,7 @@ use Dem\HelpDesk\Model\Department;
 use Dem\HelpDesk\Model\ResourceModel\Department as Resource;
 
 /**
- * HelpDesk Resource Model - Case Collection
+ * HelpDesk Resource Model - Department Collection
  *
  * =============================================================================
  *
@@ -44,6 +44,7 @@ class Collection extends AbstractCollection
      * Define resource model
      *
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -60,6 +61,7 @@ class Collection extends AbstractCollection
      *
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _initSelect()
     {

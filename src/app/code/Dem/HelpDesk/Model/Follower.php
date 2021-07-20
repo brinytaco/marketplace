@@ -6,6 +6,7 @@ namespace Dem\HelpDesk\Model;
 use Dem\HelpDesk\Model\ResourceModel\Follower as Resource;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * HelpDesk Model - Follower
@@ -37,6 +38,7 @@ class Follower extends AbstractModel
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
@@ -46,12 +48,26 @@ class Follower extends AbstractModel
     /**
      * Get resource instance
      *
+     * Added here for proper PHPDoc return of Resource class
+     *
      * @throws LocalizedException
-     * @return Resource
+     * @return \Dem\HelpDesk\Model\ResourceModel\Follower
+     * @codeCoverageIgnore
      */
-    protected function _getResource()
+    public function getResource()
     {
-        return parent::_getResource();
+        return parent::getResource();
+    }
+
+    /**
+     * Set id
+     *
+     * @param int $id
+     * @return $this
+     */
+    public function setId($id)
+    {
+        return $this->setData(self::FOLLOWER_ID, $id);
     }
 
     /**
@@ -78,7 +94,7 @@ class Follower extends AbstractModel
      * Set case id
      *
      * @param int $caseId
-     * @return Follower
+     * @return $this
      */
     public function setCaseId($caseId)
     {
@@ -99,7 +115,7 @@ class Follower extends AbstractModel
      * Set user id
      *
      * @param int $userId
-     * @return Follower
+     * @return $this
      */
     public function setUserId($userId)
     {
@@ -120,7 +136,7 @@ class Follower extends AbstractModel
      * Set last read reply id
      *
      * @param int $lastRead
-     * @return Follower
+     * @return $this
      */
     public function setLastRead($lastRead)
     {
@@ -141,7 +157,7 @@ class Follower extends AbstractModel
      * set created at
      *
      * @param $createdAt
-     * @return Follower
+     * @return $this
      */
     public function setCreatedAt($createdAt)
     {
@@ -162,7 +178,7 @@ class Follower extends AbstractModel
      * set updated at
      *
      * @param $updatedAt
-     * @return Follower
+     * @return $this
      */
     public function setUpdatedAt($updatedAt)
     {

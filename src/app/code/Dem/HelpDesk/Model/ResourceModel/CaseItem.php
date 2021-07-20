@@ -6,11 +6,16 @@ namespace Dem\HelpDesk\Model\ResourceModel;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Api\Search\FilterGroupBuilder;
+use Magento\Framework\Api\ObjectFactory;
+use Magento\Framework\Api\FilterBuilder;
 use Magento\Store\Api\Data\WebsiteInterface;
 use Dem\HelpDesk\Model\ReplyRepository;
 use Dem\HelpDesk\Model\FollowerRepository;
@@ -20,7 +25,9 @@ use Dem\HelpDesk\Model\Department;
 use Dem\HelpDesk\Model\CaseItem as CaseModel;
 use Dem\HelpDesk\Model\Reply;
 use Dem\HelpDesk\Model\Follower;
+use Dem\HelpDesk\Model\User;
 use Dem\HelpDesk\Helper\Data as Helper;
+use Magento\AdobeStockAsset\Model\SearchResults;
 
 /**
  * HelpDesk Resource Model - Case
@@ -35,42 +42,42 @@ use Dem\HelpDesk\Helper\Data as Helper;
 class CaseItem extends AbstractDb
 {
     /**
-     * @var ReplyRepository
+     * @var \Dem\HelpDesk\Model\ReplyRepository
      */
     protected $replyRepository;
 
     /**
-     * @var FollowerRepository
+     * @var \Dem\HelpDesk\Model\FollowerRepository
      */
     protected $followerRepository;
 
     /**
-     * @var DepartmentRepository
+     * @var \Dem\HelpDesk\Model\DepartmentRepository
      */
     protected $departmentRepository;
 
     /**
-     * @var UserRepository
+     * @var \Dem\HelpDesk\Model\UserRepository
      */
     protected $userRepository;
 
     /**
-     * @var DateTime
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime
      */
     protected $date;
 
     /**
-     * @var Helper
+     * @var Dem\HelpDesk\Helper\Data
      */
     protected $helper;
 
     /**
-     * @var Department
+     * @var Dem\HelpDesk\Model\Department
      */
     private $department;
 
     /**
-     * @var SearchCriteriaBuilder
+     * @var \Magento\Framework\Api\SearchCriteriaBuilder
      */
     protected $searchCriteriaBuilder;
 
@@ -84,6 +91,7 @@ class CaseItem extends AbstractDb
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param Helper $helper
      * @return void
+     * @codeCoverageIgnore
      */
     public function __construct(
         Context $context,
@@ -107,10 +115,11 @@ class CaseItem extends AbstractDb
 
     /**
      * @return void
+     * @codeCoverageIgnore
      */
     protected function _construct()
     {
-        $this->_init('dem_helpdesk_case', 'case_id');
+        $this->_init('dem_helpdesk_case', CaseModel::CASE_ID);
     }
 
     /**
@@ -119,6 +128,7 @@ class CaseItem extends AbstractDb
      * @param CaseModel $object
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _afterLoad(AbstractModel $object)
     {
@@ -137,11 +147,12 @@ class CaseItem extends AbstractDb
      * @param CaseModel $object
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _beforeSave(AbstractModel $object)
     {
         // New case, set protect_code value
-        if ($object->isObjectNew()) {
+        if (!$object->getOrigData(CaseModel::CASE_ID)) {
             $object->setCreatedAt($this->date->gmtDate());
             $object->setProtectCode(sha1(microtime()));
         } else {
@@ -151,13 +162,13 @@ class CaseItem extends AbstractDb
         return parent::_beforeSave($object);
     }
 
-
     /**
      * After save, perform additional actions
      *
      * @param CaseModel $object
      * @return $this
      * @since 1.0.0
+     * @codeCoverageIgnore
      */
     protected function _afterSave(AbstractModel $object)
     {
@@ -168,19 +179,43 @@ class CaseItem extends AbstractDb
     }
 
     /**
+     * Get helper instance
+     *
+     * @return \Magento\Framework\Api\SearchCriteriaBuilder
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function getSearchCriteriaBuilder()
+    {
+        return $this->searchCriteriaBuilder;
+    }
+
+    /**
+     * Get website object by id
+     *
+     * @return \Magento\Store\Api\Data\WebsiteInterface
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    public function getWebsite($websiteId)
+    {
+        return $this->helper->getWebsite($websiteId);
+    }
+
+    /**
      * Save new replies
      *
      * @param CaseModel $object
      * @return $this
      * @since 1.0.0
      */
-    protected function saveReplies(CaseModel $object)
+    public function saveReplies(CaseModel $object)
     {
         /** @var Reply $reply */
         $replies = $object->getRepliesToSave();
         foreach ($replies as $reply) {
             $reply->setCaseId($object->getId());
-            $this->replyRepository->save($reply);
+            $this->getReplyRepository()->save($reply);
         }
         $object->clearRepliesToSave();
         return $this;
@@ -193,13 +228,13 @@ class CaseItem extends AbstractDb
      * @return $this
      * @since 1.0.0
      */
-    protected function saveFollowers(CaseModel $object)
+    public function saveFollowers(CaseModel $object)
     {
         /** @var Follower $follower */
         $followers = $object->getFollowersToSave();
         foreach ($followers as $follower) {
             $follower->setCaseId($object->getId());
-            $this->followerRepository->save($follower);
+            $this->getFollowerRepository()->save($follower);
         }
         $object->clearFollowersToSave();
         return $this;
@@ -215,7 +250,7 @@ class CaseItem extends AbstractDb
     public function setCaseNumber(AbstractModel $object)
     {
         $websiteId = str_pad((string) $object->getWebsiteId(), 3, '0', STR_PAD_LEFT);
-        $caseId = str_pad($object->getCaseId(), 6, '0', STR_PAD_LEFT);
+        $caseId = str_pad((string) $object->getCaseId(), 6, '0', STR_PAD_LEFT);
         $caseNumber = $websiteId . '-' . $caseId;
         $object->setData(CaseModel::CASE_NUMBER, $caseNumber);
         return $this;
@@ -244,7 +279,13 @@ class CaseItem extends AbstractDb
     public function getDepartment(AbstractModel $object)
     {
         if (!isset($this->department)) {
-            $this->department = $this->departmentRepository->getById($object->getDepartmentId());
+            if ($this->getDepartmentRepository()) {
+                $this->department = $this->getDepartmentRepository()->getById($object->getDepartmentId());
+            } elseif ($object->hasData('_department')) {
+                $this->department = $object->getData('_department');
+            } else {
+                $this->department = ObjectManager::getInstance()->get(Department::class);
+            }
         }
         return $this->department;
     }
@@ -258,14 +299,13 @@ class CaseItem extends AbstractDb
      */
     public function setWebsiteName(AbstractModel $object)
     {
-        /** @var WebsiteInterface $website */
-        $website = $this->helper->getWebsite($object->getWebsiteId());
+        $website = $this->getWebsite($object->getWebsiteId());
         $object->setData(CaseModel::WEBSITE_NAME, $website->getName());
         return $this;
     }
 
     /**
-     * Retrieve and set case manager name value
+     * Retrieve and set helpdesk user as case manager object
      *
      * @param CaseModel $object
      * @return $this
@@ -274,7 +314,11 @@ class CaseItem extends AbstractDb
     public function setCaseManager(AbstractModel $object)
     {
         $caseManagerId = $this->getDepartment($object)->getCaseManagerId();
-        $user = $this->userRepository->getById($caseManagerId);
+        if ($this->getUserRepository()) {
+            $user = $this->getUserRepository()->getById($caseManagerId);
+        } else {
+            $user = ObjectManager::getInstance()->get(User::class);
+        }
         $object->setData(CaseModel::CASE_MANAGER, $user);
         return $this;
     }
@@ -285,37 +329,110 @@ class CaseItem extends AbstractDb
      * Sort in reverse order to always place most recent on top
      *
      * @param CaseModel $object
-     * @return SearchResultsInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @since 1.0.0
      */
     public function getReplies(AbstractModel $object)
     {
-        $this->searchCriteriaBuilder
-            ->addFilter(Reply::CASE_ID, $object->getId());
+        $searchCriteriaBuilder = $this->getSearchCriteriaBuilder();
 
         $sortOrders = [
             new SortOrder(['field' => 'reply_id', 'direction' => 'desc'])
-        ];
+        ];;
 
-        $searchCriteria = $this->searchCriteriaBuilder
+        $searchCriteria = $searchCriteriaBuilder
+            ->addFilter(Reply::CASE_ID, $object->getId())
             ->setSortOrders($sortOrders)
             ->create();
 
-        return $this->replyRepository->getList($searchCriteria);
+        return $this->getRepliesList($searchCriteria);
+    }
+
+    /**
+     * Retrieve default followers list
+     *
+     * @param SearchCriteria $searchCriteria
+     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    protected function getRepliesList($searchCriteria)
+    {
+        return $this->getReplyRepository()->getList($searchCriteria);
     }
 
     /**
      * Get case followers
      *
      * @param CaseModel $object
-     * @return SearchResultsInterface
+     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @since 1.0.0
      */
     public function getFollowers(AbstractModel $object)
     {
-        $this->searchCriteriaBuilder
-            ->addFilter(Follower::CASE_ID, $object->getId());
+        $searchCriteriaBuilder = $this->getSearchCriteriaBuilder();
 
-        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $searchCriteria = $searchCriteriaBuilder
+            ->addFilter(Follower::CASE_ID, $object->getId())
+            ->create();
 
-        return $this->followerRepository->getList($searchCriteria);
+        return $this->getFollowersList($searchCriteria);
+    }
+
+    /**
+     * Retrieve default followers list
+     *
+     * @param SearchCriteria $searchCriteria
+     * @return \Magento\Framework\Api\SearchResultsInterface
+     * @since 1.0.0
+     * @codeCoverageIgnore
+     */
+    protected function getFollowersList($searchCriteria)
+    {
+        return $this->getFollowerRepository()->getList($searchCriteria);
+    }
+
+    /**
+     * Get ReplyRepository instance
+     *
+     * @return \Dem\HelpDesk\Model\ReplyRepository
+     * @codeCoverageIgnore
+     */
+    protected function getReplyRepository()
+    {
+        return $this->replyRepository;
+    }
+
+    /**
+     * Get FollowerRepository instance
+     *
+     * @return \Dem\HelpDesk\Model\FollowerRepository
+     * @codeCoverageIgnore
+     */
+    protected function getFollowerRepository()
+    {
+        return $this->followerRepository;
+    }
+
+    /**
+     * Get DepartmentRepository instance
+     *
+     * @return \Dem\HelpDesk\Model\DepartmentRepository
+     * @codeCoverageIgnore
+     */
+    protected function getDepartmentRepository()
+    {
+        return $this->departmentRepository;
+    }
+
+    /**
+     * Get UserRepository instance
+     *
+     * @return \Dem\HelpDesk\Model\UserRepository
+     * @codeCoverageIgnore
+     */
+    protected function getUserRepository()
+    {
+        return $this->userRepository;
     }
 }
