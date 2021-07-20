@@ -60,12 +60,27 @@
             </item>
         </argument>
 
+        <!-- Set flag if this is default department so we can hide the active/is_internal toggles -->
+        <field name="is_default_department">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">hidden</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="field_is_default_department" xsi:type="boolean">true</item>
+                    </item>
+                </item>
+            </argument>
+        </field>
+
+
+
         <field name="website_id">
             <argument name="data" xsi:type="array">
                 <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\Department\Website</item>
                 <item name="config" xsi:type="array">
                     <item name="sortOrder" xsi:type="number">10</item>
-                    <item name="component" xsi:type="string">Dem_HelpDesk/js/create/element/website</item>
                     <item name="label" xsi:type="string" translate="true">Website</item>
                     <item name="visible" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">select</item>
@@ -116,7 +131,7 @@
                     <item name="sortOrder" xsi:type="number">40</item>
                     <item name="label" xsi:type="string" translate="true">Sort Order</item>
                     <item name="visible" xsi:type="boolean">true</item>
-                    <item name="disabled" xsi:type="boolean">false</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">number</item>
                     <item name="formElement" xsi:type="string">input</item>
                     <item name="validation" xsi:type="array">
@@ -124,6 +139,7 @@
                     </item>
                     <item name="additionalClasses" xsi:type="array">
                         <item name="numeric-input-short" xsi:type="boolean">true</item>
+                        <item name="field_sort_order" xsi:type="boolean">true</item>
                     </item>
                     <item name="notice" xsi:type="string" translate="true">Set the display order of available departments in drop-down list (new cases).</item>
                 </item>
@@ -145,8 +161,12 @@
                     <!-- <item name="component" xsi:type="string">Magento_Ui/js/form/element/single-checkbox-toggle-notice</item> -->
                     <!-- <item name="formElement" xsi:type="string">checkbox</item> -->
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="default" xsi:type="number">1</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="field_is_active" xsi:type="boolean">true</item>
+                    </item>
                 </item>
             </argument>
             <!-- Required for toggle display -->
@@ -169,8 +189,12 @@
                     <item name="sortOrder" xsi:type="number">60</item>
                     <item name="label" xsi:type="string" translate="true">Is Internal</item>
                     <item name="visible" xsi:type="boolean">true</item>
+                    <item name="disabled" xsi:type="boolean">true</item>
                     <item name="dataType" xsi:type="string">boolean</item>
                     <item name="default" xsi:type="number">0</item>
+                    <item name="additionalClasses" xsi:type="array">
+                        <item name="field_is_internal" xsi:type="boolean">true</item>
+                    </item>
                     <item name="notices" xsi:type="array">
                         <item name="0" xsi:type="string" translate="true">This department will be available to all users of this website.</item>
                         <item name="1" xsi:type="string" translate="true">This department will only be available to administrative users.</item>

@@ -19,6 +19,24 @@ use Dem\HelpDesk\Model\Department as DeptModel;
 class Department extends AbstractProvider
 {
     /**
+     * Populate form data by fieldset
+     *
+     * @return array
+     * @since 1.0.0
+     */
+    public function getData()
+    {
+        parent::getData();
+
+        // Set is_default_department flag to allow for form manipulation
+        foreach ($this->loadedData as $itemId => $item) {
+            $isDefaultDepartment = \Dem\HelpDesk\Helper\Config::isDefaultDepartment($itemId);
+            $this->loadedData[$itemId]['general']['is_default_department'] = (int)$isDefaultDepartment;
+        }
+        return $this->loadedData;
+    }
+
+    /**
      * Format date field values
      *
      * @param array $departmentData

@@ -18,6 +18,7 @@
     <head>
         <css src="Dem_HelpDesk::css/default.css" />
         <css src="Dem_HelpDesk::css/department.css" />
+        <script src="Dem_HelpDesk::js/department.js" />
    </head>
     <body>
         <referenceContainer name="content">

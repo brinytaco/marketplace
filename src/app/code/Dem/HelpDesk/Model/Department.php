@@ -279,6 +279,10 @@ class Department extends AbstractModel
         return $this->setData(self::UPDATED_AT, $updatedAt);
     }
 
+    /******************************************************************/
+    /* Dynamic properties
+    /******************************************************************/
+
     /**
      * Get default followers
      *
