@@ -31,7 +31,7 @@
              module="Dem_HelpDesk"
              sortOrder="10"
              resource="Dem_HelpDesk::helpdesk_case"
-             action="helpdesk/case/index"/>
+             action="helpdesk/caseitem/index"/>
 
         <!-- Actionable Menu Item -->
         <add id="Dem_HelpDesk::helpdesk_department"

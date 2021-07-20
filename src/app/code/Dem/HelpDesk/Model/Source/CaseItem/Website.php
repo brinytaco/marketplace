@@ -38,10 +38,25 @@ class Website extends SourceOptions
 
         $this->optionArray = array_merge($this->optionArray, $websiteOptions);
 
+        $this->changeAdminWebsiteName();
         $this->filterDefaultWebsite();
         $this->filterDisabledWebsites();
 
         return $this->optionArray;
+    }
+
+    /**
+     * Change default website display name
+     * @return void
+     * @since 1.0.0
+     */
+    protected function changeAdminWebsiteName()
+    {
+        foreach ($this->optionArray as $key => $option) {
+            if ($option['value'] === \Dem\HelpDesk\Helper\Config::HELPDESK_WEBSITE_ID_ADMIN) {
+                $this->optionArray[$key]['label'] = __('DE INTERNAL');
+            }
+        }
     }
 
     /**

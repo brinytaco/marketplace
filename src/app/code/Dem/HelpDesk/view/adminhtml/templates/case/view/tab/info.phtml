@@ -138,11 +138,14 @@ $case = $block->getCase();
                 <td>
                     <?php /* This row would show n/a if the current user is the creator or case manager */ ?>
                     <?php if ($block->getCanRenderFollowerBlock()): ?>
-                        <?= sprintf('<input type="checkbox" class="follower-toggle"%s><span>%s</span>',
-                            $block->getIsUserFollower() ? ' checked' : '',
-                            $block->getIsUserFollower() ? __('Currently Following') : __('Not Following')
-                        );
-                        ?>
+                        <div class="admin__actions-switch" data-role="switcher">
+                            <input type="checkbox" class="admin__actions-switch-checkbox follower-toggle"
+                                   data-bind="attr: {id: uid, name: inputName}, value: value, disable: disabled, hasFocus: focused, simpleChecked: checked"
+                                   id="followerToggle" value="1" <?= $block->getIsUserFollower() ? ' checked="checked"' : '' ?>>
+                            <label class="admin__actions-switch-label" data-bind="attr: {for: uid}" for="followerToggle">
+                                <span class="admin__actions-switch-text" data-bind="attr: {'data-text-on': toggleLabels.on, 'data-text-off': toggleLabels.off}" data-text-on="<?= __('Currently Following') ?>" data-text-off="<?= __('Not Following') ?>"></span>
+                            </label>
+                        </div>
                         <p class="note">
                             <?= $block->escapeHtml(
                                 __('You %1%2 currently receiving notifications of case replies and changes.',

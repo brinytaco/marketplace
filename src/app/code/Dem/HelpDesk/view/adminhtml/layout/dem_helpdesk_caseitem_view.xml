@@ -11,6 +11,7 @@
  * @since      1.0.0
  */
 -->
+<!-- 2column layout needed for tab structure -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
@@ -18,9 +19,6 @@
         <css src="Dem_HelpDesk::css/case.css" />
         <css src="Dem_HelpDesk::css/reply.css" />
         <script src="Dem_HelpDesk::js/case.js" />
-
-        <!-- Window title, not page header. Translated -->
-        <title>Case View</title>
    </head>
     <body>
         <referenceContainer name="content">

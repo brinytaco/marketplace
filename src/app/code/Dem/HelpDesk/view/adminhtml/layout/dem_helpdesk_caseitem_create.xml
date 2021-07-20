@@ -17,10 +17,6 @@
     <head>
         <css src="Dem_HelpDesk::css/default.css" />
         <css src="Dem_HelpDesk::css/case.css" />
-        <!--<script src="Dem_HelpDesk::js/case.js" />-->
-
-        <!-- Window title, not page header. Translated -->
-        <title>Open New Case</title>
    </head>
     <body>
         <referenceContainer name="content">

@@ -132,14 +132,8 @@ abstract class Department extends Action
      */
     protected function _initAction()
     {
-        $frontendLabel = $this->helper->getConfiguredFrontendLabel();
-
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Dem_HelpDesk::helpdesk_department');
-        $resultPage->addBreadcrumb($frontendLabel, $frontendLabel);
-        $resultPage->addBreadcrumb(__('Departments'), __('Departments'));
-
-        $resultPage->getConfig()->getTitle()->prepend($frontendLabel);
         return $resultPage;
     }
 

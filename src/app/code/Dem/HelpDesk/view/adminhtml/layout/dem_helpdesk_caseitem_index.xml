@@ -11,15 +11,11 @@
  * @since      1.0.0
  */
 -->
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="styles"/>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <head>
         <css src="Dem_HelpDesk::css/default.css" />
         <css src="Dem_HelpDesk::css/case.css" />
-        <!--<script src="Dem_HelpDesk::js/case.js" />-->
-
-        <!-- Window title, not page header. Translated -->
-        <title>Manage Cases</title>
    </head>
     <body>
         <referenceContainer name="content">
