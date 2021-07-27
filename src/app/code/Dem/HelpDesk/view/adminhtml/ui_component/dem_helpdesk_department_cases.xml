@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * HelpDesk Case UI Component - Grid
+ *
+ * =============================================================================
+ *
+ * @package    Dem\HelpDesk
+ * @copyright  Copyright (c) 2021 Direct Edge Media (http://directedgemedia.com)
+ * @author     Toby Crain
+ * @since      1.0.0
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_department_cases_grid_data_source</item>
+            <item name="deps" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_department_cases_grid_data_source</item>
+        </item>
+        <item name="spinner" xsi:type="string">dem_helpdesk_department_cases_grid_columns</item>
+    </argument>
+
+    <dataSource name="dem_helpdesk_department_cases_grid_data_source" component="Magento_Ui/js/grid/provider">
+        <settings>
+            <filterUrlParams>
+                <!-- Filter the collection by department id (this is part of the select statement) -->
+                <param name="main_table.department_id">*</param>
+            </filterUrlParams>
+            <updateUrl path="mui/index/render"/>
+        </settings>
+        <dataProvider class="DemHelpDeskCaseGridDataProvider" name="dem_helpdesk_department_cases_grid_data_source">
+            <settings>
+                <requestFieldName>case_id</requestFieldName>
+                <primaryFieldName>case_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+
+    <listingToolbar name="listing_top">
+        <!-- Make toolbar "sticky" (fixed) when scrolling beyond vertical -->
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="sticky" xsi:type="boolean">true</item>
+            </item>
+        </argument>
+        <!-- Adds support for "bookmarking" or "saving" the current view -->
+        <bookmark name="bookmarks"/>
+        <!-- Include controls for "column" visibility on/off -->
+        <columnsControls name="columns_controls"/>
+        <filterSearch name="fulltext"/>
+        <!-- Include "templates" config argument to show select lists as multiple checkboxes -->
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="templates" xsi:type="array">
+                        <item name="filters" xsi:type="array">
+                            <item name="select" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                                <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                            </item>
+                        </item>
+                    </item>
+                </item>
+            </argument>
+        </filters>
+        <!-- Include paging for results -->
+        <paging name="listing_paging"/>
+        <!-- Add default export button -->
+        <exportButton name="export_button"/>
+    </listingToolbar>
+
+    <!-- Grid column definition -->
+    <columns name="dem_helpdesk_department_cases_grid_columns">
+
+        <!-- Required to allow column width and resize to function -->
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="resizeConfig" xsi:type="array">
+                    <item name="enabled" xsi:type="boolean">true</item><!-- This is required configuration -->
+                </item>
+            </item>
+        </argument>
+
+        <!-- Make entire row clickable (requires actionsColumn defined below) -->
+        <settings>
+            <childDefaults>
+                <param name="fieldAction" xsi:type="array">
+                    <item name="provider" xsi:type="string">dem_helpdesk_department_cases_grid.dem_helpdesk_department_cases_grid.dem_helpdesk_department_cases_grid_columns.actions</item>
+                    <item name="target" xsi:type="string">applyAction</item>
+                    <item name="params" xsi:type="array">
+                        <item name="0" xsi:type="string">view</item>
+                        <item name="1" xsi:type="string">${ $.$data.rowIndex }</item>
+                    </item>
+                </param>
+            </childDefaults>
+        </settings>
+
+        <!-- Column order is natural by column "name" if no sortOrder is set -->
+
+        <column name="case_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">0</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="sorting" xsi:type="string">desc</item>
+                    <item name="label" xsi:type="string" translate="true">ID</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
+
+        <!-- NOTE: Column order/visibility is saved in ui_bookmark table. Be sure to remove
+                relevant entries & clear cache to observe changes. -->
+
+        <column name="case_number">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="sorting" xsi:type="string">desc</item>
+                    <item name="label" xsi:type="string" translate="true">Case Number</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">100</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="website_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Website</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">Website</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">150</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="case_manager_name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="label" xsi:type="string" translate="true">Case Manager</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">150</item>
+                </item>
+            </argument>
+        </column>
+
+        <!-- Must apply the class property shown to allow for proper tz conversion -->
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">50</item>
+                    <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="label" xsi:type="string" translate="true">Created At</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">120</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="creator_name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="label" xsi:type="string" translate="true">Created By</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">180</item>
+                </item>
+            </argument>
+        </column>
+
+        <!-- Must apply the class property shown to allow for proper tz conversion -->
+        <column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="label" xsi:type="string" translate="true">Updated At</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">180</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="updater_name">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">80</item>
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="dataType" xsi:type="string">text</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/column</item>
+                    <item name="label" xsi:type="string" translate="true">Updated By</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="resizeEnabled" xsi:type="boolean">true</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">100</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="priority">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Priority</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">90</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">Priority</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="array">
+                        <item name="a-center" xsi:type="boolean">true</item>
+                    </item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="status_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Dem\HelpDesk\Model\Source\CaseItem\Status</item>
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">100</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="label" xsi:type="string" translate="true">Status</item>
+                    <item name="visible" xsi:type="boolean">true</item>
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="array">
+                        <item name="a-center" xsi:type="boolean">true</item>
+                    </item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
+                </item>
+            </argument>
+        </column>
+
+        <actionsColumn name="actions" class="Dem\HelpDesk\Ui\Component\Listing\Column\ViewAction">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <!-- Column header (default is "Action") -->
+                    <item name="label" xsi:type="string">Action</item>
+                    <!-- Link text (translated) -->
+                    <item name="actionLabel" xsi:type="string">View</item>
+                    <!-- Item index field -->
+                    <item name="indexField" xsi:type="string">case_id</item>
+                    <!-- Base link url -->
+                    <item name="viewUrlPath" xsi:type="string">helpdesk/caseitem/view</item>
+                    <!-- Url parameter name. This can also be an array -->
+                    <item name="urlEntityParamName" xsi:type="string">case_id</item>
+
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="number">80</item>
+                    <item name="fieldClass" xsi:type="array">
+                        <item name="a-center" xsi:type="boolean">true</item>
+                    </item>
+                    <!-- custom header template for centering header text -->
+                    <item name="headerTmpl" xsi:type="string">Dem_Base/grid/columns/text-center</item>
+                </item>
+            </argument>
+        </actionsColumn>
+
+    </columns>
+</listing>

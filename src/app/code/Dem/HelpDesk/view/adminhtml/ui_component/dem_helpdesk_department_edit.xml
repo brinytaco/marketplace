@@ -251,12 +251,7 @@
     </fieldset>
 
     <!-- Tab Content: See block class for label/settings -->
-<!--    <htmlContent name="dem_helpdesk_department_tab_info_content">
-        <block class="Dem\HelpDesk\Block\Adminhtml\Department\Edit\Tab\Cases" name="department_tab_cases" template="Dem_HelpDesk::department/edit/tab/cases.phtml"/>
-    </htmlContent>-->
-
-    <!-- Tab Content: See block class for label/settings -->
-<!--    <htmlContent name="dem_helpdesk_department_tab_replies_content">
-        <block class="Dem\HelpDesk\Block\Adminhtml\Department\Edit\Tab\Users" name="department_tab_users" template="Dem_HelpDesk::department/edit/tab/users.phtml"/>
-    </htmlContent>-->
+    <htmlContent name="dem_helpdesk_department_tab_cases_content">
+        <block class="Dem\HelpDesk\Block\Adminhtml\Department\View\Tab\Cases" name="department_tab_cases"/>
+    </htmlContent>
 </form>

@@ -36,4 +36,26 @@ class Cases extends Tabs
         return __('Cases');
     }
 
+    /**
+     * Return URL link to Tab content
+     *
+     * @return string
+     * @codeCoverageIgnore
+     */
+    public function getTabUrl()
+    {
+        return $this->getUrl('*/department/cases', ['department_id' => $this->getDepartment()->getId()]);
+    }
+
+    /**
+     * Tab should be loaded through Ajax call
+     *
+     * @return bool
+     * @codeCoverageIgnore
+     */
+    public function isAjaxLoaded()
+    {
+        return true;
+    }
+
 }

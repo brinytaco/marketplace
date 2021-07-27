@@ -35,12 +35,6 @@ use Magento\User\Model\User;
 class Tabs extends Template implements TabInterface
 {
     /**
-     * Reply template constants
-     */
-    const ADMIN_REPLY_TEMPLATE_PATH_SYSTEM = 'department/view/tab/replies/system.phtml';
-    const ADMIN_REPLY_TEMPLATE_PATH_USER   = 'department/view/tab/replies/user.phtml';
-
-    /**
      * Core registry
      *
      * @var Registry
