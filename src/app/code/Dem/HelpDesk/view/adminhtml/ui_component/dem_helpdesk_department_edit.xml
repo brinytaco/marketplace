@@ -246,12 +246,27 @@
                 </item>
             </argument>
         </field>
-
-
     </fieldset>
 
-    <!-- Tab Content: See block class for label/settings -->
-    <htmlContent name="dem_helpdesk_department_tab_cases_content">
-        <block class="Dem\HelpDesk\Block\Adminhtml\Department\View\Tab\Cases" name="department_tab_cases"/>
-    </htmlContent>
+    <fieldset name="cases">
+        <settings>
+            <collapsible>false</collapsible>
+            <label translate="true">Cases</label>
+            <componentType>fieldset</componentType>
+        </settings>
+        <insertListing name="department_case_listing">
+            <settings>
+                <dataLinks>
+                    <exports>false</exports>
+                    <imports>false</imports>
+                </dataLinks>
+                <externalProvider>dem_helpdesk_department_cases.dem_helpdesk_department_cases_grid_data_source</externalProvider>
+                <!-- <selectionsProvider>dem_helpdesk_caseitem_grid.dem_helpdesk_department_cases_grid_data_source.dem_helpdesk_department_cases_grid_columns.ids</selectionsProvider> -->
+                <autoRender>true</autoRender>
+                <dataScope>dem_helpdesk_department_cases</dataScope>
+                <ns>dem_helpdesk_department_cases</ns>
+            </settings>
+        </insertListing>
+    </fieldset>
+
 </form>

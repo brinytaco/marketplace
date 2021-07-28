@@ -15,35 +15,34 @@
 
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_department_cases_grid_data_source</item>
-            <item name="deps" xsi:type="string">dem_helpdesk_caseitem_grid.dem_helpdesk_department_cases_grid_data_source</item>
+            <item name="provider" xsi:type="string">dem_helpdesk_department_cases.dem_helpdesk_department_cases_grid_data_source</item>
+            <item name="deps" xsi:type="string">dem_helpdesk_department_cases.dem_helpdesk_department_cases_grid_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">dem_helpdesk_department_cases_grid_columns</item>
     </argument>
 
-    <dataSource name="dem_helpdesk_department_cases_grid_data_source" component="Magento_Ui/js/grid/provider">
-        <settings>
-            <filterUrlParams>
-                <!-- Filter the collection by department id (this is part of the select statement) -->
-                <param name="main_table.department_id">*</param>
-            </filterUrlParams>
-            <updateUrl path="mui/index/render"/>
-        </settings>
-        <dataProvider class="DemHelpDeskCaseGridDataProvider" name="dem_helpdesk_department_cases_grid_data_source">
-            <settings>
-                <requestFieldName>case_id</requestFieldName>
-                <primaryFieldName>case_id</primaryFieldName>
-            </settings>
-        </dataProvider>
+    <dataSource name="dem_helpdesk_department_cases_grid_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">DemHelpDeskCaseGridDataProvider</argument>
+            <argument name="name" xsi:type="string">dem_helpdesk_department_cases_grid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">case_id</argument>
+            <argument name="requestFieldName" xsi:type="string">case_id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter_url_params" xsi:type="array">
+                        <item name="main_table.department_id" xsi:type="string">1</item>
+                    </item>
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="indexField" xsi:type="string">case_id</item>
+                    </item>
+                </item>
+            </argument>
+        </argument>
     </dataSource>
 
     <listingToolbar name="listing_top">
-        <!-- Make toolbar "sticky" (fixed) when scrolling beyond vertical -->
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="sticky" xsi:type="boolean">true</item>
-            </item>
-        </argument>
         <!-- Adds support for "bookmarking" or "saving" the current view -->
         <bookmark name="bookmarks"/>
         <!-- Include controls for "column" visibility on/off -->
@@ -96,8 +95,6 @@
             </childDefaults>
         </settings>
 
-        <!-- Column order is natural by column "name" if no sortOrder is set -->
-
         <column name="case_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -108,12 +105,20 @@
                     <item name="sorting" xsi:type="string">desc</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                     <item name="visible" xsi:type="boolean">false</item>
+                    <item name="controlVisibility" xsi:type="boolean">false</item>
                 </item>
             </argument>
         </column>
 
-        <!-- NOTE: Column order/visibility is saved in ui_bookmark table. Be sure to remove
-                relevant entries & clear cache to observe changes. -->
+        <!-- Column required here so that we can filter on it (but not visible)-->
+        <column name="department_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="controlVisibility" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </column>
 
         <column name="case_number">
             <argument name="data" xsi:type="array">
