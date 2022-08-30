@@ -1,114 +1,89 @@
-# Mark Shust's Docker Configuration for Magento
-# (https://github.com/markshust/docker-magento)
-#
-# Version 37.0.2
+## Mark Shust's Docker Configuration for Magento
+## (https://github.com/markshust/docker-magento)
+##
+## Version 43.0.0
+
+## To use SSH, see https://github.com/markshust/docker-magento#ssh
+## Linux users, see https://github.com/markshust/docker-magento#linux
+
+## If you changed the default Docker network, you may need to replace
+## 172.17.0.1 in this file with the result of:
+## docker network inspect bridge --format='{{(index .IPAM.Config 0).Gateway}}'
 
 version: "3"
 
 services:
   app:
-    image: markoshust/magento-nginx:1.18-4
+    image: markoshust/magento-nginx:1.18-7
     ports:
       - "80:8000"
       - "443:8443"
-    links:
-      - db
-      - phpfpm
     volumes: &appvolumes
       - ~/.composer:/var/www/.composer:cached
+      - ~/.ssh/id_rsa:/var/www/.ssh/id_rsa:cached
+      - ~/.ssh/known_hosts:/var/www/.ssh/known_hosts:cached
       - appdata:/var/www/html
       - sockdata:/sock
       - ssldata:/etc/nginx/certs
 
-      # Host mounts with performance penalty, only put what is necessary here
-      # Uncomment following lines only after installation
-      #- ./src/app/code:/var/www/html/app/code
-      #- ./src/app/design:/var/www/html/app/design
-      #- ./src/app/etc:/var/www/html/app/etc
-      #- ./src/var/log:/var/www/html/var/log
-      #- ./src/var/report:/var/www/html/var/report
-      #- ./src/composer.json:/var/www/html/composer.json
-      #- ./src/composer.lock:/var/www/html/composer.lock
-      #- ./src/nginx.conf:/var/www/html/nginx.conf
-      #- ~/.composer/auth.json:/var/www/html/var/composer_home/auth.json
-
-      # Development only: Map core files to container
-      #- ./src/vendor:/var/www/html/vendor
-
-      # To sync your SSH to the container, uncomment the following line:
-      #- ~/.ssh/id_rsa:/var/www/.ssh/id_rsa:cached
-      # Linux only: remove the above lines and mount the entire src directory with:
-      #- ./src:/var/www/html:cached
-
   phpfpm:
-    image: markoshust/magento-php:7.4-fpm-5
-    links:
-      - db
+    image: markoshust/magento-php:8.1-fpm-1
     volumes: *appvolumes
+    env_file: env/phpfpm.env
 
   db:
-    image: percona:5.7
-    command: --max_allowed_packet=64M
+    image: mariadb:10.4
+    command:
+      --max_allowed_packet=64M
+      --optimizer_use_condition_selectivity=1
+      --optimizer_switch="rowid_filter=off"
     ports:
       - "3306:3306"
-    environment:
-        MYSQL_HOST: "db"
-        MYSQL_ROOT_PASSWORD: "magento"
-        MYSQL_DATABASE: "magento"
-        MYSQL_USER: "magento"
-        MYSQL_PASSWORD: "magento"
+    env_file: env/db.env
     volumes:
       - dbdata:/var/lib/mysql
 
   redis:
-    image: redis:5.0-alpine
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379"
 
   elasticsearch:
-    image: markoshust/magento-elasticsearch:7.7.1-0
+    image: markoshust/magento-elasticsearch:7.16-0
     ports:
       - "9200:9200"
       - "9300:9300"
     environment:
       - "discovery.type=single-node"
+      ## Set custom heap size to avoid memory errors
       - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+      ## Avoid test failures due to small disks
+      ## More info at https://github.com/markshust/docker-magento/issues/488
+      - "cluster.routing.allocation.disk.threshold_enabled=false"
+      - "index.blocks.read_only_allow_delete"
 
   rabbitmq:
-    image: rabbitmq:3.7-management-alpine
+    image: markoshust/magento-rabbitmq:3.9-0
     ports:
       - "15672:15672"
       - "5672:5672"
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
+    env_file: env/rabbitmq.env
 
-  # Disabling cron by default as it uses higher CPU, enable if needed
-  #cron:
-  #  image: markoshust/magento-php:7.4-fpm-5
-  #  user: root
-  #  command: /usr/local/bin/cronstart
-  #  tty: true
-  #  links:
-  #    - db
-  #  volumes: *appvolumes
-
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - "1025"
-      - "8025:8025"
-    user: root
-    command: ["-storage=maildir", "-maildir-path=/maildir"]
-    volumes:
-      - maildir:/maildir
+  # mailhog: // This is already running now outside of docker, so don't allow docker to start/stop it
+  #   image: mailhog/mailhog
+  #   ports:
+  #     - "1025"
+  #     - "8025:8025"
+  #   user: root
+  #   command: ["-storage=maildir", "-maildir-path=/maildir"]
+  #   volumes:
+  #     - maildir:/maildir
 
   phpmyadmin:
     restart: always
     image: phpmyadmin/phpmyadmin
-    environment:
-        MYSQL_HOST: "db"
-        MYSQL_ROOT_PASSWORD: "magento"
-        MYSQL_DATABASE: "magento"
-        MYSQL_USER: "magento"
-        MYSQL_PASSWORD: "magento"
     ports:
       - "8080:80"
     links:
@@ -120,4 +95,3 @@ volumes:
   rabbitmqdata:
   sockdata:
   ssldata:
-  maildir:
